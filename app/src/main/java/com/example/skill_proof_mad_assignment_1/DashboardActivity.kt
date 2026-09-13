@@ -50,13 +50,13 @@ class DashboardActivity : AppCompatActivity() {
 
         tvViewAssessment.setOnClickListener {
 
-            Toast.makeText(
+            val intent = Intent(
                 this,
-                "Assessment module coming next",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+                AssessmentActivity::class.java
+            )
 
+            startActivity(intent)
+        }
 
         tvViewCareer.setOnClickListener {
 

@@ -46,6 +46,14 @@
             android:name=".EvidenceActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".AddEvidenceActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AssessmentActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
