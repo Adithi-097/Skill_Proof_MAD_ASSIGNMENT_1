@@ -72,14 +72,14 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Career Readiness
         tvViewCareer.setOnClickListener {
 
-            Toast.makeText(
+            val intent = Intent(
                 this,
-                "Career Readiness module coming next",
-                Toast.LENGTH_SHORT
-            ).show()
+                CareerActivity::class.java
+            )
+
+            startActivity(intent)
         }
     }
 }
