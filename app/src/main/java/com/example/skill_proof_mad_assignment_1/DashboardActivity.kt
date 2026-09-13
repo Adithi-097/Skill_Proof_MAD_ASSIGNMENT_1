@@ -25,10 +25,24 @@ class DashboardActivity : AppCompatActivity() {
         val tvViewCareer =
             findViewById<TextView>(R.id.tvViewCareer)
 
+        // Proof Score card
+        val proofScoreCard =
+            findViewById<android.view.View>(R.id.proofScoreCard)
 
+        proofScoreCard.setOnClickListener {
+
+            val intent = Intent(
+                this,
+                ProofScoreActivity::class.java
+            )
+
+            startActivity(intent)
+        }
+
+        // Skills
         tvViewSkills.setOnClickListener {
 
-            val intent = android.content.Intent(
+            val intent = Intent(
                 this,
                 SkillsActivity::class.java
             )
@@ -36,7 +50,7 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
+        // Evidence
         tvViewEvidence.setOnClickListener {
 
             val intent = Intent(
@@ -47,7 +61,7 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
+        // Assessment
         tvViewAssessment.setOnClickListener {
 
             val intent = Intent(
@@ -58,6 +72,7 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Career Readiness
         tvViewCareer.setOnClickListener {
 
             Toast.makeText(

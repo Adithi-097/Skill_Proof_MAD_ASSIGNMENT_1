@@ -54,6 +54,10 @@
             android:name=".AssessmentActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ProofScoreActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
