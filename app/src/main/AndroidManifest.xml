@@ -38,7 +38,13 @@
             android:name=".SkillsActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".AddSkillActivity"
+            android:exported="false" />
 
+        <activity
+            android:name=".EvidenceActivity"
+            android:exported="false" />
 
     </application>
 
