@@ -10,6 +10,15 @@ class CareerActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
+    private lateinit var tvReadinessScore: TextView
+    private lateinit var tvReadinessLevel: TextView
+    private lateinit var tvSkillName: TextView
+    private lateinit var progressReadiness: ProgressBar
+
+    private lateinit var tvStrongSkill: TextView
+    private lateinit var tvImproveSkill: TextView
+    private lateinit var tvRecommendations: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -17,222 +26,239 @@ class CareerActivity : AppCompatActivity() {
 
         databaseHelper = DatabaseHelper(this)
 
-        // ------------------------------------------
-        // FIND VIEWS
-        // ------------------------------------------
-
         val btnBack =
             findViewById<ImageButton>(R.id.btnBack)
 
-        val tvReadinessScore =
-            findViewById<TextView>(R.id.tvReadinessScore)
+        tvReadinessScore =
+            findViewById(R.id.tvReadinessScore)
 
-        val tvReadinessMessage =
-            findViewById<TextView>(R.id.tvReadinessMessage)
+        tvReadinessLevel =
+            findViewById(R.id.tvReadinessLabel)
 
-        val readinessProgress =
-            findViewById<ProgressBar>(R.id.readinessProgress)
+        tvSkillName =
+            findViewById(R.id.tvSkillName)
 
-        val tvStrongSkills =
-            findViewById<TextView>(R.id.tvStrongSkills)
+        progressReadiness =
+            findViewById(R.id.readinessProgress)
 
-        val tvImproveSkills =
-            findViewById<TextView>(R.id.tvImproveSkills)
+        tvStrongSkill =
+            findViewById(R.id.tvStrongSkills)
 
-        val tvRecommendations =
-            findViewById<TextView>(R.id.tvRecommendations)
+        tvImproveSkill =
+            findViewById(R.id.tvImproveSkills)
 
-        // ------------------------------------------
-        // BACK BUTTON
-        // ------------------------------------------
+        tvRecommendations =
+            findViewById(R.id.tvRecommendations)
 
         btnBack.setOnClickListener {
             finish()
         }
+    }
 
-        // ------------------------------------------
-        // GET REAL DATA FROM SQLITE
-        // ------------------------------------------
+    override fun onResume() {
+        super.onResume()
+        loadCareerReadiness()
+    }
 
-        val proofScore =
-            calculateProofScore()
+    private fun loadCareerReadiness() {
 
+        val skills = databaseHelper.getAllSkills()
+
+        // No skills available
+        if (skills.isEmpty()) {
+
+            tvSkillName.text = "No skill added"
+            tvReadinessScore.text = "0"
+            tvReadinessLevel.text = "Start building your skills"
+            progressReadiness.progress = 0
+
+            tvStrongSkill.text = "No strong skill yet."
+            tvImproveSkill.text = "Add a skill to begin."
+
+            tvRecommendations.text =
+                "Add your first skill, complete an assessment, and upload evidence."
+
+            return
+        }
+
+        // Get first skill
+        val skill = skills[0]
+
+        // Display skill name
+        tvSkillName.text = skill.name
+
+        // Skill progress
+        val skillLevel = skill.progress
+
+        // Assessment
         val assessmentScore =
-            databaseHelper.getLatestAssessmentPercentage()
+            databaseHelper.getAssessmentPercentageForSkill(
+                skill.name
+            )
 
-        val skills =
-            databaseHelper.getAllSkills()
+        // Evidence
+        val evidenceCount =
+            databaseHelper.getEvidenceCountForSkill(
+                skill.name
+            )
 
-        // ------------------------------------------
-        // CALCULATE CAREER READINESS
-        // ------------------------------------------
+        val verifiedEvidenceCount =
+            databaseHelper.getVerifiedEvidenceCountForSkill(
+                skill.name
+            )
 
-        val readinessScore =
-            (
-                    proofScore * 0.60 +
-                            assessmentScore * 0.40
-                    ).toInt()
+        // Evidence score
+        val evidenceScore = when {
+            evidenceCount >= 5 -> 100
+            evidenceCount == 4 -> 90
+            evidenceCount == 3 -> 80
+            evidenceCount == 2 -> 65
+            evidenceCount == 1 -> 45
+            else -> 0
+        }
 
-        // ------------------------------------------
-        // DISPLAY READINESS SCORE
-        // ------------------------------------------
+        // Verification score
+        val verificationScore =
+            if (evidenceCount == 0) {
+                0
+            } else {
+                (verifiedEvidenceCount * 100) / evidenceCount
+            }
 
+        // Proof score
+        val proofScore = (
+                skillLevel * 0.30 +
+                        assessmentScore * 0.30 +
+                        evidenceScore * 0.25 +
+                        verificationScore * 0.15
+                ).toInt()
+
+        // Career readiness
+        val readinessScore = (
+                proofScore * 0.60 +
+                        assessmentScore * 0.40
+                ).toInt()
+
+        // Display readiness
         tvReadinessScore.text =
-            "$readinessScore%"
+            readinessScore.toString()
 
-        readinessProgress.progress =
+        progressReadiness.progress =
             readinessScore
 
-        // ------------------------------------------
-        // READINESS MESSAGE
-        // ------------------------------------------
+        tvReadinessLevel.text =
+            getReadinessLevel(readinessScore)
 
-        tvReadinessMessage.text =
-            when {
+        // Strong skill
+        if (skillLevel >= 70) {
 
-                readinessScore >= 85 ->
-                    "You are highly prepared for your target role."
-
-                readinessScore >= 70 ->
-                    "You are on the right track. Strengthen your weak areas."
-
-                readinessScore >= 50 ->
-                    "Good start. Build more proof to improve your readiness."
-
-                else ->
-                    "Keep building skills, assessments and evidence."
-            }
-
-        // ------------------------------------------
-        // STRONG AND WEAK SKILLS
-        // ------------------------------------------
-
-        val strongSkills =
-            skills.filter {
-                it.progress >= 70
-            }
-
-        val skillsToImprove =
-            skills.filter {
-                it.progress < 70
-            }
-
-        if (strongSkills.isEmpty()) {
-
-            tvStrongSkills.text =
-                "No strong skills yet.\n\nBuild your skill level to 70% or above."
+            tvStrongSkill.text =
+                "${skill.name} — Strong"
 
         } else {
 
-            tvStrongSkills.text =
-                strongSkills.joinToString(
-                    separator = "\n"
-                ) {
-                    "✓  ${it.name}  •  ${it.progress}%"
-                }
+            tvStrongSkill.text =
+                "${skill.name} — Developing"
         }
 
-        if (skillsToImprove.isEmpty()) {
+        // Improvement area
+        if (assessmentScore < 70) {
 
-            tvImproveSkills.text =
-                "No major weak areas detected."
+            tvImproveSkill.text =
+                "Assessment performance needs improvement."
+
+        } else if (evidenceCount < 2) {
+
+            tvImproveSkill.text =
+                "Add more evidence for ${skill.name}."
+
+        } else if (verifiedEvidenceCount < evidenceCount) {
+
+            tvImproveSkill.text =
+                "Verify your pending evidence."
 
         } else {
 
-            tvImproveSkills.text =
-                skillsToImprove.joinToString(
-                    separator = "\n"
-                ) {
-                    "⚠  ${it.name}  •  ${it.progress}%"
-                }
+            tvImproveSkill.text =
+                "${skill.name} is well supported."
         }
 
-        // ------------------------------------------
-        // RECOMMENDATIONS
-        // ------------------------------------------
+        // Recommendations
+        tvRecommendations.text =
+            generateRecommendations(
+                skillLevel,
+                assessmentScore,
+                evidenceCount,
+                verifiedEvidenceCount
+            )
+    }
+
+    private fun getReadinessLevel(score: Int): String {
+
+        return when {
+
+            score >= 85 ->
+                "Placement Ready"
+
+            score >= 70 ->
+                "Almost Ready"
+
+            score >= 50 ->
+                "Developing"
+
+            else ->
+                "Needs Improvement"
+        }
+    }
+
+    private fun generateRecommendations(
+        skillLevel: Int,
+        assessmentScore: Int,
+        evidenceCount: Int,
+        verifiedEvidenceCount: Int
+    ): String {
 
         val recommendations =
             mutableListOf<String>()
 
-        if (skills.isEmpty()) {
+        if (skillLevel < 70) {
 
             recommendations.add(
-                "Add your first skill to start building your career profile."
-            )
-        }
-
-        if (skillsToImprove.isNotEmpty()) {
-
-            recommendations.add(
-                "Improve skills below 70% through practice and projects."
+                "• Improve your practical skill level through projects and practice."
             )
         }
 
         if (assessmentScore < 70) {
 
             recommendations.add(
-                "Take more assessments to improve your knowledge score."
+                "• Retake the assessment and improve your theoretical understanding."
             )
         }
 
-        val evidenceScore =
-            databaseHelper.getEvidenceScore()
-
-        if (evidenceScore < 80) {
+        if (evidenceCount < 2) {
 
             recommendations.add(
-                "Add more project, certificate or GitHub evidence."
+                "• Add at least one more project, certificate, or GitHub evidence."
             )
         }
 
-        val verificationScore =
-            databaseHelper.getVerificationScore()
-
-        if (verificationScore < 50) {
+        if (
+            evidenceCount > 0 &&
+            verifiedEvidenceCount < evidenceCount
+        ) {
 
             recommendations.add(
-                "Verify more evidence to increase your proof credibility."
+                "• Verify your pending evidence to increase trust in your profile."
             )
         }
 
         if (recommendations.isEmpty()) {
 
-            recommendations.add(
-                "Excellent! Keep updating your skills and evidence regularly."
-            )
+            return "Excellent progress! Your skill has strong evidence, assessment performance, and verification."
         }
 
-        tvRecommendations.text =
-            recommendations.joinToString(
-                separator = "\n\n"
-            ) {
-                "•  $it"
-            }
-    }
-
-    // ------------------------------------------
-    // CALCULATE PROOF SCORE
-    // ------------------------------------------
-
-    private fun calculateProofScore(): Int {
-
-        val skillLevel =
-            databaseHelper.getAverageSkillProgress()
-
-        val assessmentScore =
-            databaseHelper.getLatestAssessmentPercentage()
-
-        val evidenceScore =
-            databaseHelper.getEvidenceScore()
-
-        val verifiedScore =
-            databaseHelper.getVerificationScore()
-
-        return (
-                skillLevel * 0.30 +
-                        assessmentScore * 0.30 +
-                        evidenceScore * 0.25 +
-                        verifiedScore * 0.15
-                ).toInt()
+        return recommendations.joinToString(
+            separator = "\n\n"
+        )
     }
 }

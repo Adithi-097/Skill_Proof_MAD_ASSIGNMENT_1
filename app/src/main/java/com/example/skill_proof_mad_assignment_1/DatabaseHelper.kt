@@ -682,4 +682,156 @@ class DatabaseHelper(context: Context) :
                 verified * 100
                 ) / total
     }
+
+    fun getSkillByName(skillName: String): Skill? {
+
+        val db = readableDatabase
+
+        val cursor = db.query(
+            TABLE_SKILLS,
+            null,
+            "$COL_SKILL_NAME = ?",
+            arrayOf(skillName),
+            null,
+            null,
+            "$COL_SKILL_ID DESC",
+            "1"
+        )
+
+        cursor.use {
+
+            if (it.moveToFirst()) {
+
+                val name =
+                    it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_NAME
+                        )
+                    )
+
+                val level =
+                    it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_LEVEL
+                        )
+                    )
+
+                val progress =
+                    it.getInt(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_PROGRESS
+                        )
+                    )
+
+                val proofStatus =
+                    it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_PROOF_STATUS
+                        )
+                    )
+
+                return Skill(
+                    name,
+                    level,
+                    progress,
+                    proofStatus
+                )
+            }
+        }
+
+        return null
+    }
+
+
+    fun getAssessmentPercentageForSkill(
+        skillName: String
+    ): Int {
+
+        val db = readableDatabase
+
+        val cursor = db.query(
+            TABLE_ASSESSMENTS,
+            arrayOf(
+                COL_ASSESSMENT_PERCENTAGE
+            ),
+            "$COL_ASSESSMENT_SKILL = ?",
+            arrayOf(skillName),
+            null,
+            null,
+            "$COL_ASSESSMENT_ID DESC",
+            "1"
+        )
+
+        cursor.use {
+
+            if (it.moveToFirst()) {
+
+                return it.getInt(
+                    it.getColumnIndexOrThrow(
+                        COL_ASSESSMENT_PERCENTAGE
+                    )
+                )
+            }
+        }
+
+        return 0
+    }
+
+
+    fun getEvidenceCountForSkill(
+        skillName: String
+    ): Int {
+
+        val db = readableDatabase
+
+        val cursor =
+            db.rawQuery(
+                """
+            SELECT COUNT(*)
+            FROM $TABLE_EVIDENCE
+            WHERE $COL_EVIDENCE_SKILL = ?
+            """.trimIndent(),
+                arrayOf(skillName)
+            )
+
+        cursor.use {
+
+            if (it.moveToFirst()) {
+                return it.getInt(0)
+            }
+        }
+
+        return 0
+    }
+
+
+    fun getVerifiedEvidenceCountForSkill(
+        skillName: String
+    ): Int {
+
+        val db = readableDatabase
+
+        val cursor =
+            db.rawQuery(
+                """
+            SELECT COUNT(*)
+            FROM $TABLE_EVIDENCE
+            WHERE $COL_EVIDENCE_SKILL = ?
+            AND $COL_EVIDENCE_STATUS = ?
+            """.trimIndent(),
+                arrayOf(
+                    skillName,
+                    "Verified"
+                )
+            )
+
+        cursor.use {
+
+            if (it.moveToFirst()) {
+                return it.getInt(0)
+            }
+        }
+
+        return 0
+    }
 }
