@@ -15,15 +15,20 @@ class DatabaseHelper(context: Context) :
 
     companion object {
 
+        // ==========================================
+        // DATABASE
+        // ==========================================
+
         private const val DATABASE_NAME =
             "skillproof.db"
 
         private const val DATABASE_VERSION =
             2
 
-        // =========================
+
+        // ==========================================
         // SKILLS TABLE
-        // =========================
+        // ==========================================
 
         const val TABLE_SKILLS =
             "skills"
@@ -43,9 +48,10 @@ class DatabaseHelper(context: Context) :
         const val COL_SKILL_PROOF_STATUS =
             "proof_status"
 
-        // =========================
+
+        // ==========================================
         // EVIDENCE TABLE
-        // =========================
+        // ==========================================
 
         const val TABLE_EVIDENCE =
             "evidence"
@@ -68,9 +74,10 @@ class DatabaseHelper(context: Context) :
         const val COL_EVIDENCE_STATUS =
             "status"
 
-        // =========================
+
+        // ==========================================
         // ASSESSMENT TABLE
-        // =========================
+        // ==========================================
 
         const val TABLE_ASSESSMENTS =
             "assessments"
@@ -91,13 +98,18 @@ class DatabaseHelper(context: Context) :
             "percentage"
     }
 
+
+    // ==========================================
+    // CREATE DATABASE TABLES
+    // ==========================================
+
     override fun onCreate(
         db: SQLiteDatabase
     ) {
 
-        // =========================
-        // CREATE SKILLS TABLE
-        // =========================
+        // ------------------------------------------
+        // Skills table
+        // ------------------------------------------
 
         val createSkillsTable = """
             CREATE TABLE $TABLE_SKILLS (
@@ -109,9 +121,10 @@ class DatabaseHelper(context: Context) :
             )
         """.trimIndent()
 
-        // =========================
-        // CREATE EVIDENCE TABLE
-        // =========================
+
+        // ------------------------------------------
+        // Evidence table
+        // ------------------------------------------
 
         val createEvidenceTable = """
             CREATE TABLE $TABLE_EVIDENCE (
@@ -124,9 +137,10 @@ class DatabaseHelper(context: Context) :
             )
         """.trimIndent()
 
-        // =========================
-        // CREATE ASSESSMENT TABLE
-        // =========================
+
+        // ------------------------------------------
+        // Assessment table
+        // ------------------------------------------
 
         val createAssessmentTable = """
             CREATE TABLE $TABLE_ASSESSMENTS (
@@ -137,6 +151,9 @@ class DatabaseHelper(context: Context) :
                 $COL_ASSESSMENT_PERCENTAGE INTEGER NOT NULL
             )
         """.trimIndent()
+
+
+        // Execute table creation
 
         db.execSQL(
             createSkillsTable
@@ -150,6 +167,11 @@ class DatabaseHelper(context: Context) :
             createAssessmentTable
         )
     }
+
+
+    // ==========================================
+    // DATABASE UPGRADE
+    // ==========================================
 
     override fun onUpgrade(
         db: SQLiteDatabase,
@@ -172,9 +194,10 @@ class DatabaseHelper(context: Context) :
         onCreate(db)
     }
 
-    // =========================
+
+    // ==========================================
     // INSERT SKILL
-    // =========================
+    // ==========================================
 
     fun insertSkill(
         name: String,
@@ -217,9 +240,10 @@ class DatabaseHelper(context: Context) :
         )
     }
 
-    // =========================
+
+    // ==========================================
     // GET ALL SKILLS
-    // =========================
+    // ==========================================
 
     fun getAllSkills():
             MutableList<Skill> {
@@ -287,9 +311,10 @@ class DatabaseHelper(context: Context) :
         return skills
     }
 
-    // =========================
+
+    // ==========================================
     // INSERT EVIDENCE
-    // =========================
+    // ==========================================
 
     fun insertEvidence(
         title: String,
@@ -338,9 +363,10 @@ class DatabaseHelper(context: Context) :
         )
     }
 
-    // =========================
+
+    // ==========================================
     // GET ALL EVIDENCE
-    // =========================
+    // ==========================================
 
     fun getAllEvidence():
             MutableList<Evidence> {
@@ -416,9 +442,10 @@ class DatabaseHelper(context: Context) :
         return evidenceList
     }
 
-    // =========================
+
+    // ==========================================
     // INSERT ASSESSMENT
-    // =========================
+    // ==========================================
 
     fun insertAssessment(
         skill: String,
@@ -461,9 +488,10 @@ class DatabaseHelper(context: Context) :
         )
     }
 
-    // =========================
-    // GET LATEST ASSESSMENT
-    // =========================
+
+    // ==========================================
+    // GET LATEST ASSESSMENT PERCENTAGE
+    // ==========================================
 
     fun getLatestAssessmentPercentage():
             Int {
@@ -498,5 +526,156 @@ class DatabaseHelper(context: Context) :
         }
 
         return 0
+    }
+
+
+    // ==========================================
+    // GET AVERAGE SKILL PROGRESS
+    // ==========================================
+
+    fun getAverageSkillProgress():
+            Int {
+
+        val db =
+            readableDatabase
+
+        val cursor =
+            db.rawQuery(
+                "SELECT AVG($COL_SKILL_PROGRESS) " +
+                        "FROM $TABLE_SKILLS",
+                null
+            )
+
+        cursor.use {
+
+            if (
+                it.moveToFirst() &&
+                !it.isNull(0)
+            ) {
+
+                return it.getDouble(0).toInt()
+            }
+        }
+
+        return 0
+    }
+
+
+    // ==========================================
+    // GET EVIDENCE SCORE
+    // ==========================================
+
+    fun getEvidenceScore():
+            Int {
+
+        val db =
+            readableDatabase
+
+        val cursor =
+            db.rawQuery(
+                "SELECT COUNT(*) " +
+                        "FROM $TABLE_EVIDENCE",
+                null
+            )
+
+        cursor.use {
+
+            if (it.moveToFirst()) {
+
+                val count =
+                    it.getInt(0)
+
+                return when {
+
+                    count >= 5 ->
+                        100
+
+                    count == 4 ->
+                        90
+
+                    count == 3 ->
+                        80
+
+                    count == 2 ->
+                        65
+
+                    count == 1 ->
+                        45
+
+                    else ->
+                        0
+                }
+            }
+        }
+
+        return 0
+    }
+
+
+    // ==========================================
+    // GET VERIFICATION SCORE
+    // ==========================================
+
+    fun getVerificationScore():
+            Int {
+
+        val db =
+            readableDatabase
+
+        // Total evidence
+        val totalCursor =
+            db.rawQuery(
+                "SELECT COUNT(*) " +
+                        "FROM $TABLE_EVIDENCE",
+                null
+            )
+
+        // Verified evidence
+        val verifiedCursor =
+            db.rawQuery(
+                """
+                SELECT COUNT(*)
+                FROM $TABLE_EVIDENCE
+                WHERE $COL_EVIDENCE_STATUS = ?
+                """.trimIndent(),
+                arrayOf("Verified")
+            )
+
+        var total =
+            0
+
+        var verified =
+            0
+
+        totalCursor.use {
+
+            if (it.moveToFirst()) {
+
+                total =
+                    it.getInt(0)
+            }
+        }
+
+        verifiedCursor.use {
+
+            if (it.moveToFirst()) {
+
+                verified =
+                    it.getInt(0)
+            }
+        }
+
+        /*
+         * No evidence means
+         * no verification score.
+         */
+        if (total == 0) {
+
+            return 0
+        }
+
+        return (
+                verified * 100
+                ) / total
     }
 }

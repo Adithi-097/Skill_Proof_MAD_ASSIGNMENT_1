@@ -8,81 +8,124 @@ import androidx.appcompat.app.AppCompatActivity
 
 class ProofScoreActivity : AppCompatActivity() {
 
+    private lateinit var databaseHelper: DatabaseHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_proof_score)
 
+        /*
+         * Initialize database.
+         */
+        databaseHelper =
+            DatabaseHelper(this)
+
+        /*
+         * Find views.
+         */
         val btnBack =
-            findViewById<ImageButton>(R.id.btnBack)
+            findViewById<ImageButton>(
+                R.id.btnBack
+            )
 
         val tvScore =
-            findViewById<TextView>(R.id.tvScore)
+            findViewById<TextView>(
+                R.id.tvScore
+            )
 
         val tvScoreMessage =
-            findViewById<TextView>(R.id.tvScoreMessage)
+            findViewById<TextView>(
+                R.id.tvScoreMessage
+            )
 
         val tvSkillValue =
-            findViewById<TextView>(R.id.tvSkillValue)
+            findViewById<TextView>(
+                R.id.tvSkillValue
+            )
 
         val tvAssessmentValue =
-            findViewById<TextView>(R.id.tvAssessmentValue)
+            findViewById<TextView>(
+                R.id.tvAssessmentValue
+            )
 
         val tvEvidenceValue =
-            findViewById<TextView>(R.id.tvEvidenceValue)
+            findViewById<TextView>(
+                R.id.tvEvidenceValue
+            )
 
         val tvVerifiedValue =
-            findViewById<TextView>(R.id.tvVerifiedValue)
+            findViewById<TextView>(
+                R.id.tvVerifiedValue
+            )
 
         val progressSkill =
-            findViewById<ProgressBar>(R.id.progressSkill)
+            findViewById<ProgressBar>(
+                R.id.progressSkill
+            )
 
         val progressAssessment =
-            findViewById<ProgressBar>(R.id.progressAssessment)
+            findViewById<ProgressBar>(
+                R.id.progressAssessment
+            )
 
         val progressEvidence =
-            findViewById<ProgressBar>(R.id.progressEvidence)
+            findViewById<ProgressBar>(
+                R.id.progressEvidence
+            )
 
         val progressVerified =
-            findViewById<ProgressBar>(R.id.progressVerified)
+            findViewById<ProgressBar>(
+                R.id.progressVerified
+            )
 
+        /*
+         * Back button.
+         */
         btnBack.setOnClickListener {
             finish()
         }
 
         /*
-         * Current demo values.
-         *
-         * These will later come from SQLite/database:
-         *
-         * Skill level      = 70%
-         * Assessment       = 80%
-         * Evidence         = 60%
-         * Verified proof   = 40%
+         * Get REAL data from SQLite.
          */
+        val skillLevel =
+            databaseHelper.getAverageSkillProgress()
 
-        val skillLevel = 70
-        val assessmentScore = 80
-        val evidenceScore = 60
-        val verifiedScore = 40
+        val assessmentScore =
+            databaseHelper.getLatestAssessmentPercentage()
+
+        val evidenceScore =
+            databaseHelper.getEvidenceScore()
+
+        val verifiedScore =
+            databaseHelper.getVerificationScore()
 
         /*
-         * Proof Score calculation
+         * Proof Score formula:
          *
-         * Skill Level     → 30%
-         * Assessment      → 30%
+         * Skill Level      → 30%
+         * Assessment       → 30%
          * Evidence        → 25%
          * Verification    → 15%
          */
-
         val proofScore =
-            (skillLevel * 0.30 +
-                    assessmentScore * 0.30 +
-                    evidenceScore * 0.25 +
-                    verifiedScore * 0.15).toInt()
+            (
+                    skillLevel * 0.30 +
+                            assessmentScore * 0.30 +
+                            evidenceScore * 0.25 +
+                            verifiedScore * 0.15
+                    ).toInt()
 
-        tvScore.text = proofScore.toString()
+        /*
+         * Display score.
+         */
+        tvScore.text =
+            proofScore.toString()
 
+        /*
+         * Display individual values.
+         */
         tvSkillValue.text =
             "$skillLevel%"
 
@@ -95,6 +138,9 @@ class ProofScoreActivity : AppCompatActivity() {
         tvVerifiedValue.text =
             "$verifiedScore%"
 
+        /*
+         * Update progress bars.
+         */
         progressSkill.progress =
             skillLevel
 
@@ -107,8 +153,12 @@ class ProofScoreActivity : AppCompatActivity() {
         progressVerified.progress =
             verifiedScore
 
+        /*
+         * Display score message.
+         */
         tvScoreMessage.text =
             when {
+
                 proofScore >= 85 ->
                     "Excellent proof profile"
 
