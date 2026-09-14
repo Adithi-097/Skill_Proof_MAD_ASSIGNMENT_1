@@ -9,6 +9,13 @@ class ProfileActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
+    private lateinit var tvUserName: TextView
+    private lateinit var tvUserEmail: TextView
+    private lateinit var tvSkillCount: TextView
+    private lateinit var tvEvidenceCount: TextView
+    private lateinit var tvProofScore: TextView
+    private lateinit var tvCareerReadiness: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -16,70 +23,68 @@ class ProfileActivity : AppCompatActivity() {
 
         databaseHelper = DatabaseHelper(this)
 
-        // ------------------------------------------
-        // FIND VIEWS
-        // ------------------------------------------
-
         val btnBack =
             findViewById<ImageButton>(R.id.btnBack)
 
-        val tvUserName =
-            findViewById<TextView>(R.id.tvUserName)
+        tvUserName =
+            findViewById(R.id.tvUserName)
 
-        val tvUserEmail =
-            findViewById<TextView>(R.id.tvUserEmail)
+        tvUserEmail =
+            findViewById(R.id.tvUserEmail)
 
-        val tvSkillCount =
-            findViewById<TextView>(R.id.tvSkillCount)
+        tvSkillCount =
+            findViewById(R.id.tvSkillCount)
 
-        val tvEvidenceCount =
-            findViewById<TextView>(R.id.tvEvidenceCount)
+        tvEvidenceCount =
+            findViewById(R.id.tvEvidenceCount)
 
-        val tvProofScore =
-            findViewById<TextView>(R.id.tvProofScore)
+        tvProofScore =
+            findViewById(R.id.tvProofScore)
 
-        val tvCareerReadiness =
-            findViewById<TextView>(R.id.tvCareerReadiness)
-
-        // ------------------------------------------
-        // BACK BUTTON
-        // ------------------------------------------
+        tvCareerReadiness =
+            findViewById(R.id.tvCareerReadiness)
 
         btnBack.setOnClickListener {
             finish()
         }
+    }
 
-        // ------------------------------------------
+    override fun onResume() {
+        super.onResume()
+
+        loadProfile()
+    }
+
+    private fun loadProfile() {
+
+        // ==========================================
         // USER INFORMATION
-        // ------------------------------------------
+        // ==========================================
 
-        val sharedPreferences =
+        val preferences =
             getSharedPreferences(
                 "SkillProofPrefs",
                 MODE_PRIVATE
             )
 
-        val userName =
-            sharedPreferences.getString(
+        val name =
+            preferences.getString(
                 "user_name",
                 "SkillProof User"
             )
 
-        val userEmail =
-            sharedPreferences.getString(
+        val email =
+            preferences.getString(
                 "user_email",
-                "user@example.com"
+                "No email available"
             )
 
-        tvUserName.text =
-            userName
+        tvUserName.text = name
+        tvUserEmail.text = email
 
-        tvUserEmail.text =
-            userEmail
-
-        // ------------------------------------------
-        // GET DATABASE DATA
-        // ------------------------------------------
+        // ==========================================
+        // DATABASE DATA
+        // ==========================================
 
         val skills =
             databaseHelper.getAllSkills()
@@ -87,17 +92,100 @@ class ProfileActivity : AppCompatActivity() {
         val evidence =
             databaseHelper.getAllEvidence()
 
-        val skillCount =
-            skills.size
+        tvSkillCount.text =
+            skills.size.toString()
 
-        val evidenceCount =
-            evidence.size
+        tvEvidenceCount.text =
+            evidence.size.toString()
 
-        val proofScore =
-            calculateProofScore()
+        // ==========================================
+        // NO SKILLS
+        // ==========================================
+
+        if (skills.isEmpty()) {
+
+            tvProofScore.text = "0"
+            tvCareerReadiness.text = "0"
+
+            return
+        }
+
+        // ==========================================
+        // CURRENT SKILL
+        // ==========================================
+
+        val skill =
+            skills.first()
+
+        val skillName =
+            skill.name
+
+        val skillLevel =
+            skill.progress
+
+        // ==========================================
+        // ASSESSMENT
+        // ==========================================
 
         val assessmentScore =
-            databaseHelper.getLatestAssessmentPercentage()
+            databaseHelper.getAssessmentPercentageForSkill(
+                skillName
+            )
+
+        // ==========================================
+        // EVIDENCE
+        // ==========================================
+
+        val evidenceCount =
+            databaseHelper.getEvidenceCountForSkill(
+                skillName
+            )
+
+        val verifiedEvidenceCount =
+            databaseHelper.getVerifiedEvidenceCountForSkill(
+                skillName
+            )
+
+        // ==========================================
+        // EVIDENCE SCORE
+        // ==========================================
+
+        val evidenceScore =
+            when {
+                evidenceCount >= 5 -> 100
+                evidenceCount == 4 -> 90
+                evidenceCount == 3 -> 80
+                evidenceCount == 2 -> 65
+                evidenceCount == 1 -> 45
+                else -> 0
+            }
+
+        // ==========================================
+        // VERIFICATION SCORE
+        // ==========================================
+
+        val verificationScore =
+            if (evidenceCount == 0) {
+                0
+            } else {
+                (verifiedEvidenceCount * 100) / evidenceCount
+            }
+
+        // ==========================================
+        // PROOF SCORE
+        // ==========================================
+
+        val proofScore =
+            (
+                    skillLevel * 0.30 +
+                            assessmentScore * 0.30 +
+                            evidenceScore * 0.25 +
+                            verificationScore * 0.15
+                    ).toInt()
+
+        // ==========================================
+        // CAREER READINESS
+        // ==========================================
 
         val careerReadiness =
             (
@@ -105,46 +193,14 @@ class ProfileActivity : AppCompatActivity() {
                             assessmentScore * 0.40
                     ).toInt()
 
-        // ------------------------------------------
-        // DISPLAY SUMMARY
-        // ------------------------------------------
-
-        tvSkillCount.text =
-            skillCount.toString()
-
-        tvEvidenceCount.text =
-            evidenceCount.toString()
+        // ==========================================
+        // DISPLAY
+        // ==========================================
 
         tvProofScore.text =
             proofScore.toString()
 
         tvCareerReadiness.text =
-            "$careerReadiness%"
-    }
-
-    // ------------------------------------------
-    // CALCULATE PROOF SCORE
-    // ------------------------------------------
-
-    private fun calculateProofScore(): Int {
-
-        val skillLevel =
-            databaseHelper.getAverageSkillProgress()
-
-        val assessmentScore =
-            databaseHelper.getLatestAssessmentPercentage()
-
-        val evidenceScore =
-            databaseHelper.getEvidenceScore()
-
-        val verifiedScore =
-            databaseHelper.getVerificationScore()
-
-        return (
-                skillLevel * 0.30 +
-                        assessmentScore * 0.30 +
-                        evidenceScore * 0.25 +
-                        verifiedScore * 0.15
-                ).toInt()
+            careerReadiness.toString()
     }
 }
