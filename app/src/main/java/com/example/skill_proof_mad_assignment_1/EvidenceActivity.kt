@@ -16,13 +16,11 @@ class EvidenceActivity : AppCompatActivity() {
 
     private lateinit var evidenceAdapter: EvidenceAdapter
     private lateinit var evidenceList: MutableList<Evidence>
+    private lateinit var databaseHelper: DatabaseHelper
 
     private lateinit var tvEvidenceCount: TextView
     private lateinit var tvVerifiedCount: TextView
 
-    private lateinit var databaseHelper: DatabaseHelper
-
-    // ADD EVIDENCE RESULT
     private val addEvidenceLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -32,8 +30,7 @@ class EvidenceActivity : AppCompatActivity() {
                 return@registerForActivityResult
             }
 
-            val data = result.data
-                ?: return@registerForActivityResult
+            val data = result.data ?: return@registerForActivityResult
 
             val title =
                 data.getStringExtra("evidence_title")
@@ -55,122 +52,83 @@ class EvidenceActivity : AppCompatActivity() {
                 data.getStringExtra("evidence_status")
                     ?: "Pending"
 
-            // SAVE TO SQLITE
+            val attachmentUri =
+                data.getStringExtra("evidence_attachment_uri")
+                    ?: ""
+
+            // Save evidence in SQLite
             databaseHelper.insertEvidence(
-                title,
-                skill,
-                type,
-                link,
-                status
+                title = title,
+                skill = skill,
+                type = type,
+                link = link,
+                status = status,
+                attachmentUri = attachmentUri
             )
 
-            // CREATE NEW EVIDENCE OBJECT
-            val evidence =
-                Evidence(
-                    title,
-                    skill,
-                    type,
-                    link,
-                    status
-                )
-
-            // ADD TO RECYCLERVIEW
-            evidenceAdapter.addEvidence(
-                evidence
+            // Add new evidence to RecyclerView
+            val evidence = Evidence(
+                title = title,
+                skill = skill,
+                type = type,
+                link = link,
+                status = status,
+                attachmentUri = attachmentUri
             )
 
-            // UPDATE COUNTS
+            evidenceAdapter.addEvidence(evidence)
+
             updateCounts()
         }
 
-
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(
-            R.layout.activity_evidence
-        )
+        setContentView(R.layout.activity_evidence)
 
-        // DATABASE
-        databaseHelper =
-            DatabaseHelper(this)
+        databaseHelper = DatabaseHelper(this)
 
-
-        // FIND VIEWS
-
+        // Views
         val btnBack =
-            findViewById<ImageButton>(
-                R.id.btnBack
-            )
+            findViewById<ImageButton>(R.id.btnBack)
 
         val btnAddEvidence =
-            findViewById<MaterialButton>(
-                R.id.btnAddEvidence
-            )
+            findViewById<MaterialButton>(R.id.btnAddEvidence)
 
         tvEvidenceCount =
-            findViewById(
-                R.id.tvEvidenceCount
-            )
+            findViewById(R.id.tvEvidenceCount)
 
         tvVerifiedCount =
-            findViewById(
-                R.id.tvVerifiedCount
-            )
+            findViewById(R.id.tvVerifiedCount)
 
         val recyclerEvidence =
-            findViewById<RecyclerView>(
-                R.id.recyclerEvidence
-            )
+            findViewById<RecyclerView>(R.id.recyclerEvidence)
 
-
-        // LOAD EVIDENCE FROM SQLITE
-
+        // Load evidence from SQLite
         evidenceList =
             databaseHelper.getAllEvidence()
 
-
-        // CREATE ADAPTER
-
+        // Adapter
         evidenceAdapter =
-            EvidenceAdapter(
-                evidenceList
-            ) { evidence, position ->
-
-                showVerificationDialog(
-                    evidence,
-                    position
-                )
+            EvidenceAdapter(evidenceList) { evidence, position ->
+                showVerificationDialog(evidence, position)
             }
 
-
-        // RECYCLERVIEW
-
+        // RecyclerView
         recyclerEvidence.layoutManager =
             LinearLayoutManager(this)
 
         recyclerEvidence.adapter =
             evidenceAdapter
 
-
-        // UPDATE COUNTS
-
         updateCounts()
 
-
-        // BACK BUTTON
-
+        // Back button
         btnBack.setOnClickListener {
-
             finish()
         }
 
-
-        // ADD EVIDENCE BUTTON
-
+        // Add Evidence button
         btnAddEvidence.setOnClickListener {
 
             val intent =
@@ -179,42 +137,32 @@ class EvidenceActivity : AppCompatActivity() {
                     AddEvidenceActivity::class.java
                 )
 
-            addEvidenceLauncher.launch(
-                intent
-            )
+            addEvidenceLauncher.launch(intent)
         }
     }
 
-
-    // UPDATE EVIDENCE COUNTS
-
     private fun updateCounts() {
 
+        // Total evidence
         tvEvidenceCount.text =
             evidenceList.size.toString()
 
-
+        // Verified evidence
         val verifiedCount =
             evidenceList.count {
-
                 it.status == "Verified"
             }
-
 
         tvVerifiedCount.text =
             verifiedCount.toString()
     }
-
-
-    // VERIFY EVIDENCE DIALOG
 
     private fun showVerificationDialog(
         evidence: Evidence,
         position: Int
     ) {
 
-        // ALREADY VERIFIED
-
+        // Already verified
         if (evidence.status == "Verified") {
 
             Toast.makeText(
@@ -226,30 +174,18 @@ class EvidenceActivity : AppCompatActivity() {
             return
         }
 
-
-        // CONFIRMATION DIALOG
-
         AlertDialog.Builder(this)
-
-            .setTitle(
-                "Verify Evidence"
-            )
-
+            .setTitle("Verify Evidence")
             .setMessage(
                 "Do you want to mark \"${evidence.title}\" as verified?"
             )
-
             .setNegativeButton(
                 "Cancel",
                 null
             )
-
             .setPositiveButton(
                 "Verify"
             ) { _, _ ->
-
-
-                // UPDATE SQLITE
 
                 val updatedRows =
                     databaseHelper.updateEvidenceStatus(
@@ -257,35 +193,24 @@ class EvidenceActivity : AppCompatActivity() {
                         "Verified"
                     )
 
-
                 if (updatedRows > 0) {
-
-                    // UPDATED EVIDENCE OBJECT
 
                     val updatedEvidence =
                         Evidence(
-                            evidence.title,
-                            evidence.skill,
-                            evidence.type,
-                            evidence.link,
-                            "Verified"
+                            title = evidence.title,
+                            skill = evidence.skill,
+                            type = evidence.type,
+                            link = evidence.link,
+                            status = "Verified",
+                            attachmentUri = evidence.attachmentUri
                         )
-
-
-                    // UPDATE RECYCLERVIEW
 
                     evidenceAdapter.updateEvidence(
                         position,
                         updatedEvidence
                     )
 
-
-                    // UPDATE COUNTS
-
                     updateCounts()
-
-
-                    // SUCCESS MESSAGE
 
                     Toast.makeText(
                         this,
@@ -302,7 +227,6 @@ class EvidenceActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-
             .show()
     }
 }

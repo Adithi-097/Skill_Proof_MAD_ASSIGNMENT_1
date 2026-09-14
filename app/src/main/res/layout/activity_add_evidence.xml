@@ -11,7 +11,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:padding="20dp">
+
+
+        <!-- ========================= -->
+        <!-- BACK BUTTON -->
+        <!-- ========================= -->
 
         <ImageButton
             android:id="@+id/btnBack"
@@ -19,10 +24,14 @@
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
-            android:padding="12dp"
-            android:src="@android:drawable/ic_menu_revert"
+            android:src="@android:drawable/ic_media_previous"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+        <!-- ========================= -->
+        <!-- TITLE -->
+        <!-- ========================= -->
 
         <TextView
             android:id="@+id/tvTitle"
@@ -30,46 +39,62 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:text="Add Evidence"
-            android:textSize="27sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/btnBack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btnBack"
             app:layout_constraintTop_toTopOf="@id/btnBack" />
 
+
+        <!-- ========================= -->
+        <!-- SUBTITLE -->
+        <!-- ========================= -->
+
         <TextView
             android:id="@+id/tvSubtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="Add something that proves your skill."
+            android:layout_marginTop="8dp"
+            android:text="Add proof that demonstrates your skill."
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
+
+        <!-- ========================= -->
+        <!-- EVIDENCE CARD -->
+        <!-- ========================= -->
+
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/formCard"
+            android:id="@+id/evidenceFormCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="24dp"
+            android:layout_marginTop="22dp"
+            app:cardCornerRadius="20dp"
             app:cardElevation="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp">
 
+
+                <!-- ========================= -->
+                <!-- TITLE FIELD -->
+                <!-- ========================= -->
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/titleLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Evidence title"
+                    android:hint="Evidence Title"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -83,13 +108,18 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+
+                <!-- ========================= -->
+                <!-- SKILL -->
+                <!-- ========================= -->
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/skillLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:hint="Select skill"
+                    android:layout_marginTop="16dp"
+                    android:hint="Select Skill"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/titleLayout">
@@ -102,13 +132,18 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+
+                <!-- ========================= -->
+                <!-- EVIDENCE TYPE -->
+                <!-- ========================= -->
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/typeLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:hint="Evidence type"
+                    android:layout_marginTop="16dp"
+                    android:hint="Evidence Type"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/skillLayout">
@@ -121,13 +156,18 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+
+                <!-- ========================= -->
+                <!-- LINK -->
+                <!-- ========================= -->
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/linkLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:hint="Project / GitHub / Certificate link"
+                    android:layout_marginTop="16dp"
+                    android:hint="Evidence Link"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/typeLayout">
@@ -137,27 +177,126 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textUri"
-                        android:maxLines="1" />
+                        android:maxLines="2" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+
+                <!-- ========================= -->
+                <!-- ATTACHMENT TITLE -->
+                <!-- ========================= -->
+
+                <TextView
+                    android:id="@+id/tvAttachmentTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:text="Evidence Attachment"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/linkLayout" />
+
+
+                <!-- ========================= -->
+                <!-- ATTACHMENT SUBTITLE -->
+                <!-- ========================= -->
+
+                <TextView
+                    android:id="@+id/tvAttachmentSubtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Add a photo of your certificate, project or achievement."
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAttachmentTitle" />
+
+
+                <!-- ========================= -->
+                <!-- IMAGE PREVIEW -->
+                <!-- ========================= -->
+
+                <ImageView
+                    android:id="@+id/ivAttachmentPreview"
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="14dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="Evidence attachment preview"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAttachmentSubtitle" />
+
+
+                <!-- ========================= -->
+                <!-- CAMERA BUTTON -->
+                <!-- ========================= -->
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCamera"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="📷  Take Photo"
+                    app:layout_constraintEnd_toStartOf="@id/btnGallery"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivAttachmentPreview" />
+
+
+                <!-- ========================= -->
+                <!-- GALLERY BUTTON -->
+                <!-- ========================= -->
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGallery"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="🖼  Gallery"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/btnCamera"
+                    app:layout_constraintTop_toTopOf="@id/btnCamera" />
+
+
+                <!-- ========================= -->
+                <!-- SAVE BUTTON -->
+                <!-- ========================= -->
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSaveEvidence"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:text="SAVE EVIDENCE"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
                     android:textStyle="bold"
-                    app:cornerRadius="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/linkLayout" />
+                    app:layout_constraintTop_toBottomOf="@id/btnCamera" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+
+        <!-- ========================= -->
+        <!-- FOOTER -->
+        <!-- ========================= -->
+
+        <TextView
+            android:id="@+id/tvFooter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="SkillProof • Evidence makes skills credible."
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/evidenceFormCard" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

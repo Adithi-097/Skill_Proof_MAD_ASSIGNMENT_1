@@ -5,5 +5,6 @@ data class Evidence(
     val skill: String,
     val type: String,
     val link: String,
-    val status: String
+    val status: String,
+    val attachmentUri: String = ""
 )

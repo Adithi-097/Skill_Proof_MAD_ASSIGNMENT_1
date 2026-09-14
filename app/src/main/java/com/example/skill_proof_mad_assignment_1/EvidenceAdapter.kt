@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,9 @@ class EvidenceAdapter(
 
         val tvEvidenceLink: TextView =
             itemView.findViewById(R.id.tvEvidenceLink)
+
+        val ivEvidenceAttachment: ImageView =
+            itemView.findViewById(R.id.ivEvidenceAttachment)
     }
 
     override fun onCreateViewHolder(
@@ -57,10 +61,7 @@ class EvidenceAdapter(
         val evidence =
             evidenceList[position]
 
-        // ------------------------------------------
-        // DISPLAY DATA
-        // ------------------------------------------
-
+        // Basic information
         holder.tvEvidenceTitle.text =
             evidence.title
 
@@ -76,9 +77,39 @@ class EvidenceAdapter(
         holder.tvEvidenceLink.text =
             evidence.link
 
-        // ------------------------------------------
-        // OPEN LINK
-        // ------------------------------------------
+        // -------------------------------------------------
+        // Attachment Image
+        // -------------------------------------------------
+
+        if (evidence.attachmentUri.isNotEmpty()) {
+
+            try {
+
+                val imageUri =
+                    Uri.parse(evidence.attachmentUri)
+
+                holder.ivEvidenceAttachment.setImageURI(
+                    imageUri
+                )
+
+                holder.ivEvidenceAttachment.visibility =
+                    View.VISIBLE
+
+            } catch (e: Exception) {
+
+                holder.ivEvidenceAttachment.visibility =
+                    View.GONE
+            }
+
+        } else {
+
+            holder.ivEvidenceAttachment.visibility =
+                View.GONE
+        }
+
+        // -------------------------------------------------
+        // Open Link
+        // -------------------------------------------------
 
         holder.tvEvidenceLink.setOnClickListener {
 
@@ -89,8 +120,7 @@ class EvidenceAdapter(
                 !url.startsWith("http://") &&
                 !url.startsWith("https://")
             ) {
-                url =
-                    "https://$url"
+                url = "https://$url"
             }
 
             try {
@@ -101,8 +131,9 @@ class EvidenceAdapter(
                         Uri.parse(url)
                     )
 
-                holder.itemView.context
-                    .startActivity(intent)
+                holder.itemView.context.startActivity(
+                    intent
+                )
 
             } catch (e: Exception) {
 
@@ -114,25 +145,31 @@ class EvidenceAdapter(
             }
         }
 
-        // ------------------------------------------
-        // CLICK ENTIRE EVIDENCE CARD
-        // ------------------------------------------
+        // -------------------------------------------------
+        // Click Evidence Card
+        // -------------------------------------------------
 
         holder.itemView.setOnClickListener {
 
-            onEvidenceClick(
-                evidence,
+            val currentPosition =
                 holder.bindingAdapterPosition
-            )
+
+            if (currentPosition != RecyclerView.NO_POSITION) {
+
+                onEvidenceClick(
+                    evidenceList[currentPosition],
+                    currentPosition
+                )
+            }
         }
     }
 
     override fun getItemCount(): Int =
         evidenceList.size
 
-    // ------------------------------------------
-    // ADD EVIDENCE
-    // ------------------------------------------
+    // -------------------------------------------------
+    // Add Evidence
+    // -------------------------------------------------
 
     fun addEvidence(
         evidence: Evidence
@@ -145,9 +182,9 @@ class EvidenceAdapter(
         )
     }
 
-    // ------------------------------------------
-    // UPDATE EVIDENCE
-    // ------------------------------------------
+    // -------------------------------------------------
+    // Update Evidence
+    // -------------------------------------------------
 
     fun updateEvidence(
         position: Int,

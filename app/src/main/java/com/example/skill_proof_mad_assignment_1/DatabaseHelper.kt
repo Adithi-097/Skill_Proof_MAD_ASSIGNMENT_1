@@ -19,7 +19,7 @@ class DatabaseHelper(context: Context) :
             "skillproof.db"
 
         private const val DATABASE_VERSION =
-            2
+            3
 
 
         // =========================
@@ -70,6 +70,9 @@ class DatabaseHelper(context: Context) :
         const val COL_EVIDENCE_STATUS =
             "status"
 
+        const val COL_EVIDENCE_ATTACHMENT_URI =
+            "attachment_uri"
+
 
         // =========================
         // ASSESSMENT TABLE
@@ -103,10 +106,6 @@ class DatabaseHelper(context: Context) :
         db: SQLiteDatabase
     ) {
 
-        // -------------------------
-        // SKILLS TABLE
-        // -------------------------
-
         val createSkillsTable = """
             CREATE TABLE $TABLE_SKILLS (
                 $COL_SKILL_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -118,10 +117,6 @@ class DatabaseHelper(context: Context) :
         """.trimIndent()
 
 
-        // -------------------------
-        // EVIDENCE TABLE
-        // -------------------------
-
         val createEvidenceTable = """
             CREATE TABLE $TABLE_EVIDENCE (
                 $COL_EVIDENCE_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -129,14 +124,11 @@ class DatabaseHelper(context: Context) :
                 $COL_EVIDENCE_SKILL TEXT NOT NULL,
                 $COL_EVIDENCE_TYPE TEXT NOT NULL,
                 $COL_EVIDENCE_LINK TEXT NOT NULL,
-                $COL_EVIDENCE_STATUS TEXT NOT NULL
+                $COL_EVIDENCE_STATUS TEXT NOT NULL,
+                $COL_EVIDENCE_ATTACHMENT_URI TEXT
             )
         """.trimIndent()
 
-
-        // -------------------------
-        // ASSESSMENT TABLE
-        // -------------------------
 
         val createAssessmentTable = """
             CREATE TABLE $TABLE_ASSESSMENTS (
@@ -149,19 +141,11 @@ class DatabaseHelper(context: Context) :
         """.trimIndent()
 
 
-        // CREATE ALL TABLES
+        db.execSQL(createSkillsTable)
 
-        db.execSQL(
-            createSkillsTable
-        )
+        db.execSQL(createEvidenceTable)
 
-        db.execSQL(
-            createEvidenceTable
-        )
-
-        db.execSQL(
-            createAssessmentTable
-        )
+        db.execSQL(createAssessmentTable)
     }
 
 
@@ -194,8 +178,6 @@ class DatabaseHelper(context: Context) :
     // =====================================================
     // SKILLS
     // =====================================================
-
-    // INSERT SKILL
 
     fun insertSkill(
         name: String,
@@ -238,8 +220,6 @@ class DatabaseHelper(context: Context) :
         )
     }
 
-
-    // GET ALL SKILLS
 
     fun getAllSkills():
             MutableList<Skill> {
@@ -312,14 +292,13 @@ class DatabaseHelper(context: Context) :
     // EVIDENCE
     // =====================================================
 
-    // INSERT EVIDENCE
-
     fun insertEvidence(
         title: String,
         skill: String,
         type: String,
         link: String,
-        status: String
+        status: String,
+        attachmentUri: String = ""
     ): Long {
 
         val db =
@@ -352,6 +331,11 @@ class DatabaseHelper(context: Context) :
                     COL_EVIDENCE_STATUS,
                     status
                 )
+
+                put(
+                    COL_EVIDENCE_ATTACHMENT_URI,
+                    attachmentUri
+                )
             }
 
         return db.insert(
@@ -361,8 +345,6 @@ class DatabaseHelper(context: Context) :
         )
     }
 
-
-    // GET ALL EVIDENCE
 
     fun getAllEvidence():
             MutableList<Evidence> {
@@ -423,13 +405,22 @@ class DatabaseHelper(context: Context) :
                         )
                     )
 
+                val attachmentUri =
+                    it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_EVIDENCE_ATTACHMENT_URI
+                        )
+                    ) ?: ""
+
+
                 evidenceList.add(
                     Evidence(
                         title,
                         skill,
                         type,
                         link,
-                        status
+                        status,
+                        attachmentUri
                     )
                 )
             }
@@ -440,7 +431,6 @@ class DatabaseHelper(context: Context) :
 
 
     // UPDATE EVIDENCE STATUS
-    // Used for Pending -> Verified
 
     fun updateEvidenceStatus(
         title: String,
@@ -471,8 +461,6 @@ class DatabaseHelper(context: Context) :
     // =====================================================
     // ASSESSMENT
     // =====================================================
-
-    // INSERT ASSESSMENT RESULT
 
     fun insertAssessment(
         skill: String,
@@ -516,8 +504,6 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // GET LATEST ASSESSMENT PERCENTAGE
-
     fun getLatestAssessmentPercentage():
             Int {
 
@@ -558,8 +544,6 @@ class DatabaseHelper(context: Context) :
     // PROOF SCORE
     // =====================================================
 
-    // AVERAGE SKILL PROGRESS
-
     fun getAverageSkillProgress():
             Int {
 
@@ -587,8 +571,6 @@ class DatabaseHelper(context: Context) :
         return 0
     }
 
-
-    // EVIDENCE SCORE
 
     fun getEvidenceScore():
             Int {
@@ -637,16 +619,12 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // VERIFICATION SCORE
-
     fun getVerificationScore():
             Int {
 
         val db =
             readableDatabase
 
-
-        // TOTAL EVIDENCE
 
         val totalCursor =
             db.rawQuery(
@@ -655,8 +633,6 @@ class DatabaseHelper(context: Context) :
                 null
             )
 
-
-        // VERIFIED EVIDENCE
 
         val verifiedCursor =
             db.rawQuery(
@@ -696,15 +672,11 @@ class DatabaseHelper(context: Context) :
         }
 
 
-        // NO EVIDENCE
-
         if (total == 0) {
 
             return 0
         }
 
-
-        // CALCULATE VERIFICATION %
 
         return (
                 verified * 100
