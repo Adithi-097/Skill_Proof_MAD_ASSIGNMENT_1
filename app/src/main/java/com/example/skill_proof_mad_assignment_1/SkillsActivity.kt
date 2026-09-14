@@ -14,8 +14,9 @@ class SkillsActivity : AppCompatActivity() {
 
     private lateinit var skillAdapter: SkillAdapter
     private lateinit var skills: MutableList<Skill>
-
     private lateinit var tvSkillCount: TextView
+
+    private lateinit var databaseHelper: DatabaseHelper
 
     private val addSkillLauncher =
         registerForActivityResult(
@@ -24,7 +25,8 @@ class SkillsActivity : AppCompatActivity() {
 
             if (result.resultCode == RESULT_OK) {
 
-                val data = result.data ?: return@registerForActivityResult
+                val data = result.data
+                    ?: return@registerForActivityResult
 
                 val skillName =
                     data.getStringExtra("skill_name")
@@ -44,11 +46,24 @@ class SkillsActivity : AppCompatActivity() {
                     data.getStringExtra("proof_status")
                         ?: "Not verified"
 
+                /*
+                 * Save the new skill into SQLite.
+                 */
+                databaseHelper.insertSkill(
+                    skillName,
+                    level,
+                    progress,
+                    proofStatus
+                )
+
+                /*
+                 * Add the same skill to the RecyclerView.
+                 */
                 val newSkill = Skill(
-                    name = skillName,
-                    level = level,
-                    progress = progress,
-                    proofStatus = proofStatus
+                    skillName,
+                    level,
+                    progress,
+                    proofStatus
                 )
 
                 skillAdapter.addSkill(newSkill)
@@ -62,6 +77,11 @@ class SkillsActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_skills)
 
+        /*
+         * Initialize SQLite database helper.
+         */
+        databaseHelper = DatabaseHelper(this)
+
         val btnBack =
             findViewById<ImageButton>(R.id.btnBack)
 
@@ -74,30 +94,48 @@ class SkillsActivity : AppCompatActivity() {
         val recyclerSkills =
             findViewById<RecyclerView>(R.id.recyclerSkills)
 
-        skills = mutableListOf(
+        /*
+         * Load skills from SQLite.
+         */
+        skills =
+            databaseHelper.getAllSkills()
 
-            Skill(
+        /*
+         * If database is empty, add demo data once.
+         */
+        if (skills.isEmpty()) {
+
+            databaseHelper.insertSkill(
                 "Java",
                 "Intermediate",
                 70,
                 "Not verified"
-            ),
+            )
 
-            Skill(
+            databaseHelper.insertSkill(
                 "Kotlin",
                 "Beginner",
                 45,
                 "Not verified"
-            ),
+            )
 
-            Skill(
+            databaseHelper.insertSkill(
                 "Python",
                 "Advanced",
                 88,
                 "Verified"
             )
-        )
 
+            /*
+             * Load the newly inserted data.
+             */
+            skills =
+                databaseHelper.getAllSkills()
+        }
+
+        /*
+         * RecyclerView setup.
+         */
         skillAdapter =
             SkillAdapter(skills)
 
@@ -109,16 +147,23 @@ class SkillsActivity : AppCompatActivity() {
 
         updateSkillCount()
 
+        /*
+         * Back button.
+         */
         btnBack.setOnClickListener {
             finish()
         }
 
+        /*
+         * Add Skill button.
+         */
         btnAddSkill.setOnClickListener {
 
-            val intent = Intent(
-                this,
-                AddSkillActivity::class.java
-            )
+            val intent =
+                Intent(
+                    this,
+                    AddSkillActivity::class.java
+                )
 
             addSkillLauncher.launch(intent)
         }
