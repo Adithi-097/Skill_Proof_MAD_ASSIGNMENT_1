@@ -1,6 +1,7 @@
 package com.example.skill_proof_mad_assignment_1
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
 import android.widget.RadioButton
@@ -20,34 +21,70 @@ class AssessmentActivity : AppCompatActivity() {
     private lateinit var btnNext: MaterialButton
     private lateinit var tvResult: TextView
 
+    // SQLite database helper
+    private lateinit var databaseHelper: DatabaseHelper
+
     private var currentQuestion = 0
     private var score = 0
     private var assessmentStarted = false
 
+    /*
+     * Assessment questions.
+     */
     private val questions = listOf(
+
         Question(
             "Which keyword is used to declare a variable whose value cannot be changed in Kotlin?",
-            listOf("var", "val", "const", "let"),
+            listOf(
+                "var",
+                "val",
+                "const",
+                "let"
+            ),
             1
         ),
+
         Question(
             "Which collection does not allow duplicate elements?",
-            listOf("List", "ArrayList", "Set", "Array"),
+            listOf(
+                "List",
+                "ArrayList",
+                "Set",
+                "Array"
+            ),
             2
         ),
+
         Question(
             "Which function is the entry point of a Kotlin program?",
-            listOf("start()", "run()", "main()", "init()"),
+            listOf(
+                "start()",
+                "run()",
+                "main()",
+                "init()"
+            ),
             2
         ),
+
         Question(
             "Which keyword is used to create a class in Kotlin?",
-            listOf("object", "class", "struct", "type"),
+            listOf(
+                "object",
+                "class",
+                "struct",
+                "type"
+            ),
             1
         ),
+
         Question(
             "Which Android component is normally used to represent a screen?",
-            listOf("Service", "Activity", "BroadcastReceiver", "Provider"),
+            listOf(
+                "Service",
+                "Activity",
+                "BroadcastReceiver",
+                "Provider"
+            ),
             1
         )
     )
@@ -57,6 +94,14 @@ class AssessmentActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_assessment)
 
+        /*
+         * Initialize SQLite database.
+         */
+        databaseHelper = DatabaseHelper(this)
+
+        /*
+         * Find views.
+         */
         val btnBack =
             findViewById<ImageButton>(R.id.btnBack)
 
@@ -79,8 +124,13 @@ class AssessmentActivity : AppCompatActivity() {
             findViewById(R.id.tvResult)
 
         val skillLayout =
-            findViewById<TextInputLayout>(R.id.skillLayout)
+            findViewById<TextInputLayout>(
+                R.id.skillLayout
+            )
 
+        /*
+         * Skills available for assessment.
+         */
         val skills = arrayOf(
             "Kotlin",
             "Java",
@@ -89,7 +139,7 @@ class AssessmentActivity : AppCompatActivity() {
             "Android"
         )
 
-        val adapter = android.widget.ArrayAdapter(
+        val adapter = ArrayAdapter(
             this,
             android.R.layout.simple_dropdown_item_1line,
             skills
@@ -97,64 +147,112 @@ class AssessmentActivity : AppCompatActivity() {
 
         actvSkill.setAdapter(adapter)
 
+        /*
+         * Back button.
+         */
         btnBack.setOnClickListener {
             finish()
         }
 
+        /*
+         * Next / Start / Submit button.
+         */
         btnNext.setOnClickListener {
 
+            /*
+             * First click:
+             * Start the assessment.
+             */
             if (!assessmentStarted) {
 
                 val selectedSkill =
                     actvSkill.text.toString().trim()
 
                 if (selectedSkill.isEmpty()) {
+
                     skillLayout.error =
                         "Select a skill to begin"
+
                     actvSkill.requestFocus()
+
                     return@setOnClickListener
                 }
 
                 skillLayout.error = null
 
                 assessmentStarted = true
+
                 currentQuestion = 0
+
                 score = 0
+
+                tvResult.visibility =
+                    TextView.GONE
 
                 showQuestion()
 
                 return@setOnClickListener
             }
 
+            /*
+             * After assessment starts,
+             * check the selected answer.
+             */
             checkAnswer()
         }
     }
 
+    /*
+     * Display the current question.
+     */
     private fun showQuestion() {
 
+        /*
+         * If all questions are completed,
+         * show the final result.
+         */
         if (currentQuestion >= questions.size) {
+
             showResult()
+
             return
         }
 
         val question =
             questions[currentQuestion]
 
+        /*
+         * Update question number.
+         */
         questionNumber.text =
             "Question ${currentQuestion + 1} of ${questions.size}"
 
+        /*
+         * Update question text.
+         */
         questionText.text =
             question.text
 
+        /*
+         * Remove previous options.
+         */
         optionsGroup.removeAllViews()
 
-        question.options.forEachIndexed { index, option ->
+        /*
+         * Add new RadioButtons.
+         */
+        question.options.forEachIndexed {
+                index,
+                option ->
 
             val radioButton =
                 RadioButton(this)
 
-            radioButton.text = option
-            radioButton.textSize = 14f
+            radioButton.text =
+                option
+
+            radioButton.textSize =
+                14f
 
             radioButton.setPadding(
                 8,
@@ -163,25 +261,43 @@ class AssessmentActivity : AppCompatActivity() {
                 18
             )
 
+            /*
+             * Give each option a unique ID.
+             */
             radioButton.id =
                 1000 + index
 
-            optionsGroup.addView(radioButton)
+            optionsGroup.addView(
+                radioButton
+            )
         }
 
+        /*
+         * Change button text according
+         * to the current question.
+         */
         btnNext.text =
             if (currentQuestion == questions.lastIndex) {
+
                 "SUBMIT ASSESSMENT"
+
             } else {
+
                 "NEXT QUESTION"
             }
     }
 
+    /*
+     * Check the selected answer.
+     */
     private fun checkAnswer() {
 
         val selectedId =
             optionsGroup.checkedRadioButtonId
 
+        /*
+         * No option selected.
+         */
         if (selectedId == -1) {
 
             Toast.makeText(
@@ -193,13 +309,19 @@ class AssessmentActivity : AppCompatActivity() {
             return
         }
 
+        /*
+         * Convert RadioButton ID
+         * back to option index.
+         */
         val selectedIndex =
             selectedId - 1000
 
         val correctAnswer =
-            questions[currentQuestion].correctAnswerIndex
+            questions[currentQuestion]
+                .correctAnswerIndex
 
         if (selectedIndex == correctAnswer) {
+
             score++
         }
 
@@ -210,7 +332,8 @@ class AssessmentActivity : AppCompatActivity() {
 
     private fun showResult() {
 
-        questionNumber.text = "Assessment Complete"
+        questionNumber.text =
+            "Assessment Complete"
 
         questionText.text = ""
 
@@ -219,16 +342,30 @@ class AssessmentActivity : AppCompatActivity() {
         val percentage =
             (score * 100) / questions.size
 
+        val selectedSkill =
+            actvSkill.text.toString().trim()
+
+        databaseHelper.insertAssessment(
+            selectedSkill,
+            score,
+            questions.size,
+            percentage
+        )
+
         tvResult.text =
-            "Your Score\n$score/${questions.size}  •  $percentage%"
+            "Your Score\n" +
+                    "$score/${questions.size}  •  $percentage%"
 
         tvResult.visibility =
             TextView.VISIBLE
 
-        btnNext.text = "RETAKE ASSESSMENT"
+        btnNext.text =
+            "RETAKE ASSESSMENT"
 
         assessmentStarted = false
+
         currentQuestion = 0
+
         score = 0
     }
 }
