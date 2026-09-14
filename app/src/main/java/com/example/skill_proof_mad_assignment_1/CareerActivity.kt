@@ -8,10 +8,18 @@ import androidx.appcompat.app.AppCompatActivity
 
 class CareerActivity : AppCompatActivity() {
 
+    private lateinit var databaseHelper: DatabaseHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_career)
+
+        databaseHelper = DatabaseHelper(this)
+
+        // ------------------------------------------
+        // FIND VIEWS
+        // ------------------------------------------
 
         val btnBack =
             findViewById<ImageButton>(R.id.btnBack)
@@ -34,39 +42,40 @@ class CareerActivity : AppCompatActivity() {
         val tvRecommendations =
             findViewById<TextView>(R.id.tvRecommendations)
 
+        // ------------------------------------------
+        // BACK BUTTON
+        // ------------------------------------------
+
         btnBack.setOnClickListener {
             finish()
         }
 
-        /*
-         * Current SkillProof demo data.
-         *
-         * These values will later come from SQLite.
-         */
+        // ------------------------------------------
+        // GET REAL DATA FROM SQLITE
+        // ------------------------------------------
 
-        val proofScore = 66
-        val assessmentScore = 80
+        val proofScore =
+            calculateProofScore()
 
-        val strongSkills = listOf(
-            "Python",
-            "Kotlin"
-        )
+        val assessmentScore =
+            databaseHelper.getLatestAssessmentPercentage()
 
-        val skillsToImprove = listOf(
-            "SQL",
-            "Java"
-        )
+        val skills =
+            databaseHelper.getAllSkills()
 
-        /*
-         * Career Readiness calculation.
-         *
-         * Proof Score      → 60%
-         * Assessment       → 40%
-         */
+        // ------------------------------------------
+        // CALCULATE CAREER READINESS
+        // ------------------------------------------
 
         val readinessScore =
-            (proofScore * 0.60 +
-                    assessmentScore * 0.40).toInt()
+            (
+                    proofScore * 0.60 +
+                            assessmentScore * 0.40
+                    ).toInt()
+
+        // ------------------------------------------
+        // DISPLAY READINESS SCORE
+        // ------------------------------------------
 
         tvReadinessScore.text =
             "$readinessScore%"
@@ -74,8 +83,13 @@ class CareerActivity : AppCompatActivity() {
         readinessProgress.progress =
             readinessScore
 
+        // ------------------------------------------
+        // READINESS MESSAGE
+        // ------------------------------------------
+
         tvReadinessMessage.text =
             when {
+
                 readinessScore >= 85 ->
                     "You are highly prepared for your target role."
 
@@ -89,25 +103,136 @@ class CareerActivity : AppCompatActivity() {
                     "Keep building skills, assessments and evidence."
             }
 
-        tvStrongSkills.text =
-            strongSkills.joinToString(
-                separator = "\n"
-            ) {
-                "✓  $it"
+        // ------------------------------------------
+        // STRONG AND WEAK SKILLS
+        // ------------------------------------------
+
+        val strongSkills =
+            skills.filter {
+                it.progress >= 70
             }
 
-        tvImproveSkills.text =
-            skillsToImprove.joinToString(
-                separator = "\n"
-            ) {
-                "⚠  $it"
+        val skillsToImprove =
+            skills.filter {
+                it.progress < 70
             }
+
+        if (strongSkills.isEmpty()) {
+
+            tvStrongSkills.text =
+                "No strong skills yet.\n\nBuild your skill level to 70% or above."
+
+        } else {
+
+            tvStrongSkills.text =
+                strongSkills.joinToString(
+                    separator = "\n"
+                ) {
+                    "✓  ${it.name}  •  ${it.progress}%"
+                }
+        }
+
+        if (skillsToImprove.isEmpty()) {
+
+            tvImproveSkills.text =
+                "No major weak areas detected."
+
+        } else {
+
+            tvImproveSkills.text =
+                skillsToImprove.joinToString(
+                    separator = "\n"
+                ) {
+                    "⚠  ${it.name}  •  ${it.progress}%"
+                }
+        }
+
+        // ------------------------------------------
+        // RECOMMENDATIONS
+        // ------------------------------------------
+
+        val recommendations =
+            mutableListOf<String>()
+
+        if (skills.isEmpty()) {
+
+            recommendations.add(
+                "Add your first skill to start building your career profile."
+            )
+        }
+
+        if (skillsToImprove.isNotEmpty()) {
+
+            recommendations.add(
+                "Improve skills below 70% through practice and projects."
+            )
+        }
+
+        if (assessmentScore < 70) {
+
+            recommendations.add(
+                "Take more assessments to improve your knowledge score."
+            )
+        }
+
+        val evidenceScore =
+            databaseHelper.getEvidenceScore()
+
+        if (evidenceScore < 80) {
+
+            recommendations.add(
+                "Add more project, certificate or GitHub evidence."
+            )
+        }
+
+        val verificationScore =
+            databaseHelper.getVerificationScore()
+
+        if (verificationScore < 50) {
+
+            recommendations.add(
+                "Verify more evidence to increase your proof credibility."
+            )
+        }
+
+        if (recommendations.isEmpty()) {
+
+            recommendations.add(
+                "Excellent! Keep updating your skills and evidence regularly."
+            )
+        }
 
         tvRecommendations.text =
-            "• Take assessments for your weak skills\n\n" +
-                    "• Add at least one project as evidence\n\n" +
-                    "• Add certificates or GitHub repositories\n\n" +
-                    "• Verify your strongest evidence\n\n" +
-                    "• Improve skills with low assessment scores"
+            recommendations.joinToString(
+                separator = "\n\n"
+            ) {
+                "•  $it"
+            }
+    }
+
+    // ------------------------------------------
+    // CALCULATE PROOF SCORE
+    // ------------------------------------------
+
+    private fun calculateProofScore(): Int {
+
+        val skillLevel =
+            databaseHelper.getAverageSkillProgress()
+
+        val assessmentScore =
+            databaseHelper.getLatestAssessmentPercentage()
+
+        val evidenceScore =
+            databaseHelper.getEvidenceScore()
+
+        val verifiedScore =
+            databaseHelper.getVerificationScore()
+
+        return (
+                skillLevel * 0.30 +
+                        assessmentScore * 0.30 +
+                        evidenceScore * 0.25 +
+                        verifiedScore * 0.15
+                ).toInt()
     }
 }
