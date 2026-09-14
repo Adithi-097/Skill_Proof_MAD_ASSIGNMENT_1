@@ -18,14 +18,19 @@ class EvidenceActivity : AppCompatActivity() {
     private lateinit var tvEvidenceCount: TextView
     private lateinit var tvVerifiedCount: TextView
 
+    private lateinit var databaseHelper: DatabaseHelper
+
     private val addEvidenceLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
 
-            if (result.resultCode != RESULT_OK) return@registerForActivityResult
+            if (result.resultCode != RESULT_OK) {
+                return@registerForActivityResult
+            }
 
-            val data = result.data ?: return@registerForActivityResult
+            val data = result.data
+                ?: return@registerForActivityResult
 
             val title =
                 data.getStringExtra("evidence_title")
@@ -47,13 +52,28 @@ class EvidenceActivity : AppCompatActivity() {
                 data.getStringExtra("evidence_status")
                     ?: "Pending"
 
-            val evidence = Evidence(
-                title = title,
-                skill = skill,
-                type = type,
-                link = link,
-                status = status
+            /*
+             * Save evidence into SQLite.
+             */
+            databaseHelper.insertEvidence(
+                title,
+                skill,
+                type,
+                link,
+                status
             )
+
+            /*
+             * Add the evidence to RecyclerView.
+             */
+            val evidence =
+                Evidence(
+                    title,
+                    skill,
+                    type,
+                    link,
+                    status
+                )
 
             evidenceAdapter.addEvidence(evidence)
 
@@ -65,11 +85,19 @@ class EvidenceActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_evidence)
 
+        /*
+         * Initialize SQLite database.
+         */
+        databaseHelper =
+            DatabaseHelper(this)
+
         val btnBack =
             findViewById<ImageButton>(R.id.btnBack)
 
         val btnAddEvidence =
-            findViewById<MaterialButton>(R.id.btnAddEvidence)
+            findViewById<MaterialButton>(
+                R.id.btnAddEvidence
+            )
 
         tvEvidenceCount =
             findViewById(R.id.tvEvidenceCount)
@@ -78,10 +106,19 @@ class EvidenceActivity : AppCompatActivity() {
             findViewById(R.id.tvVerifiedCount)
 
         val recyclerEvidence =
-            findViewById<RecyclerView>(R.id.recyclerEvidence)
+            findViewById<RecyclerView>(
+                R.id.recyclerEvidence
+            )
 
-        evidenceList = mutableListOf()
+        /*
+         * Load evidence from SQLite.
+         */
+        evidenceList =
+            databaseHelper.getAllEvidence()
 
+        /*
+         * Create adapter.
+         */
         evidenceAdapter =
             EvidenceAdapter(evidenceList)
 
@@ -93,16 +130,23 @@ class EvidenceActivity : AppCompatActivity() {
 
         updateCounts()
 
+        /*
+         * Back button.
+         */
         btnBack.setOnClickListener {
             finish()
         }
 
+        /*
+         * Add Evidence button.
+         */
         btnAddEvidence.setOnClickListener {
 
-            val intent = Intent(
-                this,
-                AddEvidenceActivity::class.java
-            )
+            val intent =
+                Intent(
+                    this,
+                    AddEvidenceActivity::class.java
+                )
 
             addEvidenceLauncher.launch(intent)
         }
