@@ -10,7 +10,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class EvidenceAdapter(
-    private val evidenceList: MutableList<Evidence>
+    private val evidenceList: MutableList<Evidence>,
+    private val onEvidenceClick: (Evidence, Int) -> Unit
 ) : RecyclerView.Adapter<EvidenceAdapter.EvidenceViewHolder>() {
 
     class EvidenceViewHolder(itemView: View) :
@@ -76,7 +77,7 @@ class EvidenceAdapter(
             evidence.link
 
         // ------------------------------------------
-        // MAKE LINK CLICKABLE
+        // OPEN LINK
         // ------------------------------------------
 
         holder.tvEvidenceLink.setOnClickListener {
@@ -84,7 +85,6 @@ class EvidenceAdapter(
             var url =
                 evidence.link.trim()
 
-            // Add https:// if user did not provide it
             if (
                 !url.startsWith("http://") &&
                 !url.startsWith("https://")
@@ -113,14 +113,25 @@ class EvidenceAdapter(
                 ).show()
             }
         }
+
+        // ------------------------------------------
+        // CLICK ENTIRE EVIDENCE CARD
+        // ------------------------------------------
+
+        holder.itemView.setOnClickListener {
+
+            onEvidenceClick(
+                evidence,
+                holder.bindingAdapterPosition
+            )
+        }
     }
 
-    override fun getItemCount(): Int {
-        return evidenceList.size
-    }
+    override fun getItemCount(): Int =
+        evidenceList.size
 
     // ------------------------------------------
-    // ADD NEW EVIDENCE
+    // ADD EVIDENCE
     // ------------------------------------------
 
     fun addEvidence(
@@ -132,5 +143,27 @@ class EvidenceAdapter(
         notifyItemInserted(
             evidenceList.lastIndex
         )
+    }
+
+    // ------------------------------------------
+    // UPDATE EVIDENCE
+    // ------------------------------------------
+
+    fun updateEvidence(
+        position: Int,
+        evidence: Evidence
+    ) {
+
+        if (
+            position < 0 ||
+            position >= evidenceList.size
+        ) {
+            return
+        }
+
+        evidenceList[position] =
+            evidence
+
+        notifyItemChanged(position)
     }
 }

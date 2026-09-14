@@ -15,10 +15,6 @@ class DatabaseHelper(context: Context) :
 
     companion object {
 
-        // ==========================================
-        // DATABASE
-        // ==========================================
-
         private const val DATABASE_NAME =
             "skillproof.db"
 
@@ -26,9 +22,9 @@ class DatabaseHelper(context: Context) :
             2
 
 
-        // ==========================================
+        // =========================
         // SKILLS TABLE
-        // ==========================================
+        // =========================
 
         const val TABLE_SKILLS =
             "skills"
@@ -49,9 +45,9 @@ class DatabaseHelper(context: Context) :
             "proof_status"
 
 
-        // ==========================================
+        // =========================
         // EVIDENCE TABLE
-        // ==========================================
+        // =========================
 
         const val TABLE_EVIDENCE =
             "evidence"
@@ -75,9 +71,9 @@ class DatabaseHelper(context: Context) :
             "status"
 
 
-        // ==========================================
+        // =========================
         // ASSESSMENT TABLE
-        // ==========================================
+        // =========================
 
         const val TABLE_ASSESSMENTS =
             "assessments"
@@ -99,17 +95,17 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
-    // CREATE DATABASE TABLES
-    // ==========================================
+    // =========================
+    // CREATE DATABASE
+    // =========================
 
     override fun onCreate(
         db: SQLiteDatabase
     ) {
 
-        // ------------------------------------------
-        // Skills table
-        // ------------------------------------------
+        // -------------------------
+        // SKILLS TABLE
+        // -------------------------
 
         val createSkillsTable = """
             CREATE TABLE $TABLE_SKILLS (
@@ -122,9 +118,9 @@ class DatabaseHelper(context: Context) :
         """.trimIndent()
 
 
-        // ------------------------------------------
-        // Evidence table
-        // ------------------------------------------
+        // -------------------------
+        // EVIDENCE TABLE
+        // -------------------------
 
         val createEvidenceTable = """
             CREATE TABLE $TABLE_EVIDENCE (
@@ -138,9 +134,9 @@ class DatabaseHelper(context: Context) :
         """.trimIndent()
 
 
-        // ------------------------------------------
-        // Assessment table
-        // ------------------------------------------
+        // -------------------------
+        // ASSESSMENT TABLE
+        // -------------------------
 
         val createAssessmentTable = """
             CREATE TABLE $TABLE_ASSESSMENTS (
@@ -153,7 +149,7 @@ class DatabaseHelper(context: Context) :
         """.trimIndent()
 
 
-        // Execute table creation
+        // CREATE ALL TABLES
 
         db.execSQL(
             createSkillsTable
@@ -169,9 +165,9 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
+    // =========================
     // DATABASE UPGRADE
-    // ==========================================
+    // =========================
 
     override fun onUpgrade(
         db: SQLiteDatabase,
@@ -195,9 +191,11 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
+    // =====================================================
+    // SKILLS
+    // =====================================================
+
     // INSERT SKILL
-    // ==========================================
 
     fun insertSkill(
         name: String,
@@ -241,9 +239,7 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
     // GET ALL SKILLS
-    // ==========================================
 
     fun getAllSkills():
             MutableList<Skill> {
@@ -312,9 +308,11 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
+    // =====================================================
+    // EVIDENCE
+    // =====================================================
+
     // INSERT EVIDENCE
-    // ==========================================
 
     fun insertEvidence(
         title: String,
@@ -364,9 +362,7 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
     // GET ALL EVIDENCE
-    // ==========================================
 
     fun getAllEvidence():
             MutableList<Evidence> {
@@ -443,9 +439,40 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
-    // INSERT ASSESSMENT
-    // ==========================================
+    // UPDATE EVIDENCE STATUS
+    // Used for Pending -> Verified
+
+    fun updateEvidenceStatus(
+        title: String,
+        status: String
+    ): Int {
+
+        val db =
+            writableDatabase
+
+        val values =
+            ContentValues().apply {
+
+                put(
+                    COL_EVIDENCE_STATUS,
+                    status
+                )
+            }
+
+        return db.update(
+            TABLE_EVIDENCE,
+            values,
+            "$COL_EVIDENCE_TITLE = ?",
+            arrayOf(title)
+        )
+    }
+
+
+    // =====================================================
+    // ASSESSMENT
+    // =====================================================
+
+    // INSERT ASSESSMENT RESULT
 
     fun insertAssessment(
         skill: String,
@@ -489,9 +516,7 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
     // GET LATEST ASSESSMENT PERCENTAGE
-    // ==========================================
 
     fun getLatestAssessmentPercentage():
             Int {
@@ -529,9 +554,11 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
-    // GET AVERAGE SKILL PROGRESS
-    // ==========================================
+    // =====================================================
+    // PROOF SCORE
+    // =====================================================
+
+    // AVERAGE SKILL PROGRESS
 
     fun getAverageSkillProgress():
             Int {
@@ -561,9 +588,7 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
-    // GET EVIDENCE SCORE
-    // ==========================================
+    // EVIDENCE SCORE
 
     fun getEvidenceScore():
             Int {
@@ -612,9 +637,7 @@ class DatabaseHelper(context: Context) :
     }
 
 
-    // ==========================================
-    // GET VERIFICATION SCORE
-    // ==========================================
+    // VERIFICATION SCORE
 
     fun getVerificationScore():
             Int {
@@ -622,7 +645,9 @@ class DatabaseHelper(context: Context) :
         val db =
             readableDatabase
 
-        // Total evidence
+
+        // TOTAL EVIDENCE
+
         val totalCursor =
             db.rawQuery(
                 "SELECT COUNT(*) " +
@@ -630,7 +655,9 @@ class DatabaseHelper(context: Context) :
                 null
             )
 
-        // Verified evidence
+
+        // VERIFIED EVIDENCE
+
         val verifiedCursor =
             db.rawQuery(
                 """
@@ -641,11 +668,13 @@ class DatabaseHelper(context: Context) :
                 arrayOf("Verified")
             )
 
+
         var total =
             0
 
         var verified =
             0
+
 
         totalCursor.use {
 
@@ -656,6 +685,7 @@ class DatabaseHelper(context: Context) :
             }
         }
 
+
         verifiedCursor.use {
 
             if (it.moveToFirst()) {
@@ -665,14 +695,16 @@ class DatabaseHelper(context: Context) :
             }
         }
 
-        /*
-         * No evidence means
-         * no verification score.
-         */
+
+        // NO EVIDENCE
+
         if (total == 0) {
 
             return 0
         }
+
+
+        // CALCULATE VERIFICATION %
 
         return (
                 verified * 100
