@@ -3,7 +3,6 @@ package com.example.skill_proof_mad_assignment_1
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class DashboardActivity : AppCompatActivity() {
@@ -12,6 +11,10 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_dashboard)
+
+        // ------------------------------------------
+        // FIND VIEWS
+        // ------------------------------------------
 
         val tvViewSkills =
             findViewById<TextView>(R.id.tvViewSkills)
@@ -25,59 +28,100 @@ class DashboardActivity : AppCompatActivity() {
         val tvViewCareer =
             findViewById<TextView>(R.id.tvViewCareer)
 
-        // Proof Score card
+        val tvProfile =
+            findViewById<TextView>(R.id.tvProfile)
+
+        // ------------------------------------------
+        // PROOF SCORE
+        // ------------------------------------------
+
         val proofScoreCard =
-            findViewById<android.view.View>(R.id.proofScoreCard)
+            findViewById<android.view.View>(
+                R.id.proofScoreCard
+            )
 
         proofScoreCard.setOnClickListener {
 
-            val intent = Intent(
-                this,
-                ProofScoreActivity::class.java
-            )
+            val intent =
+                Intent(
+                    this,
+                    ProofScoreActivity::class.java
+                )
 
             startActivity(intent)
         }
 
-        // Skills
+        // ------------------------------------------
+        // SKILLS
+        // ------------------------------------------
+
         tvViewSkills.setOnClickListener {
 
-            val intent = Intent(
-                this,
-                SkillsActivity::class.java
-            )
+            val intent =
+                Intent(
+                    this,
+                    SkillsActivity::class.java
+                )
 
             startActivity(intent)
         }
 
-        // Evidence
+        // ------------------------------------------
+        // EVIDENCE
+        // ------------------------------------------
+
         tvViewEvidence.setOnClickListener {
 
-            val intent = Intent(
-                this,
-                EvidenceActivity::class.java
-            )
+            val intent =
+                Intent(
+                    this,
+                    EvidenceActivity::class.java
+                )
 
             startActivity(intent)
         }
 
-        // Assessment
+        // ------------------------------------------
+        // ASSESSMENT
+        // ------------------------------------------
+
         tvViewAssessment.setOnClickListener {
 
-            val intent = Intent(
-                this,
-                AssessmentActivity::class.java
-            )
+            val intent =
+                Intent(
+                    this,
+                    AssessmentActivity::class.java
+                )
 
             startActivity(intent)
         }
+
+        // ------------------------------------------
+        // CAREER READINESS
+        // ------------------------------------------
 
         tvViewCareer.setOnClickListener {
 
-            val intent = Intent(
-                this,
-                CareerActivity::class.java
-            )
+            val intent =
+                Intent(
+                    this,
+                    CareerActivity::class.java
+                )
+
+            startActivity(intent)
+        }
+
+        // ------------------------------------------
+        // PROFILE
+        // ------------------------------------------
+
+        tvProfile.setOnClickListener {
+
+            val intent =
+                Intent(
+                    this,
+                    ProfileActivity::class.java
+                )
 
             startActivity(intent)
         }

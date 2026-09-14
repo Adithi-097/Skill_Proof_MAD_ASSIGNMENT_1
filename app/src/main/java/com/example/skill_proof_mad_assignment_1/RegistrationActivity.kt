@@ -98,6 +98,17 @@ class RegistrationActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
 
+            val sharedPreferences =
+                getSharedPreferences(
+                    "SkillProofPrefs",
+                    MODE_PRIVATE
+                )
+
+            sharedPreferences.edit()
+                .putString("user_name", name)
+                .putString("user_email", email)
+                .apply()
+
             val intent = Intent(
                 this,
                 LoginActivity::class.java
