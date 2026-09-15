@@ -11,7 +11,7 @@ class BadgeManager(
 
         val badges = mutableListOf<Badge>()
 
-        // 1. First Skill
+        // 1. First Skill Badge
         badges.add(
             Badge(
                 id = "first_skill",
@@ -22,9 +22,9 @@ class BadgeManager(
             )
         )
 
-        // 2. Assessment Completed
+        // 2. Assessment Completed Badge
         val assessmentCompleted =
-            databaseHelper.hasCompletedAssesment()
+            databaseHelper.getLatestAssessmentPercentage() > 0
 
         badges.add(
             Badge(
@@ -36,7 +36,7 @@ class BadgeManager(
             )
         )
 
-        // 3. First Evidence
+        // 3. First Evidence Badge
         badges.add(
             Badge(
                 id = "first_evidence",
@@ -47,7 +47,7 @@ class BadgeManager(
             )
         )
 
-        // 4. Verified Evidence
+        // 4. Verified Evidence Badge
         val verifiedEvidence =
             evidence.count { it.status == "Verified" }
 
@@ -61,7 +61,7 @@ class BadgeManager(
             )
         )
 
-        // 5. Evidence Collector
+        // 5. Evidence Collector Badge
         badges.add(
             Badge(
                 id = "evidence_collector",
@@ -72,7 +72,7 @@ class BadgeManager(
             )
         )
 
-        // 6. Proven Skill
+        // 6. Proven Skill Badge
         val skillsWithGoodProgress =
             skills.count { it.progress >= 75 }
 

@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Internet access for GitHub API -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="SkillProof"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Skill_Proof_MAD_ASSIGNMENT_1">
+
+        <!-- Main Activity -->
         <activity
-            android:name=".SplashActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <!-- Splash -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="false" />
+
+        <!-- Authentication -->
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
@@ -30,10 +36,12 @@
             android:name=".RegistrationActivity"
             android:exported="false" />
 
+        <!-- Dashboard -->
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />
 
+        <!-- Skills -->
         <activity
             android:name=".SkillsActivity"
             android:exported="false" />
@@ -42,6 +50,7 @@
             android:name=".AddSkillActivity"
             android:exported="false" />
 
+        <!-- Evidence -->
         <activity
             android:name=".EvidenceActivity"
             android:exported="false" />
@@ -50,23 +59,42 @@
             android:name=".AddEvidenceActivity"
             android:exported="false" />
 
+        <!-- Assessment -->
         <activity
             android:name=".AssessmentActivity"
             android:exported="false" />
 
+        <!-- Proof Score -->
         <activity
             android:name=".ProofScoreActivity"
             android:exported="false" />
 
+        <!-- Career -->
         <activity
             android:name=".CareerActivity"
             android:exported="false" />
 
+        <!-- Profile -->
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
 
+        <!-- Badges -->
+        <activity
+            android:name=".BadgesActivity"
+            android:exported="false" />
 
+        <!-- Skill Gap Analyzer -->
+        <activity
+            android:name=".SkillGapActivity"
+            android:exported="false" />
+
+        <!-- GitHub Verification -->
+        <activity
+            android:name=".GitHubVerificationActivity"
+            android:exported="false" />
+
+        <!-- FileProvider for camera/gallery evidence -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -76,11 +104,6 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-
-            <activity
-                android:name=".BadgesActivity"
-                android:exported="false" />
-
 
         </provider>
 

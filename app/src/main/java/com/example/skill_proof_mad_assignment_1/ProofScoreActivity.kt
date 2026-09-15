@@ -15,133 +15,313 @@ class ProofScoreActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_proof_score)
 
-        /*
-         * Initialize database.
-         */
-        databaseHelper =
-            DatabaseHelper(this)
+        databaseHelper = DatabaseHelper(this)
 
-        /*
-         * Find views.
-         */
+        // -----------------------------
+        // Find views
+        // -----------------------------
+
         val btnBack =
-            findViewById<ImageButton>(
-                R.id.btnBack
-            )
+            findViewById<ImageButton>(R.id.btnBack)
 
-        val tvScore =
-            findViewById<TextView>(
-                R.id.tvScore
-            )
+        val btnRefresh =
+            findViewById<ImageButton>(R.id.btnRefresh)
 
-        val tvScoreMessage =
-            findViewById<TextView>(
-                R.id.tvScoreMessage
-            )
+        val tvProofScore =
+            findViewById<TextView>(R.id.tvProofScore)
 
-        val tvSkillValue =
-            findViewById<TextView>(
-                R.id.tvSkillValue
-            )
+        val tvSkillName =
+            findViewById<TextView>(R.id.tvSkillName)
 
-        val tvAssessmentValue =
-            findViewById<TextView>(
-                R.id.tvAssessmentValue
-            )
+        val tvProofLevel =
+            findViewById<TextView>(R.id.tvProofLevel)
 
-        val tvEvidenceValue =
-            findViewById<TextView>(
-                R.id.tvEvidenceValue
-            )
+        val tvSkillLevelScore =
+            findViewById<TextView>(R.id.tvSkillLevelScore)
 
-        val tvVerifiedValue =
-            findViewById<TextView>(
-                R.id.tvVerifiedValue
-            )
+        val tvAssessmentScore =
+            findViewById<TextView>(R.id.tvAssessmentScore)
 
-        val progressSkill =
-            findViewById<ProgressBar>(
-                R.id.progressSkill
-            )
+        val tvEvidenceScore =
+            findViewById<TextView>(R.id.tvEvidenceScore)
+
+        val tvVerificationScore =
+            findViewById<TextView>(R.id.tvVerificationScore)
+
+        val progressSkillLevel =
+            findViewById<ProgressBar>(R.id.progressSkillLevel)
 
         val progressAssessment =
-            findViewById<ProgressBar>(
-                R.id.progressAssessment
-            )
+            findViewById<ProgressBar>(R.id.progressAssessment)
 
         val progressEvidence =
-            findViewById<ProgressBar>(
-                R.id.progressEvidence
-            )
+            findViewById<ProgressBar>(R.id.progressEvidence)
 
-        val progressVerified =
-            findViewById<ProgressBar>(
-                R.id.progressVerified
-            )
+        val progressVerification =
+            findViewById<ProgressBar>(R.id.progressVerification)
 
-        /*
-         * Back button.
-         */
+        val tvRecommendation =
+            findViewById<TextView>(R.id.tvRecommendation)
+
+        // -----------------------------
+        // Back button
+        // -----------------------------
+
         btnBack.setOnClickListener {
             finish()
         }
 
-        /*
-         * Get REAL data from SQLite.
-         */
+        // -----------------------------
+        // Refresh button
+        // -----------------------------
+
+        btnRefresh.setOnClickListener {
+
+            loadProofScore(
+                tvProofScore,
+                tvSkillName,
+                tvProofLevel,
+                tvSkillLevelScore,
+                tvAssessmentScore,
+                tvEvidenceScore,
+                tvVerificationScore,
+                progressSkillLevel,
+                progressAssessment,
+                progressEvidence,
+                progressVerification,
+                tvRecommendation
+            )
+        }
+
+        // -----------------------------
+        // Load initial data
+        // -----------------------------
+
+        loadProofScore(
+            tvProofScore,
+            tvSkillName,
+            tvProofLevel,
+            tvSkillLevelScore,
+            tvAssessmentScore,
+            tvEvidenceScore,
+            tvVerificationScore,
+            progressSkillLevel,
+            progressAssessment,
+            progressEvidence,
+            progressVerification,
+            tvRecommendation
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (::databaseHelper.isInitialized) {
+
+            val tvProofScore =
+                findViewById<TextView>(R.id.tvProofScore)
+
+            val tvSkillName =
+                findViewById<TextView>(R.id.tvSkillName)
+
+            val tvProofLevel =
+                findViewById<TextView>(R.id.tvProofLevel)
+
+            val tvSkillLevelScore =
+                findViewById<TextView>(R.id.tvSkillLevelScore)
+
+            val tvAssessmentScore =
+                findViewById<TextView>(R.id.tvAssessmentScore)
+
+            val tvEvidenceScore =
+                findViewById<TextView>(R.id.tvEvidenceScore)
+
+            val tvVerificationScore =
+                findViewById<TextView>(R.id.tvVerificationScore)
+
+            val progressSkillLevel =
+                findViewById<ProgressBar>(R.id.progressSkillLevel)
+
+            val progressAssessment =
+                findViewById<ProgressBar>(R.id.progressAssessment)
+
+            val progressEvidence =
+                findViewById<ProgressBar>(R.id.progressEvidence)
+
+            val progressVerification =
+                findViewById<ProgressBar>(R.id.progressVerification)
+
+            val tvRecommendation =
+                findViewById<TextView>(R.id.tvRecommendation)
+
+            loadProofScore(
+                tvProofScore,
+                tvSkillName,
+                tvProofLevel,
+                tvSkillLevelScore,
+                tvAssessmentScore,
+                tvEvidenceScore,
+                tvVerificationScore,
+                progressSkillLevel,
+                progressAssessment,
+                progressEvidence,
+                progressVerification,
+                tvRecommendation
+            )
+        }
+    }
+
+    private fun loadProofScore(
+        tvProofScore: TextView,
+        tvSkillName: TextView,
+        tvProofLevel: TextView,
+        tvSkillLevelScore: TextView,
+        tvAssessmentScore: TextView,
+        tvEvidenceScore: TextView,
+        tvVerificationScore: TextView,
+        progressSkillLevel: ProgressBar,
+        progressAssessment: ProgressBar,
+        progressEvidence: ProgressBar,
+        progressVerification: ProgressBar,
+        tvRecommendation: TextView
+    ) {
+
+        // -----------------------------
+        // Get skills
+        // -----------------------------
+
+        val skills =
+            databaseHelper.getAllSkills()
+
+        // -----------------------------
+        // No skill added
+        // -----------------------------
+
+        if (skills.isEmpty()) {
+
+            tvProofScore.text = "0"
+            tvSkillName.text = "No skill added yet"
+            tvProofLevel.text = "Beginner"
+
+            tvSkillLevelScore.text = "0%"
+            tvAssessmentScore.text = "0%"
+            tvEvidenceScore.text = "0%"
+            tvVerificationScore.text = "0%"
+
+            progressSkillLevel.progress = 0
+            progressAssessment.progress = 0
+            progressEvidence.progress = 0
+            progressVerification.progress = 0
+
+            tvRecommendation.text =
+                "Add a skill, complete an assessment, and add supporting evidence to build your Proof Score."
+
+            return
+        }
+
+        // -----------------------------
+        // Use current/latest skill
+        // -----------------------------
+
+        val skill =
+            skills.first()
+
+        val skillName =
+            skill.name
+
         val skillLevel =
-            databaseHelper.getAverageSkillProgress()
+            skill.progress.coerceIn(0, 100)
+
+        // -----------------------------
+        // Get assessment score
+        // -----------------------------
 
         val assessmentScore =
-            databaseHelper.getLatestAssessmentPercentage()
+            databaseHelper.getAssessmentPercentageForSkill(
+                skillName
+            ).coerceIn(0, 100)
+
+        // -----------------------------
+        // Get evidence score
+        // -----------------------------
+
+        val evidenceCount =
+            databaseHelper.getEvidenceCountForSkill(
+                skillName
+            )
+
+        val verifiedEvidenceCount =
+            databaseHelper.getVerifiedEvidenceCountForSkill(
+                skillName
+            )
 
         val evidenceScore =
-            databaseHelper.getEvidenceScore()
+            when {
+                evidenceCount >= 5 -> 100
+                evidenceCount == 4 -> 90
+                evidenceCount == 3 -> 80
+                evidenceCount == 2 -> 65
+                evidenceCount == 1 -> 45
+                else -> 0
+            }
 
-        val verifiedScore =
-            databaseHelper.getVerificationScore()
+        // -----------------------------
+        // Verification score
+        // -----------------------------
 
-        /*
-         * Proof Score formula:
-         *
-         * Skill Level      → 30%
-         * Assessment       → 30%
-         * Evidence        → 25%
-         * Verification    → 15%
-         */
+        val verificationScore =
+            if (evidenceCount == 0) {
+                0
+            } else {
+                (
+                        verifiedEvidenceCount * 100
+                        ) / evidenceCount
+            }.coerceIn(0, 100)
+
+        // -----------------------------
+        // Proof Score
+        //
+        // Skill Level     = 30%
+        // Assessment      = 30%
+        // Evidence        = 25%
+        // Verification    = 15%
+        // -----------------------------
+
         val proofScore =
             (
                     skillLevel * 0.30 +
                             assessmentScore * 0.30 +
                             evidenceScore * 0.25 +
-                            verifiedScore * 0.15
-                    ).toInt()
+                            verificationScore * 0.15
+                    ).toInt().coerceIn(0, 100)
 
-        /*
-         * Display score.
-         */
-        tvScore.text =
+        // -----------------------------
+        // Display basic information
+        // -----------------------------
+
+        tvProofScore.text =
             proofScore.toString()
 
-        /*
-         * Display individual values.
-         */
-        tvSkillValue.text =
+        tvSkillName.text =
+            "Skill: $skillName"
+
+        tvSkillLevelScore.text =
             "$skillLevel%"
 
-        tvAssessmentValue.text =
+        tvAssessmentScore.text =
             "$assessmentScore%"
 
-        tvEvidenceValue.text =
+        tvEvidenceScore.text =
             "$evidenceScore%"
 
-        tvVerifiedValue.text =
-            "$verifiedScore%"
+        tvVerificationScore.text =
+            "$verificationScore%"
 
-        /*
-         * Update progress bars.
-         */
-        progressSkill.progress =
+        // -----------------------------
+        // Progress bars
+        // -----------------------------
+
+        progressSkillLevel.progress =
             skillLevel
 
         progressAssessment.progress =
@@ -150,26 +330,77 @@ class ProofScoreActivity : AppCompatActivity() {
         progressEvidence.progress =
             evidenceScore
 
-        progressVerified.progress =
-            verifiedScore
+        progressVerification.progress =
+            verificationScore
 
-        /*
-         * Display score message.
-         */
-        tvScoreMessage.text =
+        // -----------------------------
+        // Proof level
+        // -----------------------------
+
+        tvProofLevel.text =
             when {
+                proofScore >= 90 ->
+                    "Expert Proof"
 
-                proofScore >= 85 ->
-                    "Excellent proof profile"
+                proofScore >= 75 ->
+                    "Proven Skill"
 
-                proofScore >= 70 ->
-                    "Strong proof profile"
+                proofScore >= 60 ->
+                    "Competent"
 
-                proofScore >= 50 ->
-                    "Good start — keep building proof"
+                proofScore >= 40 ->
+                    "Developing"
 
                 else ->
-                    "Build more evidence to strengthen your proof"
+                    "Beginner"
             }
+
+        // -----------------------------
+        // Recommendations
+        // -----------------------------
+
+        val recommendations =
+            mutableListOf<String>()
+
+        if (skillLevel < 70) {
+
+            recommendations.add(
+                "• Improve your practical skill level through projects."
+            )
+        }
+
+        if (assessmentScore < 70) {
+
+            recommendations.add(
+                "• Complete or improve your skill assessment."
+            )
+        }
+
+        if (evidenceCount < 3) {
+
+            recommendations.add(
+                "• Add more evidence such as projects, certificates or GitHub repositories."
+            )
+        }
+
+        if (
+            evidenceCount > 0 &&
+            verifiedEvidenceCount < evidenceCount
+        ) {
+
+            recommendations.add(
+                "• Verify your remaining evidence."
+            )
+        }
+
+        if (recommendations.isEmpty()) {
+
+            recommendations.add(
+                "• Excellent! Keep adding advanced projects and maintaining your skill proof."
+            )
+        }
+
+        tvRecommendation.text =
+            recommendations.joinToString("\n")
     }
 }
