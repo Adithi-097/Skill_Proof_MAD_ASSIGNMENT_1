@@ -1,154 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground">
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    tools:context=".SkillsActivity">
 
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Back"
-        android:padding="12dp"
-        android:src="@android:drawable/ic_menu_revert"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="20dp"
-        android:text="My Skills"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/btnBack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnBack"
-        app:layout_constraintTop_toTopOf="@id/btnBack" />
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="28dp">
 
-    <TextView
-        android:id="@+id/tvSubtitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="20dp"
-        android:text="Track what you know and build proof for every skill."
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnBack" />
+        <!-- ===================================== -->
+        <!-- Decorative Background Circle -->
+        <!-- ===================================== -->
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/summaryCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        app:cardCornerRadius="22dp"
-        app:cardElevation="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
+        <View
+            android:id="@+id/topDecoration"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:background="@drawable/bg_login_circle"
+            android:translationX="95dp"
+            android:translationY="-100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <!-- ===================================== -->
+        <!-- Back Button -->
+        <!-- ===================================== -->
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:padding="12dp"
+            android:src="@android:drawable/ic_menu_revert"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- ===================================== -->
+        <!-- Page Title -->
+        <!-- ===================================== -->
+
+        <TextView
+            android:id="@+id/tvPageTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:layout_marginTop="18dp"
+            android:text="My Skills"
+            android:textColor="#172033"
+            android:textSize="29sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-            <TextView
-                android:id="@+id/tvSkillCount"
-                android:layout_width="wrap_content"
+        <!-- ===================================== -->
+        <!-- Subtitle -->
+        <!-- ===================================== -->
+
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Track the skills you want to prove."
+            android:textColor="#737D8F"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
+
+        <!-- ===================================== -->
+        <!-- Skills Summary Card -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/skillSummaryCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="3"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:padding="18dp">
 
-            <TextView
-                android:id="@+id/tvSkillCountLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Skills tracked"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@id/tvSkillCount"
-                app:layout_constraintStart_toEndOf="@id/tvSkillCount" />
+                <!-- Icon -->
 
-            <TextView
-                android:id="@+id/tvAverageLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Intermediate"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvSkillCount" />
+                <TextView
+                    android:id="@+id/tvSkillIcon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_circle"
+                    android:gravity="center"
+                    android:text="✓"
+                    android:textColor="#4267D5"
+                    android:textSize="21sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tvAverageLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Overall level"
-                android:textSize="11sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAverageLevel" />
+                <!-- Count -->
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tvSkillCount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:text="0 skills added"
+                    android:textColor="#172033"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvSkillIcon"
+                    app:layout_constraintTop_toTopOf="@id/tvSkillIcon" />
 
-    </com.google.android.material.card.MaterialCardView>
+                <!-- Description -->
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAddSkill"
-        android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
-        android:text="+  Add Skill"
-        android:textAllCaps="false"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:cornerRadius="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/summaryCard" />
+                <TextView
+                    android:id="@+id/tvSkillSummary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="Add skills and start building your proof."
+                    android:textColor="#737D8F"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tvSkillCount"
+                    app:layout_constraintTop_toBottomOf="@id/tvSkillCount" />
 
-    <TextView
-        android:id="@+id/tvYourSkills"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="22dp"
-        android:text="Your Skills"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnAddSkill" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerSkills"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="20dp"
-        android:clipToPadding="false"
-        android:paddingBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvYourSkills" />
+        </com.google.android.material.card.MaterialCardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- ===================================== -->
+        <!-- Add Skill Button -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddSkill"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="18dp"
+            android:text="＋  Add New Skill"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:cornerRadius="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/skillSummaryCard" />
+
+        <!-- ===================================== -->
+        <!-- Skills Section Title -->
+        <!-- ===================================== -->
+
+        <TextView
+            android:id="@+id/tvSkillsSectionTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="Your Skills"
+            android:textColor="#172033"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnAddSkill" />
+
+        <!-- ===================================== -->
+        <!-- Empty State -->
+        <!-- ===================================== -->
+
+        <TextView
+            android:id="@+id/tvEmptySkills"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:gravity="center"
+            android:padding="30dp"
+            android:text="No skills added yet.\n\nTap “Add New Skill” to get started."
+            android:textColor="#737D8F"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSkillsSectionTitle" />
+
+        <!-- ===================================== -->
+        <!-- Skills RecyclerView -->
+        <!-- ===================================== -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerSkills"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:paddingBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSkillsSectionTitle"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_skill" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -1,109 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
-    android:fillViewport="true">
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    tools:context=".LoginActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:paddingStart="24dp"
-        android:paddingTop="34dp"
+        android:paddingTop="32dp"
         android:paddingEnd="24dp"
-        android:paddingBottom="30dp">
+        android:paddingBottom="32dp">
 
         <!-- Decorative circle -->
+
         <View
-            android:id="@+id/loginCircle"
+            android:id="@+id/topCircle"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:alpha="0.35"
             android:background="@drawable/bg_login_circle"
             android:translationX="80dp"
-            android:translationY="-80dp"
+            android:translationY="-85dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Small logo -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/loginLogo"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <!-- Brand -->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="✓"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Heading -->
         <TextView
-            android:id="@+id/tvWelcome"
-            android:layout_width="0dp"
+            android:id="@+id/tvBrand"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:text="Welcome back 👋"
+            android:text="SkillProof"
+            android:textColor="#172033"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginLogo" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvLoginSubtitle"
+            android:id="@+id/tvSubtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:text="Continue building your SkillProof profile."
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="Prove your skills. Build your career."
+            android:textColor="#737D8F"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvWelcome" />
+            app:layout_constraintTop_toBottomOf="@id/tvBrand" />
 
         <!-- Login card -->
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/loginCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="30dp"
+            app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="24dp"
-            app:cardElevation="3dp"
-            app:strokeWidth="1dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvLoginSubtitle">
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp">
+                android:padding="22dp">
 
-                <!-- Email -->
+                <TextView
+                    android:id="@+id/tvLoginTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome Back"
+                    android:textColor="#172033"
+                    android:textSize="23sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvLoginDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Login to continue building your proof."
+                    android:textColor="#737D8F"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvLoginTitle" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/emailLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Email address"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusTopStart="14dp"
+                    android:layout_marginTop="24dp"
+                    android:hint="Email"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toBottomOf="@id/tvLoginDescription">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etEmail"
@@ -112,23 +122,17 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:textSize="14sp" />
+                        android:paddingBottom="15dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Password -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/passwordLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="15dp"
                     android:hint="Password"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusTopStart="14dp"
                     app:endIconMode="password_toggle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -141,94 +145,67 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:textSize="14sp" />
+                        android:paddingBottom="15dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Forgot password -->
-                <TextView
-                    android:id="@+id/tvForgotPassword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Forgot password?"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
-
-                <!-- Login button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnLogin"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
+                    android:layout_height="52dp"
                     android:layout_marginTop="22dp"
-                    android:text="SIGN IN  →"
-                    android:textAllCaps="false"
+                    android:text="Login"
                     android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvForgotPassword" />
+                    app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
 
-                <!-- Divider -->
                 <TextView
-                    android:id="@+id/tvDivider"
+                    android:id="@+id/tvRegisterPrompt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="OR"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="Don't have an account?"
+                    android:textColor="#737D8F"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@id/tvRegister"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+
+                <TextView
+                    android:id="@+id/tvRegister"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="Register"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tvRegisterPrompt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvRegisterPrompt"
+                    app:layout_constraintTop_toTopOf="@id/tvRegisterPrompt" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Register prompt -->
         <TextView
-            android:id="@+id/tvNewUser"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvLoginHint"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Don't have an account?"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toStartOf="@id/tvRegister"
-            app:layout_constraintHorizontal_chainStyle="packed"
+            android:layout_marginTop="22dp"
+            android:gravity="center"
+            android:text="Your skills. Your evidence. Your proof."
+            android:textColor="#8A93A3"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginCard" />
 
-        <TextView
-            android:id="@+id/tvRegister"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="Create account"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvNewUser"
-            app:layout_constraintTop_toTopOf="@id/tvNewUser" />
-
-        <!-- Branding -->
-        <TextView
-            android:id="@+id/tvLoginBrand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="SKILLPROOF  •  BUILD  •  PROVE  •  GROW"
-            android:textSize="9sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.08"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvNewUser" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

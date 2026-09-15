@@ -10,39 +10,73 @@ import androidx.recyclerview.widget.RecyclerView
 class BadgesActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
-    private lateinit var badgeManager: BadgeManager
+
+    private lateinit var btnBack: ImageButton
+
+    private lateinit var tvUnlockedCount: TextView
+    private lateinit var tvTotalCount: TextView
+    private lateinit var tvBadgeMessage: TextView
+
+    private lateinit var recyclerBadges: RecyclerView
+
     private lateinit var badgeAdapter: BadgeAdapter
 
-    private lateinit var tvLevel: TextView
-    private lateinit var tvProofScore: TextView
-    private lateinit var recyclerBadges: RecyclerView
+    private val badgeList =
+        mutableListOf<Badge>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_badges)
+        setContentView(
+            R.layout.activity_badges
+        )
 
-        // Initialize database
-        databaseHelper = DatabaseHelper(this)
+        databaseHelper =
+            DatabaseHelper(this)
 
-        // Initialize badge manager
-        badgeManager = BadgeManager(databaseHelper)
+        // -----------------------------------------
+        // Find Views
+        // -----------------------------------------
 
-        // Find views
-        val btnBack = findViewById<ImageButton>(R.id.btnBack)
+        btnBack =
+            findViewById(R.id.btnBack)
 
-        tvLevel = findViewById(R.id.tvLevel)
-        tvProofScore = findViewById(R.id.tvProofScore)
-        recyclerBadges = findViewById(R.id.recyclerBadges)
+        tvUnlockedCount =
+            findViewById(R.id.tvUnlockedCount)
 
-        // Back button
+        tvTotalCount =
+            findViewById(R.id.tvTotalCount)
+
+        tvBadgeMessage =
+            findViewById(R.id.tvBadgeMessage)
+
+        recyclerBadges =
+            findViewById(R.id.recyclerBadges)
+
+        // -----------------------------------------
+        // Back
+        // -----------------------------------------
+
         btnBack.setOnClickListener {
-            finish()
+
+            onBackPressedDispatcher
+                .onBackPressed()
         }
 
-        // RecyclerView setup
+        // -----------------------------------------
+        // RecyclerView
+        // -----------------------------------------
+
+        badgeAdapter =
+            BadgeAdapter(badgeList)
+
         recyclerBadges.layoutManager =
             LinearLayoutManager(this)
+
+        recyclerBadges.adapter =
+            badgeAdapter
+
+        recyclerBadges.setHasFixedSize(true)
 
         loadBadges()
     }
@@ -50,89 +84,304 @@ class BadgesActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // Refresh badges whenever the screen becomes visible
-        if (::badgeManager.isInitialized) {
-            loadBadges()
-        }
+        loadBadges()
     }
+
+    // =============================================
+    // LOAD BADGES
+    // =============================================
 
     private fun loadBadges() {
 
-        val skills = databaseHelper.getAllSkills()
+        badgeList.clear()
 
-        // If user has no skills yet
-        if (skills.isEmpty()) {
+        val skills =
+            databaseHelper.getAllSkills()
 
-            tvLevel.text = "Beginner"
-            tvProofScore.text = "0 / 100"
+        val evidence =
+            databaseHelper.getAllEvidence()
 
-        } else {
+        val assessmentPercentage =
+            databaseHelper.getLatestAssessmentPercentage()
 
-            // Use the first/current skill
-            val skill = skills.first()
-
-            val skillName = skill.name
-
-            val skillLevel = skill.progress
-
-            val assessmentScore =
-                databaseHelper.getAssessmentPercentageForSkill(skillName)
-
-            val evidenceCount =
-                databaseHelper.getEvidenceCountForSkill(skillName)
-
-            val verifiedEvidenceCount =
-                databaseHelper.getVerifiedEvidenceCountForSkill(skillName)
-
-            // Calculate evidence score
-            val evidenceScore = when {
-                evidenceCount >= 5 -> 100
-                evidenceCount == 4 -> 90
-                evidenceCount == 3 -> 80
-                evidenceCount == 2 -> 65
-                evidenceCount == 1 -> 45
-                else -> 0
+        val verifiedEvidenceCount =
+            evidence.count {
+                it.status.equals(
+                    "Verified",
+                    ignoreCase = true
+                )
             }
 
-            // Calculate verification score
-            val verificationScore =
-                if (evidenceCount == 0) {
-                    0
-                } else {
-                    (verifiedEvidenceCount * 100) / evidenceCount
-                }
+        val totalEvidenceCount =
+            evidence.size
 
-            // Same Proof Score formula used in ProofScoreActivity
-            val proofScore =
-                (
-                        skillLevel * 0.30 +
-                                assessmentScore * 0.30 +
-                                evidenceScore * 0.25 +
-                                verificationScore * 0.15
-                        ).toInt()
+        // -----------------------------------------
+        // Calculate Proof Score
+        // -----------------------------------------
 
-            tvProofScore.text = "$proofScore / 100"
+        val proofScore =
+            calculateProofScore()
 
-            // Determine level
-            tvLevel.text = getSkillLevel(proofScore)
-        }
+        // -----------------------------------------
+        // Badge 1
+        // -----------------------------------------
 
-        // Load badges
-        val badges = badgeManager.getBadges()
+        badgeList.add(
+            Badge(
+                id = "first_skill",
+                name = "First Skill",
+                description =
+                    "Add your first skill to SkillProof.",
+                icon = "🏁",
+                unlocked =
+                    skills.isNotEmpty()
+            )
+        )
 
-        badgeAdapter = BadgeAdapter(badges)
+        // -----------------------------------------
+        // Badge 2
+        // -----------------------------------------
 
-        recyclerBadges.adapter = badgeAdapter
+        badgeList.add(
+            Badge(
+                id = "assessment_completed",
+                name = "Assessment Completed",
+                description =
+                    "Complete at least one skill assessment.",
+                icon = "📝",
+                unlocked =
+                    assessmentPercentage > 0
+            )
+        )
+
+        // -----------------------------------------
+        // Badge 3
+        // -----------------------------------------
+
+        badgeList.add(
+            Badge(
+                id = "first_evidence",
+                name = "First Evidence",
+                description =
+                    "Add your first piece of skill evidence.",
+                icon = "📎",
+                unlocked =
+                    totalEvidenceCount >= 1
+            )
+        )
+
+        // -----------------------------------------
+        // Badge 4
+        // -----------------------------------------
+
+        badgeList.add(
+            Badge(
+                id = "verified_evidence",
+                name = "Verified Evidence",
+                description =
+                    "Get at least one evidence item verified.",
+                icon = "✅",
+                unlocked =
+                    verifiedEvidenceCount >= 1
+            )
+        )
+
+        // -----------------------------------------
+        // Badge 5
+        // -----------------------------------------
+
+        badgeList.add(
+            Badge(
+                id = "evidence_collector",
+                name = "Evidence Collector",
+                description =
+                    "Collect at least three pieces of evidence.",
+                icon = "📚",
+                unlocked =
+                    totalEvidenceCount >= 3
+            )
+        )
+
+        // -----------------------------------------
+        // Badge 6
+        // -----------------------------------------
+
+        badgeList.add(
+            Badge(
+                id = "proven_skill",
+                name = "Proven Skill",
+                description =
+                    "Reach a Proof Score of 75 or higher.",
+                icon = "🏆",
+                unlocked =
+                    proofScore >= 75
+            )
+        )
+
+        // -----------------------------------------
+        // Update UI
+        // -----------------------------------------
+
+        val unlockedCount =
+            badgeList.count {
+                it.unlocked
+            }
+
+        tvUnlockedCount.text =
+            unlockedCount.toString()
+
+        tvTotalCount.text =
+            badgeList.size.toString()
+
+        tvBadgeMessage.text =
+            getBadgeMessage(
+                unlockedCount
+            )
+
+        badgeAdapter.notifyDataSetChanged()
     }
 
-    private fun getSkillLevel(score: Int): String {
+    // =============================================
+    // PROOF SCORE
+    // =============================================
+
+    private fun calculateProofScore(): Int {
+
+        val skills =
+            databaseHelper.getAllSkills()
+
+        if (skills.isEmpty()) {
+            return 0
+        }
+
+        val selectedSkill =
+            skills.first()
+
+        val skillName =
+            selectedSkill.name
+
+        // -----------------------------------------
+        // Skill Level
+        // -----------------------------------------
+
+        val skillLevelScore =
+            selectedSkill.progress
+                .coerceIn(0, 100)
+
+        // -----------------------------------------
+        // Assessment
+        // -----------------------------------------
+
+        val assessmentScore =
+            databaseHelper
+                .getAssessmentPercentageForSkill(
+                    skillName
+                )
+                .coerceIn(0, 100)
+
+        // -----------------------------------------
+        // Evidence
+        // -----------------------------------------
+
+        val evidenceCount =
+            databaseHelper
+                .getEvidenceCountForSkill(
+                    skillName
+                )
+
+        val evidenceScore =
+            calculateEvidenceScore(
+                evidenceCount
+            )
+
+        // -----------------------------------------
+        // Verification
+        // -----------------------------------------
+
+        val verifiedEvidenceCount =
+            databaseHelper
+                .getVerifiedEvidenceCountForSkill(
+                    skillName
+                )
+
+        val verificationScore =
+            if (evidenceCount > 0) {
+
+                (
+                        verifiedEvidenceCount * 100
+                        ) / evidenceCount
+
+            } else {
+                0
+            }
+
+        // -----------------------------------------
+        // Weighted Proof Score
+        // -----------------------------------------
+
+        return (
+                skillLevelScore * 0.30 +
+                        assessmentScore * 0.30 +
+                        evidenceScore * 0.25 +
+                        verificationScore * 0.15
+                ).toInt()
+            .coerceIn(0, 100)
+    }
+
+    // =============================================
+    // EVIDENCE SCORE
+    // =============================================
+
+    private fun calculateEvidenceScore(
+        evidenceCount: Int
+    ): Int {
 
         return when {
-            score >= 90 -> "Expert"
-            score >= 75 -> "Proven Skill"
-            score >= 60 -> "Competent"
-            score >= 40 -> "Developing"
-            else -> "Beginner"
+
+            evidenceCount <= 0 ->
+                0
+
+            evidenceCount == 1 ->
+                45
+
+            evidenceCount == 2 ->
+                65
+
+            evidenceCount == 3 ->
+                80
+
+            evidenceCount == 4 ->
+                90
+
+            else ->
+                100
+        }
+    }
+
+    // =============================================
+    // BADGE MESSAGE
+    // =============================================
+
+    private fun getBadgeMessage(
+        unlockedCount: Int
+    ): String {
+
+        return when {
+
+            unlockedCount == 0 ->
+                "Start building your skill proof to unlock your first badge."
+
+            unlockedCount == 1 ->
+                "Great start! Keep building your proof."
+
+            unlockedCount < 4 ->
+                "Nice progress! Complete more activities to unlock more badges."
+
+            unlockedCount < 6 ->
+                "Excellent progress! You're building a strong proof profile."
+
+            else ->
+                "🏆 Amazing! You have unlocked every SkillProof badge."
         }
     }
 }

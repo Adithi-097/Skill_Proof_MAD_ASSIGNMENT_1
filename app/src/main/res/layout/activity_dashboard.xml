@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
-    android:fillViewport="true">
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    tools:context=".DashboardActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
-        android:paddingTop="28dp"
+        android:paddingTop="20dp"
         android:paddingEnd="20dp"
         android:paddingBottom="32dp">
 
-        <!-- Header -->
+        <!-- ================================= -->
+        <!-- HEADER -->
+        <!-- ================================= -->
 
         <TextView
             android:id="@+id/tvGoodMorning"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Good morning 👋"
+            android:text="Good Morning,"
+            android:textColor="#737D8F"
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@id/tvProfile"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,59 +38,76 @@
             android:id="@+id/tvUserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Adithi"
-            android:textSize="28sp"
+            android:layout_marginTop="3dp"
+            android:text="SkillProof User"
+            android:textColor="#172033"
+            android:textSize="27sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/tvProfile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvGoodMorning" />
 
+        <!-- Profile -->
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/tvProfile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:cardCornerRadius="25dp"
-            app:cardElevation="2dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="A"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:text="👤"
+                android:textSize="22sp" />
 
         </com.google.android.material.card.MaterialCardView>
 
-
-        <!-- Proof Score Card -->
+        <!-- ================================= -->
+        <!-- PROOF SCORE CARD -->
+        <!-- ================================= -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/proofScoreCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="3dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvUserName">
+            app:layout_constraintTop_toBottomOf="@id/tvUserName"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="22dp">
+                android:padding="20dp">
 
                 <TextView
                     android:id="@+id/tvProofScoreLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="YOUR PROOF SCORE"
+                    android:textColor="#737D8F"
                     android:textSize="11sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -92,9 +115,10 @@
                     android:id="@+id/tvProofScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="72/100"
-                    android:textSize="34sp"
+                    android:layout_marginTop="4dp"
+                    android:text="0"
+                    android:textColor="#172033"
+                    android:textSize="42sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvProofScoreLabel" />
@@ -103,8 +127,9 @@
                     android:id="@+id/tvProofMessage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:text="You're building strong proof!"
+                    android:layout_marginStart="12dp"
+                    android:text="Start building your proof."
+                    android:textColor="#737D8F"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@id/tvProofScore"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -116,20 +141,23 @@
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="0dp"
                     android:layout_height="8dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="14dp"
                     android:max="100"
-                    android:progress="72"
+                    android:progress="0"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvProofScore" />
 
                 <TextView
                     android:id="@+id/tvProofHint"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Add more evidence to increase your score →"
+                    android:layout_marginTop="9dp"
+                    android:text="Tip: Add your first skill."
+                    android:textColor="#737D8F"
                     android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/proofProgress" />
 
@@ -137,22 +165,26 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-
-        <!-- Section Title -->
+        <!-- ================================= -->
+        <!-- PROGRESS TITLE -->
+        <!-- ================================= -->
 
         <TextView
             android:id="@+id/tvProgressTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="Your Progress"
+            android:layout_marginTop="27dp"
+            android:text="Your Skill"
+            android:textColor="#172033"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/proofScoreCard" />
 
-
-        <!-- Skills Card -->
+        <!-- ================================= -->
+        <!-- SKILLS CARD -->
+        <!-- ================================= -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/skillsCard"
@@ -162,25 +194,30 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvProgressTitle">
+            app:layout_constraintTop_toBottomOf="@id/tvProgressTitle"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="100dp"
-                android:padding="18dp">
+                android:minHeight="92dp"
+                android:padding="17dp">
 
                 <TextView
                     android:id="@+id/tvSkillsIcon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_circle"
                     android:gravity="center"
-                    android:text="⚡"
-                    android:textSize="25sp"
+                    android:text="💡"
+                    android:textSize="23sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -190,7 +227,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:text="Skills"
-                    android:textSize="17sp"
+                    android:textColor="#172033"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@id/tvViewSkills"
                     app:layout_constraintStart_toEndOf="@id/tvSkillsIcon"
@@ -202,7 +240,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="4dp"
-                    android:text="Track the skills you're building."
+                    android:text="Manage your skills and progress"
+                    android:textColor="#737D8F"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toStartOf="@id/tvViewSkills"
                     app:layout_constraintStart_toEndOf="@id/tvSkillsIcon"
@@ -212,8 +251,9 @@
                     android:id="@+id/tvViewSkills"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View →"
-                    android:textSize="12sp"
+                    android:text="›"
+                    android:textColor="#172033"
+                    android:textSize="28sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -223,8 +263,9 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-
-        <!-- Evidence Card -->
+        <!-- ================================= -->
+        <!-- EVIDENCE CARD -->
+        <!-- ================================= -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/evidenceCard"
@@ -234,25 +275,30 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/skillsCard">
+            app:layout_constraintTop_toBottomOf="@id/skillsCard"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="100dp"
-                android:padding="18dp">
+                android:minHeight="92dp"
+                android:padding="17dp">
 
                 <TextView
                     android:id="@+id/tvEvidenceIcon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_circle"
                     android:gravity="center"
-                    android:text="📁"
-                    android:textSize="25sp"
+                    android:text="📎"
+                    android:textSize="23sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -262,7 +308,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:text="Evidence"
-                    android:textSize="17sp"
+                    android:textColor="#172033"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@id/tvViewEvidence"
                     app:layout_constraintStart_toEndOf="@id/tvEvidenceIcon"
@@ -274,7 +321,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="4dp"
-                    android:text="Add projects, certificates and achievements."
+                    android:text="Projects, certificates and proof"
+                    android:textColor="#737D8F"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toStartOf="@id/tvViewEvidence"
                     app:layout_constraintStart_toEndOf="@id/tvEvidenceIcon"
@@ -284,8 +332,9 @@
                     android:id="@+id/tvViewEvidence"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View →"
-                    android:textSize="12sp"
+                    android:text="›"
+                    android:textColor="#172033"
+                    android:textSize="28sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -295,8 +344,9 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-
-        <!-- Assessment Card -->
+        <!-- ================================= -->
+        <!-- ASSESSMENT CARD -->
+        <!-- ================================= -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/assessmentCard"
@@ -306,25 +356,30 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/evidenceCard">
+            app:layout_constraintTop_toBottomOf="@id/evidenceCard"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="100dp"
-                android:padding="18dp">
+                android:minHeight="92dp"
+                android:padding="17dp">
 
                 <TextView
                     android:id="@+id/tvAssessmentIcon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_circle"
                     android:gravity="center"
                     android:text="📝"
-                    android:textSize="25sp"
+                    android:textSize="23sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -334,7 +389,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:text="Assessment"
-                    android:textSize="17sp"
+                    android:textColor="#172033"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@id/tvViewAssessment"
                     app:layout_constraintStart_toEndOf="@id/tvAssessmentIcon"
@@ -346,7 +402,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="4dp"
-                    android:text="Test your knowledge and prove your skills."
+                    android:text="Test your knowledge and understanding"
+                    android:textColor="#737D8F"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toStartOf="@id/tvViewAssessment"
                     app:layout_constraintStart_toEndOf="@id/tvAssessmentIcon"
@@ -356,8 +413,9 @@
                     android:id="@+id/tvViewAssessment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Start →"
-                    android:textSize="12sp"
+                    android:text="›"
+                    android:textColor="#172033"
+                    android:textSize="28sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -367,8 +425,9 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-
-        <!-- Career Card -->
+        <!-- ================================= -->
+        <!-- CAREER CARD -->
+        <!-- ================================= -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/careerCard"
@@ -378,25 +437,30 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/assessmentCard">
+            app:layout_constraintTop_toBottomOf="@id/assessmentCard"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="100dp"
-                android:padding="18dp">
+                android:minHeight="92dp"
+                android:padding="17dp">
 
                 <TextView
                     android:id="@+id/tvCareerIcon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_circle"
                     android:gravity="center"
-                    android:text="🎯"
-                    android:textSize="25sp"
+                    android:text="🚀"
+                    android:textSize="23sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -406,7 +470,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:text="Career Readiness"
-                    android:textSize="17sp"
+                    android:textColor="#172033"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@id/tvViewCareer"
                     app:layout_constraintStart_toEndOf="@id/tvCareerIcon"
@@ -418,7 +483,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="4dp"
-                    android:text="Discover gaps and prepare for your career."
+                    android:text="Check readiness, badges and skill gaps"
+                    android:textColor="#737D8F"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toStartOf="@id/tvViewCareer"
                     app:layout_constraintStart_toEndOf="@id/tvCareerIcon"
@@ -428,8 +494,9 @@
                     android:id="@+id/tvViewCareer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Explore →"
-                    android:textSize="12sp"
+                    android:text="›"
+                    android:textColor="#172033"
+                    android:textSize="28sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -441,4 +508,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

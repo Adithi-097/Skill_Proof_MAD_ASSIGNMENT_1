@@ -16,9 +16,12 @@ import kotlin.concurrent.thread
 
 class GitHubVerificationActivity : AppCompatActivity() {
 
-    private lateinit var etGithubUrl: TextInputEditText
+    private lateinit var btnBack: ImageButton
     private lateinit var btnVerify: MaterialButton
     private lateinit var btnUseAsEvidence: MaterialButton
+
+    private lateinit var etGithubUrl: TextInputEditText
+
     private lateinit var resultCard: View
 
     private lateinit var tvVerificationStatus: TextView
@@ -29,9 +32,10 @@ class GitHubVerificationActivity : AppCompatActivity() {
     private lateinit var tvForks: TextView
     private lateinit var tvRepositoryDescription: TextView
 
-    private var verifiedOwner = ""
-    private var verifiedRepository = ""
-    private var verifiedLanguage = ""
+    private var verifiedRepositoryUrl: String = ""
+    private var verifiedRepositoryName: String = ""
+    private var verifiedOwner: String = ""
+    private var verifiedLanguage: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,73 +44,49 @@ class GitHubVerificationActivity : AppCompatActivity() {
             R.layout.activity_github_verification
         )
 
-        // =====================================================
-        // FIND VIEWS
-        // =====================================================
+        // -----------------------------------------
+        // Find Views
+        // -----------------------------------------
 
-        val btnBack =
-            findViewById<ImageButton>(
-                R.id.btnBack
-            )
-
-        etGithubUrl =
-            findViewById(
-                R.id.etGithubUrl
-            )
+        btnBack =
+            findViewById(R.id.btnBack)
 
         btnVerify =
-            findViewById(
-                R.id.btnVerify
-            )
+            findViewById(R.id.btnVerify)
 
         btnUseAsEvidence =
-            findViewById(
-                R.id.btnUseAsEvidence
-            )
+            findViewById(R.id.btnUseAsEvidence)
+
+        etGithubUrl =
+            findViewById(R.id.etGithubUrl)
 
         resultCard =
-            findViewById(
-                R.id.resultCard
-            )
+            findViewById(R.id.resultCard)
 
         tvVerificationStatus =
-            findViewById(
-                R.id.tvVerificationStatus
-            )
+            findViewById(R.id.tvVerificationStatus)
 
         tvRepository =
-            findViewById(
-                R.id.tvRepository
-            )
+            findViewById(R.id.tvRepository)
 
         tvOwner =
-            findViewById(
-                R.id.tvOwner
-            )
+            findViewById(R.id.tvOwner)
 
         tvLanguage =
-            findViewById(
-                R.id.tvLanguage
-            )
+            findViewById(R.id.tvLanguage)
 
         tvStars =
-            findViewById(
-                R.id.tvStars
-            )
+            findViewById(R.id.tvStars)
 
         tvForks =
-            findViewById(
-                R.id.tvForks
-            )
+            findViewById(R.id.tvForks)
 
         tvRepositoryDescription =
-            findViewById(
-                R.id.tvRepositoryDescription
-            )
+            findViewById(R.id.tvRepositoryDescription)
 
-        // =====================================================
-        // INITIAL STATE
-        // =====================================================
+        // -----------------------------------------
+        // Initial State
+        // -----------------------------------------
 
         resultCard.visibility =
             View.GONE
@@ -114,184 +94,82 @@ class GitHubVerificationActivity : AppCompatActivity() {
         btnUseAsEvidence.visibility =
             View.GONE
 
-        // =====================================================
-        // BACK BUTTON
-        // =====================================================
+        // -----------------------------------------
+        // Back
+        // -----------------------------------------
 
         btnBack.setOnClickListener {
-            finish()
+
+            onBackPressedDispatcher.onBackPressed()
         }
 
-        // =====================================================
-        // VERIFY BUTTON
-        // =====================================================
+        // -----------------------------------------
+        // Verify
+        // -----------------------------------------
 
         btnVerify.setOnClickListener {
 
-            val githubUrl =
-                etGithubUrl.text
-                    .toString()
-                    .trim()
-
-            // Empty URL
-            if (githubUrl.isEmpty()) {
-
-                etGithubUrl.error =
-                    "Enter a GitHub repository URL"
-
-                etGithubUrl.requestFocus()
-
-                return@setOnClickListener
-            }
-
-            // Extract repository
-            val repository =
-                extractRepository(
-                    githubUrl
-                )
-
-            if (repository == null) {
-
-                etGithubUrl.error =
-                    "Enter a valid GitHub repository URL"
-
-                etGithubUrl.requestFocus()
-
-                return@setOnClickListener
-            }
-
-            val owner =
-                repository.first
-
-            val repo =
-                repository.second
-
-            verifyRepository(
-                owner,
-                repo
-            )
+            verifyRepository()
         }
 
-        // =====================================================
-        // USE AS VERIFIED EVIDENCE
-        // =====================================================
+        // -----------------------------------------
+        // Use As Evidence
+        // -----------------------------------------
 
         btnUseAsEvidence.setOnClickListener {
 
-            if (
-                verifiedOwner.isEmpty() ||
-                verifiedRepository.isEmpty()
-            ) {
-
-                Toast.makeText(
-                    this,
-                    "Please verify a repository first.",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                return@setOnClickListener
-            }
-
-            val resultIntent =
-                Intent()
-
-            resultIntent.putExtra(
-                "github_verified",
-                true
-            )
-
-            resultIntent.putExtra(
-                "github_owner",
-                verifiedOwner
-            )
-
-            resultIntent.putExtra(
-                "github_repository",
-                verifiedRepository
-            )
-
-            resultIntent.putExtra(
-                "github_language",
-                verifiedLanguage
-            )
-
-            resultIntent.putExtra(
-                "github_url",
-                "https://github.com/$verifiedOwner/$verifiedRepository"
-            )
-
-            setResult(
-                RESULT_OK,
-                resultIntent
-            )
-
-            finish()
+            useRepositoryAsEvidence()
         }
     }
 
-    // =====================================================
-    // EXTRACT OWNER + REPOSITORY
-    // =====================================================
+    // ---------------------------------------------
+    // Verify GitHub Repository
+    // ---------------------------------------------
 
-    private fun extractRepository(
-        githubUrl: String
-    ): Pair<String, String>? {
+    private fun verifyRepository() {
 
-        var url =
-            githubUrl.trim()
+        val githubUrl =
+            etGithubUrl.text
+                .toString()
+                .trim()
 
-        // Remove trailing slash
-        url =
-            url.removeSuffix("/")
+        // -----------------------------------------
+        // Validation
+        // -----------------------------------------
 
-        // Remove .git
-        url =
-            url.removeSuffix(".git")
+        if (githubUrl.isEmpty()) {
 
-        /*
-         * Supported formats:
-         *
-         * https://github.com/user/repository
-         * http://github.com/user/repository
-         * github.com/user/repository
-         * www.github.com/user/repository
-         */
+            etGithubUrl.error =
+                "Enter a GitHub repository URL"
 
-        val regex =
-            Regex(
-                """(?:https?://)?(?:www\.)?github\.com/([^/\s]+)/([^/\s]+)"""
-            )
+            etGithubUrl.requestFocus()
 
-        val match =
-            regex.find(url)
-
-        if (match != null) {
-
-            val owner =
-                match.groupValues[1]
-
-            val repo =
-                match.groupValues[2]
-
-            return Pair(
-                owner,
-                repo
-            )
+            return
         }
 
-        return null
-    }
+        val repositoryInfo =
+            extractRepositoryInfo(githubUrl)
 
-    // =====================================================
-    // VERIFY GITHUB REPOSITORY
-    // =====================================================
+        if (repositoryInfo == null) {
 
-    private fun verifyRepository(
-        owner: String,
-        repo: String
-    ) {
+            etGithubUrl.error =
+                "Enter a valid GitHub repository URL"
 
-        // Disable button
+            etGithubUrl.requestFocus()
+
+            return
+        }
+
+        val owner =
+            repositoryInfo.first
+
+        val repository =
+            repositoryInfo.second
+
+        // -----------------------------------------
+        // Disable Button
+        // -----------------------------------------
+
         btnVerify.isEnabled =
             false
 
@@ -304,23 +182,24 @@ class GitHubVerificationActivity : AppCompatActivity() {
         btnUseAsEvidence.visibility =
             View.GONE
 
-        // Network operation
+        // -----------------------------------------
+        // API Request
+        // -----------------------------------------
+
         thread {
 
-            var connection:
-                    HttpURLConnection? = null
+            var connection: HttpURLConnection? =
+                null
 
             try {
 
-                // GitHub REST API
                 val apiUrl =
-                    "https://api.github.com/repos/$owner/$repo"
-
-                val url =
-                    URL(apiUrl)
+                    URL(
+                        "https://api.github.com/repos/$owner/$repository"
+                    )
 
                 connection =
-                    url.openConnection()
+                    apiUrl.openConnection()
                             as HttpURLConnection
 
                 connection.requestMethod =
@@ -345,14 +224,7 @@ class GitHubVerificationActivity : AppCompatActivity() {
                 val responseCode =
                     connection.responseCode
 
-                // =================================================
-                // SUCCESS
-                // =================================================
-
-                if (
-                    responseCode ==
-                    HttpURLConnection.HTTP_OK
-                ) {
+                if (responseCode == 200) {
 
                     val response =
                         connection.inputStream
@@ -362,23 +234,22 @@ class GitHubVerificationActivity : AppCompatActivity() {
                             }
 
                     val json =
-                        JSONObject(
-                            response
-                        )
+                        JSONObject(response)
 
-                    val repositoryName =
+                    val name =
                         json.optString(
                             "name",
-                            repo
+                            repository
                         )
 
-                    val repositoryOwner =
-                        json.optJSONObject(
-                            "owner"
-                        )?.optString(
-                            "login",
-                            owner
-                        ) ?: owner
+                    val ownerLogin =
+                        json
+                            .optJSONObject("owner")
+                            ?.optString(
+                                "login",
+                                owner
+                            )
+                            ?: owner
 
                     val language =
                         json.optString(
@@ -404,103 +275,71 @@ class GitHubVerificationActivity : AppCompatActivity() {
                             "No description available."
                         )
 
-                    // Update UI
                     runOnUiThread {
 
-                        verifiedOwner =
-                            repositoryOwner
+                        verifiedRepositoryUrl =
+                            githubUrl
 
-                        verifiedRepository =
-                            repositoryName
+                        verifiedRepositoryName =
+                            name
+
+                        verifiedOwner =
+                            ownerLogin
 
                         verifiedLanguage =
                             language
 
-                        showVerifiedRepository(
-                            repositoryName,
-                            repositoryOwner,
-                            language,
-                            stars,
-                            forks,
-                            description
-                        )
+                        tvVerificationStatus.text =
+                            "✓ Repository Verified"
 
-                        btnVerify.isEnabled =
-                            true
+                        tvRepository.text =
+                            "Repository: $name"
 
-                        btnVerify.text =
-                            "Verify Repository"
+                        tvOwner.text =
+                            "Owner: $ownerLogin"
+
+                        tvLanguage.text =
+                            "Language: $language"
+
+                        tvStars.text =
+                            "Stars: $stars"
+
+                        tvForks.text =
+                            "Forks: $forks"
+
+                        tvRepositoryDescription.text =
+                            if (description.isBlank()) {
+                                "No description available."
+                            } else {
+                                description
+                            }
+
+                        resultCard.visibility =
+                            View.VISIBLE
 
                         btnUseAsEvidence.visibility =
                             View.VISIBLE
-                    }
-
-                }
-
-                // =================================================
-                // REPOSITORY NOT FOUND
-                // =================================================
-
-                else if (
-                    responseCode ==
-                    HttpURLConnection.HTTP_NOT_FOUND
-                ) {
-
-                    runOnUiThread {
-
-                        showVerificationFailed(
-                            "Repository not found. Check the GitHub URL."
-                        )
 
                         btnVerify.isEnabled =
                             true
 
                         btnVerify.text =
                             "Verify Repository"
+
+                        Toast.makeText(
+                            this,
+                            "GitHub repository verified.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
 
-                }
-
-                // =================================================
-                // RATE LIMIT
-                // =================================================
-
-                else if (
-                    responseCode == 403
-                ) {
+                } else {
 
                     runOnUiThread {
 
-                        showVerificationFailed(
-                            "GitHub API rate limit reached. Try again later."
+                        showVerificationError(
+                            responseCode
                         )
-
-                        btnVerify.isEnabled =
-                            true
-
-                        btnVerify.text =
-                            "Verify Repository"
-                    }
-
-                }
-
-                // =================================================
-                // OTHER HTTP ERROR
-                // =================================================
-
-                else {
-
-                    runOnUiThread {
-
-                        showVerificationFailed(
-                            "Unable to verify repository. HTTP $responseCode"
-                        )
-
-                        btnVerify.isEnabled =
-                            true
-
-                        btnVerify.text =
-                            "Verify Repository"
                     }
                 }
 
@@ -508,22 +347,26 @@ class GitHubVerificationActivity : AppCompatActivity() {
 
                 runOnUiThread {
 
-                    showVerificationFailed(
-                        "Network error. Please check your internet connection."
-                    )
+                    tvVerificationStatus.text =
+                        "Verification failed"
+
+                    resultCard.visibility =
+                        View.VISIBLE
+
+                    btnUseAsEvidence.visibility =
+                        View.GONE
+
+                    Toast.makeText(
+                        this,
+                        "Unable to connect to GitHub.",
+                        Toast.LENGTH_LONG
+                    ).show()
 
                     btnVerify.isEnabled =
                         true
 
                     btnVerify.text =
                         "Verify Repository"
-
-                    Toast.makeText(
-                        this,
-                        e.message
-                            ?: "Network error",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
 
             } finally {
@@ -533,50 +376,54 @@ class GitHubVerificationActivity : AppCompatActivity() {
         }
     }
 
-    // =====================================================
-    // SHOW VERIFIED REPOSITORY
-    // =====================================================
+    // ---------------------------------------------
+    // Extract Owner / Repository
+    // ---------------------------------------------
 
-    private fun showVerifiedRepository(
-        repositoryName: String,
-        owner: String,
-        language: String,
-        stars: Int,
-        forks: Int,
-        description: String
-    ) {
+    private fun extractRepositoryInfo(
+        url: String
+    ): Pair<String, String>? {
 
-        resultCard.visibility =
-            View.VISIBLE
+        val cleanedUrl =
+            url
+                .trim()
+                .removeSuffix("/")
 
-        tvVerificationStatus.text =
-            "✓ Repository Verified"
+        val regex =
+            Regex(
+                """(?:https?://)?(?:www\.)?github\.com/([^/\s]+)/([^/\s#?]+)"""
+            )
 
-        tvRepository.text =
-            "Repository: $repositoryName"
+        val match =
+            regex.find(cleanedUrl)
+                ?: return null
 
-        tvOwner.text =
-            "Owner: $owner"
+        val owner =
+            match.groupValues[1]
 
-        tvLanguage.text =
-            "Language: $language"
+        val repository =
+            match.groupValues[2]
+                .removeSuffix(".git")
 
-        tvStars.text =
-            "Stars: $stars"
+        if (
+            owner.isBlank() ||
+            repository.isBlank()
+        ) {
+            return null
+        }
 
-        tvForks.text =
-            "Forks: $forks"
-
-        tvRepositoryDescription.text =
-            "Description: $description"
+        return Pair(
+            owner,
+            repository
+        )
     }
 
-    // =====================================================
-    // SHOW VERIFICATION FAILURE
-    // =====================================================
+    // ---------------------------------------------
+    // Show Verification Error
+    // ---------------------------------------------
 
-    private fun showVerificationFailed(
-        message: String
+    private fun showVerificationError(
+        responseCode: Int
     ) {
 
         resultCard.visibility =
@@ -585,25 +432,112 @@ class GitHubVerificationActivity : AppCompatActivity() {
         btnUseAsEvidence.visibility =
             View.GONE
 
-        tvVerificationStatus.text =
-            "✗ Verification Failed"
+        when (responseCode) {
 
-        tvRepository.text =
-            message
+            404 -> {
+
+                tvVerificationStatus.text =
+                    "Repository Not Found"
+
+                tvRepository.text =
+                    "The repository does not exist or is private."
+
+            }
+
+            403 -> {
+
+                tvVerificationStatus.text =
+                    "GitHub API Limit Reached"
+
+                tvRepository.text =
+                    "Please try again later."
+
+            }
+
+            else -> {
+
+                tvVerificationStatus.text =
+                    "Verification Failed"
+
+                tvRepository.text =
+                    "GitHub returned error code $responseCode."
+            }
+        }
 
         tvOwner.text =
-            "Owner: -"
+            ""
 
         tvLanguage.text =
-            "Language: -"
+            ""
 
         tvStars.text =
-            "Stars: -"
+            ""
 
         tvForks.text =
-            "Forks: -"
+            ""
 
         tvRepositoryDescription.text =
-            "Please check the repository URL and try again."
+            ""
+
+        btnVerify.isEnabled =
+            true
+
+        btnVerify.text =
+            "Verify Repository"
+    }
+
+    // ---------------------------------------------
+    // Use Repository As Evidence
+    // ---------------------------------------------
+
+    private fun useRepositoryAsEvidence() {
+
+        if (
+            verifiedRepositoryName.isBlank()
+        ) {
+
+            Toast.makeText(
+                this,
+                "Please verify a repository first.",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            return
+        }
+
+        val resultIntent =
+            Intent()
+
+        resultIntent.putExtra(
+            "github_verified",
+            true
+        )
+
+        resultIntent.putExtra(
+            "github_owner",
+            verifiedOwner
+        )
+
+        resultIntent.putExtra(
+            "github_repository",
+            verifiedRepositoryName
+        )
+
+        resultIntent.putExtra(
+            "github_language",
+            verifiedLanguage
+        )
+
+        resultIntent.putExtra(
+            "github_url",
+            verifiedRepositoryUrl
+        )
+
+        setResult(
+            RESULT_OK,
+            resultIntent
+        )
+
+        finish()
     }
 }

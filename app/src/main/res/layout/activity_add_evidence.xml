@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
-    android:fillViewport="true">
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    tools:context=".AddEvidenceActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:paddingStart="24dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="32dp">
 
+        <!-- ===================================== -->
+        <!-- Decorative Circle -->
+        <!-- ===================================== -->
 
-        <!-- ========================= -->
-        <!-- BACK BUTTON -->
-        <!-- ========================= -->
+        <View
+            android:id="@+id/topDecoration"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:background="@drawable/bg_login_circle"
+            android:translationX="95dp"
+            android:translationY="-100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- ===================================== -->
+        <!-- Back Button -->
+        <!-- ===================================== -->
 
         <ImageButton
             android:id="@+id/btnBack"
@@ -24,280 +42,304 @@
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
-            android:src="@android:drawable/ic_media_previous"
+            android:padding="12dp"
+            android:src="@android:drawable/ic_menu_revert"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <!-- ========================= -->
-        <!-- TITLE -->
-        <!-- ========================= -->
+        <!-- ===================================== -->
+        <!-- Page Title -->
+        <!-- ===================================== -->
 
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tvPageTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginTop="22dp"
             android:text="Add Evidence"
-            android:textSize="26sp"
+            android:textColor="#172033"
+            android:textSize="29sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btnBack"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnBack"
-            app:layout_constraintTop_toTopOf="@id/btnBack" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-
-        <!-- ========================= -->
-        <!-- SUBTITLE -->
-        <!-- ========================= -->
+        <!-- ===================================== -->
+        <!-- Subtitle -->
+        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvSubtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Add proof that demonstrates your skill."
-            android:textSize="14sp"
+            android:layout_marginTop="7dp"
+            android:text="Add proof that supports one of your skills."
+            android:textColor="#737D8F"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack" />
+            app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
 
+        <!-- ===================================== -->
+        <!-- Evidence Title -->
+        <!-- ===================================== -->
 
-        <!-- ========================= -->
-        <!-- EVIDENCE CARD -->
-        <!-- ========================= -->
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/evidenceFormCard"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/evidenceTitleLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="3dp"
+            android:layout_marginTop="24dp"
+            android:hint="Evidence title"
+            app:boxCornerRadiusBottomEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp"
+            app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusTopStart="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEvidenceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Example: E-Commerce Project"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ===================================== -->
+        <!-- Related Skill -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/evidenceSkillLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="Related skill"
+            app:boxCornerRadiusBottomEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp"
+            app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusTopStart="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/evidenceTitleLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEvidenceSkill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Example: Java"
+                android:inputType="textCapWords"
+                android:maxLines="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ===================================== -->
+        <!-- Evidence Type -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/evidenceTypeLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="Evidence type"
+            app:boxCornerRadiusBottomEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp"
+            app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusTopStart="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/evidenceSkillLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEvidenceType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Example: Project, Certificate, Course"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ===================================== -->
+        <!-- Evidence Link -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/evidenceLinkLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="Evidence link"
+            app:boxCornerRadiusBottomEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp"
+            app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusTopStart="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/evidenceTypeLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEvidenceLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="https://github.com/..."
+                android:inputType="textUri"
+                android:maxLines="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ===================================== -->
+        <!-- Attachment Card -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/attachmentCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/evidenceLinkLayout"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp">
+                android:padding="18dp">
 
-
-                <!-- ========================= -->
-                <!-- TITLE FIELD -->
-                <!-- ========================= -->
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/titleLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:hint="Evidence Title"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textCapSentences"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <!-- ========================= -->
-                <!-- SKILL -->
-                <!-- ========================= -->
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/skillLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:hint="Select Skill"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/titleLayout">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/actvSkill"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <!-- ========================= -->
-                <!-- EVIDENCE TYPE -->
-                <!-- ========================= -->
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/typeLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:hint="Evidence Type"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/skillLayout">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/actvType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <!-- ========================= -->
-                <!-- LINK -->
-                <!-- ========================= -->
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/linkLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:hint="Evidence Link"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/typeLayout">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etLink"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textUri"
-                        android:maxLines="2" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <!-- ========================= -->
-                <!-- ATTACHMENT TITLE -->
-                <!-- ========================= -->
+                <!-- Attachment Title -->
 
                 <TextView
                     android:id="@+id/tvAttachmentTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="22dp"
-                    android:text="Evidence Attachment"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/linkLayout" />
-
-
-                <!-- ========================= -->
-                <!-- ATTACHMENT SUBTITLE -->
-                <!-- ========================= -->
-
-                <TextView
-                    android:id="@+id/tvAttachmentSubtitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Add a photo of your certificate, project or achievement."
-                    android:textSize="12sp"
+                    android:text="Attachment"
+                    android:textColor="#172033"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Hint -->
+
+                <TextView
+                    android:id="@+id/tvAttachmentHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Optional: attach a screenshot, certificate or image."
+                    android:textColor="#737D8F"
+                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvAttachmentTitle" />
 
+                <!-- Choose File -->
 
-                <!-- ========================= -->
-                <!-- IMAGE PREVIEW -->
-                <!-- ========================= -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnChooseFile"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="14dp"
+                    android:text="Choose File"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="14dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAttachmentHint" />
+
+                <!-- Selected File -->
+
+                <TextView
+                    android:id="@+id/tvSelectedFile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:ellipsize="middle"
+                    android:maxLines="2"
+                    android:textColor="#172033"
+                    android:textSize="13sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnChooseFile" />
+
+                <!-- Image Preview -->
 
                 <ImageView
                     android:id="@+id/ivAttachmentPreview"
                     android:layout_width="0dp"
                     android:layout_height="180dp"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginTop="12dp"
                     android:adjustViewBounds="true"
-                    android:contentDescription="Evidence attachment preview"
+                    android:contentDescription="Attachment preview"
                     android:scaleType="centerCrop"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvAttachmentSubtitle" />
-
-
-                <!-- ========================= -->
-                <!-- CAMERA BUTTON -->
-                <!-- ========================= -->
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCamera"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:text="📷  Take Photo"
-                    app:layout_constraintEnd_toStartOf="@id/btnGallery"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ivAttachmentPreview" />
-
-
-                <!-- ========================= -->
-                <!-- GALLERY BUTTON -->
-                <!-- ========================= -->
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnGallery"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="🖼  Gallery"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btnCamera"
-                    app:layout_constraintTop_toTopOf="@id/btnCamera" />
-
-
-                <!-- ========================= -->
-                <!-- SAVE BUTTON -->
-                <!-- ========================= -->
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSaveEvidence"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="SAVE EVIDENCE"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnCamera" />
+                    app:layout_constraintTop_toBottomOf="@id/tvSelectedFile" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- ===================================== -->
+        <!-- Save Button -->
+        <!-- ===================================== -->
 
-        <!-- ========================= -->
-        <!-- FOOTER -->
-        <!-- ========================= -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveEvidence"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="22dp"
+            android:text="Save Evidence"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/attachmentCard" />
+
+        <!-- ===================================== -->
+        <!-- Bottom Hint -->
+        <!-- ===================================== -->
 
         <TextView
-            android:id="@+id/tvFooter"
+            android:id="@+id/tvBottomHint"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="14dp"
             android:gravity="center"
-            android:text="SkillProof • Evidence makes skills credible."
+            android:text="Evidence starts as unverified. You can verify it later."
+            android:textColor="#8A93A3"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/evidenceFormCard" />
+            app:layout_constraintTop_toBottomOf="@id/btnSaveEvidence" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

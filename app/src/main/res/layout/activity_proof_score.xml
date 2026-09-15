@@ -1,75 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    tools:context=".ProofScoreActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="24dp">
+        android:paddingStart="24dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="32dp">
 
         <!-- ===================================== -->
-        <!-- HEADER -->
+        <!-- Back Button -->
         <!-- ===================================== -->
 
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
-            android:src="@android:drawable/ic_media_previous"
+            android:padding="12dp"
+            android:src="@android:drawable/ic_menu_revert"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- ===================================== -->
+        <!-- Refresh Button -->
+        <!-- ===================================== -->
+
+        <ImageButton
+            android:id="@+id/btnRefresh"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Refresh score"
+            android:padding="12dp"
+            android:src="@android:drawable/ic_popup_sync"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- ===================================== -->
+        <!-- Page Title -->
+        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvPageTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="20dp"
             android:text="Proof Score"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="24sp"
+            android:textColor="#172033"
+            android:textSize="29sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btnBack"
-            app:layout_constraintEnd_toStartOf="@id/btnRefresh"
-            app:layout_constraintStart_toEndOf="@id/btnBack"
-            app:layout_constraintTop_toTopOf="@id/btnBack" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRefresh"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginEnd="12dp"
-            android:text="Refresh"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/btnBack"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnBack" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
         <!-- ===================================== -->
-        <!-- SCORE CARD -->
+        <!-- Subtitle -->
         <!-- ===================================== -->
 
-        <androidx.cardview.widget.CardView
+        <TextView
+            android:id="@+id/tvPageDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="A measurable score based on how well you prove your skills."
+            android:textColor="#737D8F"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
+
+        <!-- ===================================== -->
+        <!-- Score Card -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/scoreCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="4dp"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack">
+            app:layout_constraintTop_toBottomOf="@id/tvPageDescription"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -78,12 +106,13 @@
 
                 <TextView
                     android:id="@+id/tvScoreLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="YOUR PROOF SCORE"
+                    android:textColor="#737D8F"
                     android:textSize="12sp"
                     android:textStyle="bold"
-                    android:textColor="?android:attr/textColorSecondary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -92,10 +121,10 @@
                     android:id="@+id/tvProofScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="8dp"
                     android:text="0"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="52sp"
+                    android:textColor="#172033"
+                    android:textSize="58sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -105,78 +134,74 @@
                     android:id="@+id/tvOutOf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginStart="5dp"
                     android:text="/ 100"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="14sp"
+                    android:textColor="#737D8F"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvProofScore"
+                    app:layout_constraintStart_toEndOf="@id/tvProofScore" />
+
+                <TextView
+                    android:id="@+id/tvSkillName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="Kotlin"
+                    android:textColor="#172033"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvProofScore" />
 
                 <TextView
-                    android:id="@+id/tvSkillName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Java"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="?android:attr/textColorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvOutOf" />
-
-                <TextView
                     android:id="@+id/tvProofLevel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:text="Developing"
+                    android:text="Beginner"
+                    android:textColor="#737D8F"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="?android:attr/textColorSecondary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvSkillName" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- ===================================== -->
-        <!-- SCORE BREAKDOWN TITLE -->
+        <!-- Breakdown Title -->
         <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvBreakdownTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="26dp"
             android:text="Score Breakdown"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="20sp"
+            android:textColor="#172033"
+            android:textSize="19sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/scoreCard" />
 
         <!-- ===================================== -->
-        <!-- SKILL LEVEL -->
+        <!-- Skill Level -->
         <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvSkillLevelLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="18dp"
             android:text="Skill Level"
-            android:textSize="15sp"
+            android:textColor="#172033"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintEnd_toStartOf="@id/tvSkillLevelScore"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvBreakdownTitle" />
@@ -185,22 +210,19 @@
             android:id="@+id/tvSkillLevelScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
             android:text="0 / 100"
+            android:textColor="#172033"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintBaseline_toBaselineOf="@id/tvSkillLevelLabel"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvSkillLevelLabel" />
 
         <ProgressBar
             android:id="@+id/progressSkillLevel"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="8dp"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="20dp"
             android:max="100"
             android:progress="0"
             app:layout_constraintEnd_toEndOf="parent"
@@ -209,31 +231,28 @@
 
         <TextView
             android:id="@+id/tvSkillLevelWeight"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="4dp"
             android:text="Weight: 30%"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="#8A93A3"
+            android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progressSkillLevel" />
 
         <!-- ===================================== -->
-        <!-- ASSESSMENT -->
+        <!-- Assessment -->
         <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvAssessmentLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="22dp"
             android:text="Assessment"
-            android:textSize="15sp"
+            android:textColor="#172033"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintEnd_toStartOf="@id/tvAssessmentScore"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSkillLevelWeight" />
@@ -242,22 +261,19 @@
             android:id="@+id/tvAssessmentScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
             android:text="0 / 100"
+            android:textColor="#172033"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintBaseline_toBaselineOf="@id/tvAssessmentLabel"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvAssessmentLabel" />
 
         <ProgressBar
             android:id="@+id/progressAssessment"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="8dp"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="20dp"
             android:max="100"
             android:progress="0"
             app:layout_constraintEnd_toEndOf="parent"
@@ -266,31 +282,28 @@
 
         <TextView
             android:id="@+id/tvAssessmentWeight"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="4dp"
             android:text="Weight: 30%"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="#8A93A3"
+            android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progressAssessment" />
 
         <!-- ===================================== -->
-        <!-- EVIDENCE -->
+        <!-- Evidence -->
         <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvEvidenceLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="22dp"
             android:text="Evidence"
-            android:textSize="15sp"
+            android:textColor="#172033"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintEnd_toStartOf="@id/tvEvidenceScore"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvAssessmentWeight" />
@@ -299,22 +312,19 @@
             android:id="@+id/tvEvidenceScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
             android:text="0 / 100"
+            android:textColor="#172033"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintBaseline_toBaselineOf="@id/tvEvidenceLabel"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvEvidenceLabel" />
 
         <ProgressBar
             android:id="@+id/progressEvidence"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="8dp"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="20dp"
             android:max="100"
             android:progress="0"
             app:layout_constraintEnd_toEndOf="parent"
@@ -323,31 +333,28 @@
 
         <TextView
             android:id="@+id/tvEvidenceWeight"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="4dp"
             android:text="Weight: 25%"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="#8A93A3"
+            android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progressEvidence" />
 
         <!-- ===================================== -->
-        <!-- VERIFICATION -->
+        <!-- Verification -->
         <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvVerificationLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="22dp"
             android:text="Verification"
-            android:textSize="15sp"
+            android:textColor="#172033"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintEnd_toStartOf="@id/tvVerificationScore"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvEvidenceWeight" />
@@ -356,22 +363,19 @@
             android:id="@+id/tvVerificationScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
             android:text="0 / 100"
+            android:textColor="#172033"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintBaseline_toBaselineOf="@id/tvVerificationLabel"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvVerificationLabel" />
 
         <ProgressBar
             android:id="@+id/progressVerification"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="8dp"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="20dp"
             android:max="100"
             android:progress="0"
             app:layout_constraintEnd_toEndOf="parent"
@@ -380,45 +384,44 @@
 
         <TextView
             android:id="@+id/tvVerificationWeight"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="4dp"
             android:text="Weight: 15%"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="#8A93A3"
+            android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progressVerification" />
 
         <!-- ===================================== -->
-        <!-- RECOMMENDATION -->
+        <!-- Recommendation Card -->
         <!-- ===================================== -->
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/recommendationCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
+            android:layout_marginTop="26dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvVerificationWeight">
+            app:layout_constraintTop_toBottomOf="@id/tvVerificationWeight"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="18dp">
+                android:padding="20dp">
 
                 <TextView
                     android:id="@+id/tvRecommendationTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="How to Improve"
-                    android:textColor="?android:attr/textColorPrimary"
+                    android:textColor="#172033"
                     android:textSize="17sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -430,8 +433,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="3dp"
                     android:text="Add evidence and complete assessments."
-                    android:textColor="?android:attr/textColorSecondary"
+                    android:textColor="#737D8F"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -440,8 +444,8 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

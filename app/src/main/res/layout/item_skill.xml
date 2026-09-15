@@ -5,67 +5,87 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     android:layout_marginBottom="12dp"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="2dp">
+    app:cardCornerRadius="18dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp">
+        android:padding="16dp">
+
+        <!-- Skill Name -->
 
         <TextView
             android:id="@+id/tvSkillName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Java"
-            android:textSize="17sp"
+            android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/tvSkillLevel"
+            android:textColor="?android:attr/textColorPrimary"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvSkillProgress"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="12dp" />
+
+        <!-- Progress Percentage -->
+
+        <TextView
+            android:id="@+id/tvSkillProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="70%"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Skill Level -->
 
         <TextView
             android:id="@+id/tvSkillLevel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Intermediate"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ProgressBar
-            android:id="@+id/skillProgress"
-            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
-            android:layout_height="7dp"
-            android:layout_marginTop="12dp"
-            android:max="100"
-            android:progress="70"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Level: Intermediate"
+            android:textSize="13sp"
+            android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSkillName" />
 
-        <TextView
-            android:id="@+id/tvProgressValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="70% skill level"
-            android:textSize="11sp"
+        <!-- Progress Bar -->
+
+        <ProgressBar
+            android:id="@+id/progressSkill"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="14dp"
+            android:max="100"
+            android:progress="70"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/skillProgress" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSkillLevel" />
+
+        <!-- Proof Status -->
 
         <TextView
-            android:id="@+id/tvProofStatus"
+            android:id="@+id/tvSkillProofStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Proof status: Not verified"
-            android:textSize="11sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/skillProgress" />
+            android:layout_marginTop="12dp"
+            android:text="● Not verified"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressSkill" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

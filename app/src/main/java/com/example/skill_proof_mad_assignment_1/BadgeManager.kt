@@ -6,94 +6,192 @@ class BadgeManager(
 
     fun getBadges(): List<Badge> {
 
-        val skills = databaseHelper.getAllSkills()
-        val evidence = databaseHelper.getAllEvidence()
+        val skills =
+            databaseHelper.getAllSkills()
 
-        val badges = mutableListOf<Badge>()
+        val evidence =
+            databaseHelper.getAllEvidence()
 
-        // 1. First Skill Badge
-        badges.add(
+        val totalEvidence =
+            evidence.size
+
+        val verifiedEvidence =
+            evidence.count {
+                it.status.equals(
+                    "Verified",
+                    ignoreCase = true
+                )
+            }
+
+        val assessments =
+            skills.any { skill ->
+
+                databaseHelper
+                    .getAssessmentPercentageForSkill(
+                        skill.name
+                    ) > 0
+            }
+
+        val hasProvenSkill =
+            skills.any { skill ->
+
+                val assessmentScore =
+                    databaseHelper
+                        .getAssessmentPercentageForSkill(
+                            skill.name
+                        )
+
+                val evidenceCount =
+                    databaseHelper
+                        .getEvidenceCountForSkill(
+                            skill.name
+                        )
+
+                val verifiedCount =
+                    databaseHelper
+                        .getVerifiedEvidenceCountForSkill(
+                            skill.name
+                        )
+
+                val evidenceScore =
+                    calculateEvidenceScore(
+                        evidenceCount
+                    )
+
+                val verificationScore =
+                    if (evidenceCount > 0) {
+                        (verifiedCount * 100) /
+                                evidenceCount
+                    } else {
+                        0
+                    }
+
+                val proofScore =
+                    (
+                            skill.progress * 0.30 +
+                                    assessmentScore * 0.30 +
+                                    evidenceScore * 0.25 +
+                                    verificationScore * 0.15
+                            ).toInt()
+
+                proofScore >= 75
+            }
+
+        return listOf(
+
             Badge(
                 id = "first_skill",
                 name = "First Skill",
-                description = "Add your first skill to SkillProof",
-                icon = "🌱",
-                unlocked = skills.isNotEmpty()
-            )
-        )
+                description =
+                    "Add your first skill to SkillProof.",
+                icon = "🎯",
+                unlocked =
+                    skills.isNotEmpty()
+            ),
 
-        // 2. Assessment Completed Badge
-        val assessmentCompleted =
-            databaseHelper.getLatestAssessmentPercentage() > 0
-
-        badges.add(
             Badge(
                 id = "assessment_completed",
                 name = "Assessment Completed",
-                description = "Complete your first skill assessment",
+                description =
+                    "Complete at least one skill assessment.",
                 icon = "📝",
-                unlocked = assessmentCompleted
-            )
-        )
+                unlocked =
+                    assessments
+            ),
 
-        // 3. First Evidence Badge
-        badges.add(
             Badge(
                 id = "first_evidence",
                 name = "First Evidence",
-                description = "Add your first piece of skill evidence",
+                description =
+                    "Add your first piece of skill evidence.",
                 icon = "📁",
-                unlocked = evidence.isNotEmpty()
-            )
-        )
+                unlocked =
+                    totalEvidence >= 1
+            ),
 
-        // 4. Verified Evidence Badge
-        val verifiedEvidence =
-            evidence.count { it.status == "Verified" }
-
-        badges.add(
             Badge(
                 id = "verified_evidence",
                 name = "Verified Evidence",
-                description = "Get your first evidence verified",
-                icon = "✅",
-                unlocked = verifiedEvidence > 0
-            )
-        )
+                description =
+                    "Get at least one evidence item verified.",
+                icon = "✓",
+                unlocked =
+                    verifiedEvidence >= 1
+            ),
 
-        // 5. Evidence Collector Badge
-        badges.add(
             Badge(
                 id = "evidence_collector",
                 name = "Evidence Collector",
-                description = "Add at least 3 pieces of evidence",
-                icon = "📚",
-                unlocked = evidence.size >= 3
-            )
-        )
+                description =
+                    "Collect at least three evidence items.",
+                icon = "🏆",
+                unlocked =
+                    totalEvidence >= 3
+            ),
 
-        // 6. Proven Skill Badge
-        val skillsWithGoodProgress =
-            skills.count { it.progress >= 75 }
-
-        badges.add(
             Badge(
                 id = "proven_skill",
                 name = "Proven Skill",
-                description = "Reach 75% or higher skill progress",
-                icon = "🏆",
-                unlocked = skillsWithGoodProgress > 0
+                description =
+                    "Achieve a Proof Score of 75 or above.",
+                icon = "⭐",
+                unlocked =
+                    hasProvenSkill
             )
         )
-
-        return badges
     }
 
-    fun getUnlockedBadges(): List<Badge> {
-        return getBadges().filter { it.unlocked }
+    private fun calculateEvidenceScore(
+        evidenceCount: Int
+    ): Int {
+
+        return when {
+
+            evidenceCount <= 0 ->
+                0
+
+            evidenceCount == 1 ->
+                45
+
+            evidenceCount == 2 ->
+                65
+
+            evidenceCount == 3 ->
+                80
+
+            evidenceCount == 4 ->
+                90
+
+            else ->
+                100
+        }
     }
 
-    fun getLockedBadges(): List<Badge> {
-        return getBadges().filter { !it.unlocked }
+    fun getUnlockedBadgeCount(): Int {
+
+        return getBadges()
+            .count { it.unlocked }
+    }
+
+    fun getTotalBadgeCount(): Int {
+
+        return getBadges().size
+    }
+
+    fun getBadgeProgress(): Int {
+
+        val total =
+            getTotalBadgeCount()
+
+        if (total == 0) {
+            return 0
+        }
+
+        val unlocked =
+            getUnlockedBadgeCount()
+
+        return (
+                unlocked * 100
+                ) / total
     }
 }

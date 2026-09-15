@@ -10,6 +10,25 @@ class ProofScoreActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
+    private lateinit var btnBack: ImageButton
+    private lateinit var btnRefresh: ImageButton
+
+    private lateinit var tvProofScore: TextView
+    private lateinit var tvSkillName: TextView
+    private lateinit var tvProofLevel: TextView
+
+    private lateinit var tvSkillLevelScore: TextView
+    private lateinit var tvAssessmentScore: TextView
+    private lateinit var tvEvidenceScore: TextView
+    private lateinit var tvVerificationScore: TextView
+
+    private lateinit var progressSkillLevel: ProgressBar
+    private lateinit var progressAssessment: ProgressBar
+    private lateinit var progressEvidence: ProgressBar
+    private lateinit var progressVerification: ProgressBar
+
+    private lateinit var tvRecommendation: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -17,312 +36,200 @@ class ProofScoreActivity : AppCompatActivity() {
 
         databaseHelper = DatabaseHelper(this)
 
-        // -----------------------------
-        // Find views
-        // -----------------------------
+        // -----------------------------------------
+        // Find Views
+        // -----------------------------------------
 
-        val btnBack =
-            findViewById<ImageButton>(R.id.btnBack)
+        btnBack =
+            findViewById(R.id.btnBack)
 
-        val btnRefresh =
-            findViewById<ImageButton>(R.id.btnRefresh)
+        btnRefresh =
+            findViewById(R.id.btnRefresh)
 
-        val tvProofScore =
-            findViewById<TextView>(R.id.tvProofScore)
+        tvProofScore =
+            findViewById(R.id.tvProofScore)
 
-        val tvSkillName =
-            findViewById<TextView>(R.id.tvSkillName)
+        tvSkillName =
+            findViewById(R.id.tvSkillName)
 
-        val tvProofLevel =
-            findViewById<TextView>(R.id.tvProofLevel)
+        tvProofLevel =
+            findViewById(R.id.tvProofLevel)
 
-        val tvSkillLevelScore =
-            findViewById<TextView>(R.id.tvSkillLevelScore)
+        tvSkillLevelScore =
+            findViewById(R.id.tvSkillLevelScore)
 
-        val tvAssessmentScore =
-            findViewById<TextView>(R.id.tvAssessmentScore)
+        tvAssessmentScore =
+            findViewById(R.id.tvAssessmentScore)
 
-        val tvEvidenceScore =
-            findViewById<TextView>(R.id.tvEvidenceScore)
+        tvEvidenceScore =
+            findViewById(R.id.tvEvidenceScore)
 
-        val tvVerificationScore =
-            findViewById<TextView>(R.id.tvVerificationScore)
+        tvVerificationScore =
+            findViewById(R.id.tvVerificationScore)
 
-        val progressSkillLevel =
-            findViewById<ProgressBar>(R.id.progressSkillLevel)
+        progressSkillLevel =
+            findViewById(R.id.progressSkillLevel)
 
-        val progressAssessment =
-            findViewById<ProgressBar>(R.id.progressAssessment)
+        progressAssessment =
+            findViewById(R.id.progressAssessment)
 
-        val progressEvidence =
-            findViewById<ProgressBar>(R.id.progressEvidence)
+        progressEvidence =
+            findViewById(R.id.progressEvidence)
 
-        val progressVerification =
-            findViewById<ProgressBar>(R.id.progressVerification)
+        progressVerification =
+            findViewById(R.id.progressVerification)
 
-        val tvRecommendation =
-            findViewById<TextView>(R.id.tvRecommendation)
+        tvRecommendation =
+            findViewById(R.id.tvRecommendation)
 
-        // -----------------------------
-        // Back button
-        // -----------------------------
+        // -----------------------------------------
+        // Back
+        // -----------------------------------------
 
         btnBack.setOnClickListener {
-            finish()
+
+            onBackPressedDispatcher.onBackPressed()
         }
 
-        // -----------------------------
-        // Refresh button
-        // -----------------------------
+        // -----------------------------------------
+        // Refresh
+        // -----------------------------------------
 
         btnRefresh.setOnClickListener {
 
-            loadProofScore(
-                tvProofScore,
-                tvSkillName,
-                tvProofLevel,
-                tvSkillLevelScore,
-                tvAssessmentScore,
-                tvEvidenceScore,
-                tvVerificationScore,
-                progressSkillLevel,
-                progressAssessment,
-                progressEvidence,
-                progressVerification,
-                tvRecommendation
-            )
+            calculateProofScore()
         }
 
-        // -----------------------------
-        // Load initial data
-        // -----------------------------
-
-        loadProofScore(
-            tvProofScore,
-            tvSkillName,
-            tvProofLevel,
-            tvSkillLevelScore,
-            tvAssessmentScore,
-            tvEvidenceScore,
-            tvVerificationScore,
-            progressSkillLevel,
-            progressAssessment,
-            progressEvidence,
-            progressVerification,
-            tvRecommendation
-        )
+        calculateProofScore()
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (::databaseHelper.isInitialized) {
-
-            val tvProofScore =
-                findViewById<TextView>(R.id.tvProofScore)
-
-            val tvSkillName =
-                findViewById<TextView>(R.id.tvSkillName)
-
-            val tvProofLevel =
-                findViewById<TextView>(R.id.tvProofLevel)
-
-            val tvSkillLevelScore =
-                findViewById<TextView>(R.id.tvSkillLevelScore)
-
-            val tvAssessmentScore =
-                findViewById<TextView>(R.id.tvAssessmentScore)
-
-            val tvEvidenceScore =
-                findViewById<TextView>(R.id.tvEvidenceScore)
-
-            val tvVerificationScore =
-                findViewById<TextView>(R.id.tvVerificationScore)
-
-            val progressSkillLevel =
-                findViewById<ProgressBar>(R.id.progressSkillLevel)
-
-            val progressAssessment =
-                findViewById<ProgressBar>(R.id.progressAssessment)
-
-            val progressEvidence =
-                findViewById<ProgressBar>(R.id.progressEvidence)
-
-            val progressVerification =
-                findViewById<ProgressBar>(R.id.progressVerification)
-
-            val tvRecommendation =
-                findViewById<TextView>(R.id.tvRecommendation)
-
-            loadProofScore(
-                tvProofScore,
-                tvSkillName,
-                tvProofLevel,
-                tvSkillLevelScore,
-                tvAssessmentScore,
-                tvEvidenceScore,
-                tvVerificationScore,
-                progressSkillLevel,
-                progressAssessment,
-                progressEvidence,
-                progressVerification,
-                tvRecommendation
-            )
-        }
+        calculateProofScore()
     }
 
-    private fun loadProofScore(
-        tvProofScore: TextView,
-        tvSkillName: TextView,
-        tvProofLevel: TextView,
-        tvSkillLevelScore: TextView,
-        tvAssessmentScore: TextView,
-        tvEvidenceScore: TextView,
-        tvVerificationScore: TextView,
-        progressSkillLevel: ProgressBar,
-        progressAssessment: ProgressBar,
-        progressEvidence: ProgressBar,
-        progressVerification: ProgressBar,
-        tvRecommendation: TextView
-    ) {
+    // ---------------------------------------------
+    // Calculate Proof Score
+    // ---------------------------------------------
 
-        // -----------------------------
-        // Get skills
-        // -----------------------------
+    private fun calculateProofScore() {
 
         val skills =
             databaseHelper.getAllSkills()
 
-        // -----------------------------
-        // No skill added
-        // -----------------------------
-
         if (skills.isEmpty()) {
 
-            tvProofScore.text = "0"
-            tvSkillName.text = "No skill added yet"
-            tvProofLevel.text = "Beginner"
-
-            tvSkillLevelScore.text = "0%"
-            tvAssessmentScore.text = "0%"
-            tvEvidenceScore.text = "0%"
-            tvVerificationScore.text = "0%"
-
-            progressSkillLevel.progress = 0
-            progressAssessment.progress = 0
-            progressEvidence.progress = 0
-            progressVerification.progress = 0
-
-            tvRecommendation.text =
-                "Add a skill, complete an assessment, and add supporting evidence to build your Proof Score."
+            showNoSkillState()
 
             return
         }
 
-        // -----------------------------
-        // Use current/latest skill
-        // -----------------------------
+        // -----------------------------------------
+        // Currently use the first skill
+        // -----------------------------------------
 
-        val skill =
+        val selectedSkill =
             skills.first()
 
         val skillName =
-            skill.name
+            selectedSkill.name
 
-        val skillLevel =
-            skill.progress.coerceIn(0, 100)
+        // -----------------------------------------
+        // Skill Level
+        // Weight = 30%
+        // -----------------------------------------
 
-        // -----------------------------
-        // Get assessment score
-        // -----------------------------
+        val skillLevelScore =
+            selectedSkill.progress.coerceIn(0, 100)
+
+        // -----------------------------------------
+        // Assessment
+        // Weight = 30%
+        // -----------------------------------------
 
         val assessmentScore =
-            databaseHelper.getAssessmentPercentageForSkill(
-                skillName
-            ).coerceIn(0, 100)
+            databaseHelper
+                .getAssessmentPercentageForSkill(
+                    skillName
+                )
+                .coerceIn(0, 100)
 
-        // -----------------------------
-        // Get evidence score
-        // -----------------------------
+        // -----------------------------------------
+        // Evidence
+        // Weight = 25%
+        // -----------------------------------------
 
         val evidenceCount =
-            databaseHelper.getEvidenceCountForSkill(
-                skillName
-            )
-
-        val verifiedEvidenceCount =
-            databaseHelper.getVerifiedEvidenceCountForSkill(
-                skillName
-            )
+            databaseHelper
+                .getEvidenceCountForSkill(
+                    skillName
+                )
 
         val evidenceScore =
-            when {
-                evidenceCount >= 5 -> 100
-                evidenceCount == 4 -> 90
-                evidenceCount == 3 -> 80
-                evidenceCount == 2 -> 65
-                evidenceCount == 1 -> 45
-                else -> 0
-            }
+            calculateEvidenceScore(
+                evidenceCount
+            )
 
-        // -----------------------------
-        // Verification score
-        // -----------------------------
+        // -----------------------------------------
+        // Verification
+        // Weight = 15%
+        // -----------------------------------------
+
+        val verifiedEvidenceCount =
+            databaseHelper
+                .getVerifiedEvidenceCountForSkill(
+                    skillName
+                )
 
         val verificationScore =
-            if (evidenceCount == 0) {
-                0
-            } else {
+            if (evidenceCount > 0) {
+
                 (
                         verifiedEvidenceCount * 100
                         ) / evidenceCount
-            }.coerceIn(0, 100)
 
-        // -----------------------------
-        // Proof Score
-        //
-        // Skill Level     = 30%
-        // Assessment      = 30%
-        // Evidence        = 25%
-        // Verification    = 15%
-        // -----------------------------
+            } else {
+                0
+            }
+
+        // -----------------------------------------
+        // Final Score
+        // -----------------------------------------
 
         val proofScore =
             (
-                    skillLevel * 0.30 +
+                    skillLevelScore * 0.30 +
                             assessmentScore * 0.30 +
                             evidenceScore * 0.25 +
                             verificationScore * 0.15
-                    ).toInt().coerceIn(0, 100)
+                    ).toInt()
+                .coerceIn(0, 100)
 
-        // -----------------------------
-        // Display basic information
-        // -----------------------------
+        // -----------------------------------------
+        // Update UI
+        // -----------------------------------------
+
+        tvSkillName.text =
+            skillName
 
         tvProofScore.text =
             proofScore.toString()
 
-        tvSkillName.text =
-            "Skill: $skillName"
-
         tvSkillLevelScore.text =
-            "$skillLevel%"
+            "$skillLevelScore / 100"
 
         tvAssessmentScore.text =
-            "$assessmentScore%"
+            "$assessmentScore / 100"
 
         tvEvidenceScore.text =
-            "$evidenceScore%"
+            "$evidenceScore / 100"
 
         tvVerificationScore.text =
-            "$verificationScore%"
-
-        // -----------------------------
-        // Progress bars
-        // -----------------------------
+            "$verificationScore / 100"
 
         progressSkillLevel.progress =
-            skillLevel
+            skillLevelScore
 
         progressAssessment.progress =
             assessmentScore
@@ -333,31 +240,85 @@ class ProofScoreActivity : AppCompatActivity() {
         progressVerification.progress =
             verificationScore
 
-        // -----------------------------
-        // Proof level
-        // -----------------------------
-
         tvProofLevel.text =
-            when {
-                proofScore >= 90 ->
-                    "Expert Proof"
+            getProofLevel(proofScore)
 
-                proofScore >= 75 ->
-                    "Proven Skill"
+        tvRecommendation.text =
+            getRecommendation(
+                skillLevelScore,
+                assessmentScore,
+                evidenceScore,
+                verificationScore
+            )
+    }
 
-                proofScore >= 60 ->
-                    "Competent"
+    // ---------------------------------------------
+    // Evidence Score
+    // ---------------------------------------------
 
-                proofScore >= 40 ->
-                    "Developing"
+    private fun calculateEvidenceScore(
+        evidenceCount: Int
+    ): Int {
 
-                else ->
-                    "Beginner"
-            }
+        return when {
 
-        // -----------------------------
-        // Recommendations
-        // -----------------------------
+            evidenceCount <= 0 ->
+                0
+
+            evidenceCount == 1 ->
+                45
+
+            evidenceCount == 2 ->
+                65
+
+            evidenceCount == 3 ->
+                80
+
+            evidenceCount == 4 ->
+                90
+
+            else ->
+                100
+        }
+    }
+
+    // ---------------------------------------------
+    // Proof Level
+    // ---------------------------------------------
+
+    private fun getProofLevel(
+        score: Int
+    ): String {
+
+        return when {
+
+            score >= 90 ->
+                "Expert Proof"
+
+            score >= 75 ->
+                "Proven Skill"
+
+            score >= 60 ->
+                "Competent"
+
+            score >= 40 ->
+                "Developing"
+
+            else ->
+                "Beginner"
+        }
+    }
+
+    // ---------------------------------------------
+    // Recommendation
+    // ---------------------------------------------
+
+    private fun getRecommendation(
+        skillLevel: Int,
+        assessment: Int,
+        evidence: Int,
+        verification: Int
+    ): String {
 
         val recommendations =
             mutableListOf<String>()
@@ -365,42 +326,83 @@ class ProofScoreActivity : AppCompatActivity() {
         if (skillLevel < 70) {
 
             recommendations.add(
-                "• Improve your practical skill level through projects."
+                "Improve your practical skill level."
             )
         }
 
-        if (assessmentScore < 70) {
+        if (assessment < 70) {
 
             recommendations.add(
-                "• Complete or improve your skill assessment."
+                "Take another assessment and improve your knowledge."
             )
         }
 
-        if (evidenceCount < 3) {
+        if (evidence < 70) {
 
             recommendations.add(
-                "• Add more evidence such as projects, certificates or GitHub repositories."
+                "Add more projects, certificates or other evidence."
             )
         }
 
-        if (
-            evidenceCount > 0 &&
-            verifiedEvidenceCount < evidenceCount
-        ) {
+        if (verification < 70) {
 
             recommendations.add(
-                "• Verify your remaining evidence."
+                "Verify more of your submitted evidence."
             )
         }
 
-        if (recommendations.isEmpty()) {
+        return if (recommendations.isEmpty()) {
 
-            recommendations.add(
-                "• Excellent! Keep adding advanced projects and maintaining your skill proof."
+            "Excellent proof! Your skill has strong evidence, assessment performance and verification."
+
+        } else {
+
+            recommendations.joinToString(
+                separator = "\n\n"
             )
         }
+    }
+
+    // ---------------------------------------------
+    // No Skill State
+    // ---------------------------------------------
+
+    private fun showNoSkillState() {
+
+        tvSkillName.text =
+            "No skill added"
+
+        tvProofScore.text =
+            "0"
+
+        tvProofLevel.text =
+            "Start Building Proof"
+
+        tvSkillLevelScore.text =
+            "0 / 100"
+
+        tvAssessmentScore.text =
+            "0 / 100"
+
+        tvEvidenceScore.text =
+            "0 / 100"
+
+        tvVerificationScore.text =
+            "0 / 100"
+
+        progressSkillLevel.progress =
+            0
+
+        progressAssessment.progress =
+            0
+
+        progressEvidence.progress =
+            0
+
+        progressVerification.progress =
+            0
 
         tvRecommendation.text =
-            recommendations.joinToString("\n")
+            "Add a skill first, then complete an assessment and submit evidence to build your Proof Score."
     }
 }

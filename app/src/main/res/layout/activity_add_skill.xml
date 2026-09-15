@@ -1,17 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
-    android:fillViewport="true">
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    tools:context=".AddSkillActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:paddingStart="24dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="32dp">
+
+        <!-- ===================================== -->
+        <!-- Decorative Circle -->
+        <!-- ===================================== -->
+
+        <View
+            android:id="@+id/topDecoration"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:background="@drawable/bg_login_circle"
+            android:translationX="95dp"
+            android:translationY="-100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- ===================================== -->
+        <!-- Back Button -->
+        <!-- ===================================== -->
 
         <ImageButton
             android:id="@+id/btnBack"
@@ -24,149 +47,217 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- ===================================== -->
+        <!-- Page Title -->
+        <!-- ===================================== -->
+
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tvPageTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="Add Skill"
-            android:textSize="27sp"
+            android:layout_marginTop="22dp"
+            android:text="Add New Skill"
+            android:textColor="#172033"
+            android:textSize="29sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btnBack"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnBack"
-            app:layout_constraintTop_toTopOf="@id/btnBack" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
+
+        <!-- ===================================== -->
+        <!-- Subtitle -->
+        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvSubtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="Add a skill you want to build and prove."
-            android:textSize="14sp"
+            android:layout_marginTop="7dp"
+            android:text="Add a skill and tell us how confident you are."
+            android:textColor="#737D8F"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack" />
+            app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
+
+        <!-- ===================================== -->
+        <!-- Information Card -->
+        <!-- ===================================== -->
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/formCard"
+            android:id="@+id/infoCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="3dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp">
+                android:padding="18dp">
 
                 <TextView
-                    android:id="@+id/tvSkillNameLabel"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvInfoTitle"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Skill name"
-                    android:textSize="13sp"
+                    android:text="Build your proof"
+                    android:textColor="#172033"
+                    android:textSize="17sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/skillNameLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <TextView
+                    android:id="@+id/tvInfoDescription"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="e.g. Python, Java, SQL"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusTopStart="14dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvSkillNameLabel">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etSkillName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textCapSentences"
-                        android:maxLines="1"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:textSize="14sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tvLevelLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="Current skill level"
+                    android:layout_marginTop="5dp"
+                    android:text="Your skill level will contribute to your overall Proof Score."
+                    android:textColor="#737D8F"
                     android:textSize="13sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/skillNameLayout" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/levelLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Select level"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusTopStart="14dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvLevelLabel">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/actvLevel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:textSize="14sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tvInfo"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="You can add projects, certificates and assessments as proof later."
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/levelLayout" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSaveSkill"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="24dp"
-                    android:text="ADD SKILL  →"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvInfo" />
+                    app:layout_constraintTop_toBottomOf="@id/tvInfoTitle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- ===================================== -->
+        <!-- Skill Name -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/skillNameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:hint="Skill name"
+            app:boxCornerRadiusBottomEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp"
+            app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusTopStart="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/infoCard">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSkillName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:maxLines="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ===================================== -->
+        <!-- Skill Level -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/skillLevelLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="Skill level"
+            app:boxCornerRadiusBottomEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp"
+            app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusTopStart="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/skillNameLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSkillLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Example: Beginner, Intermediate, Advanced"
+                android:inputType="textCapWords"
+                android:maxLines="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ===================================== -->
+        <!-- Progress -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/skillProgressLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="Current skill progress (%)"
+            app:boxCornerRadiusBottomEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp"
+            app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusTopStart="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/skillLevelLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSkillProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="0 - 100"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- ===================================== -->
+        <!-- Save Button -->
+        <!-- ===================================== -->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveSkill"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:text="Save Skill"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/skillProgressLayout" />
+
+        <!-- ===================================== -->
+        <!-- Bottom Hint -->
+        <!-- ===================================== -->
+
+        <TextView
+            android:id="@+id/tvBottomHint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="You can strengthen this skill later with assessments and evidence."
+            android:textColor="#8A93A3"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnSaveSkill" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

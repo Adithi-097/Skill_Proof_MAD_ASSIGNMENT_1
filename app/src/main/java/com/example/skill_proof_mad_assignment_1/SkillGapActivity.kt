@@ -10,10 +10,14 @@ class SkillGapActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
+    private lateinit var btnBack: ImageButton
+    private lateinit var btnRefresh: ImageButton
+
     private lateinit var tvSkillName: TextView
     private lateinit var tvCurrentScore: TextView
     private lateinit var tvTargetScore: TextView
     private lateinit var tvGapScore: TextView
+    private lateinit var tvGapMessage: TextView
 
     private lateinit var tvSkillLevelScore: TextView
     private lateinit var tvAssessmentScore: TextView
@@ -25,22 +29,31 @@ class SkillGapActivity : AppCompatActivity() {
     private lateinit var progressEvidence: ProgressBar
     private lateinit var progressVerification: ProgressBar
 
-    private lateinit var tvGapMessage: TextView
     private lateinit var tvActionPlan: TextView
+
+    companion object {
+        private const val TARGET_SCORE = 80
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_skill_gap)
+        setContentView(
+            R.layout.activity_skill_gap
+        )
 
-        databaseHelper = DatabaseHelper(this)
+        databaseHelper =
+            DatabaseHelper(this)
 
-        // --------------------------------------------------
+        // -----------------------------------------
         // Find Views
-        // --------------------------------------------------
+        // -----------------------------------------
 
-        val btnBack =
-            findViewById<ImageButton>(R.id.btnBack)
+        btnBack =
+            findViewById(R.id.btnBack)
+
+        btnRefresh =
+            findViewById(R.id.btnRefresh)
 
         tvSkillName =
             findViewById(R.id.tvSkillName)
@@ -53,6 +66,9 @@ class SkillGapActivity : AppCompatActivity() {
 
         tvGapScore =
             findViewById(R.id.tvGapScore)
+
+        tvGapMessage =
+            findViewById(R.id.tvGapMessage)
 
         tvSkillLevelScore =
             findViewById(R.id.tvSkillLevelScore)
@@ -78,299 +94,368 @@ class SkillGapActivity : AppCompatActivity() {
         progressVerification =
             findViewById(R.id.progressVerification)
 
-        tvGapMessage =
-            findViewById(R.id.tvGapMessage)
-
         tvActionPlan =
             findViewById(R.id.tvActionPlan)
 
-        // --------------------------------------------------
+        // -----------------------------------------
         // Back
-        // --------------------------------------------------
+        // -----------------------------------------
 
         btnBack.setOnClickListener {
-            finish()
+
+            onBackPressedDispatcher
+                .onBackPressed()
         }
 
-        // --------------------------------------------------
-        // Load Data
-        // --------------------------------------------------
+        // -----------------------------------------
+        // Refresh
+        // -----------------------------------------
 
-        loadSkillGap()
+        btnRefresh.setOnClickListener {
+
+            analyzeSkillGap()
+        }
+
+        analyzeSkillGap()
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (::databaseHelper.isInitialized) {
-            loadSkillGap()
-        }
+        analyzeSkillGap()
     }
 
-    // ======================================================
-    // LOAD SKILL GAP
-    // ======================================================
+    // ---------------------------------------------
+    // Analyze Skill Gap
+    // ---------------------------------------------
 
-    private fun loadSkillGap() {
+    private fun analyzeSkillGap() {
 
         val skills =
             databaseHelper.getAllSkills()
 
-        // --------------------------------------------------
-        // No skill available
-        // --------------------------------------------------
-
         if (skills.isEmpty()) {
 
-            tvSkillName.text =
-                "No skill added"
-
-            tvCurrentScore.text =
-                "0"
-
-            tvTargetScore.text =
-                "80"
-
-            tvGapScore.text =
-                "80"
-
-            tvSkillLevelScore.text =
-                "0%"
-
-            tvAssessmentScore.text =
-                "0%"
-
-            tvEvidenceScore.text =
-                "0%"
-
-            tvVerificationScore.text =
-                "0%"
-
-            progressSkillLevel.progress = 0
-            progressAssessment.progress = 0
-            progressEvidence.progress = 0
-            progressVerification.progress = 0
-
-            tvGapMessage.text =
-                "Add a skill to start analyzing your skill gap."
-
-            tvActionPlan.text =
-                "1. Add your first skill\n" +
-                        "2. Complete a skill assessment\n" +
-                        "3. Add supporting evidence\n" +
-                        "4. Verify your evidence"
+            showNoSkillState()
 
             return
         }
 
-        // --------------------------------------------------
+        // -----------------------------------------
         // Current Skill
-        // --------------------------------------------------
+        // -----------------------------------------
 
-        val skill =
+        val selectedSkill =
             skills.first()
 
         val skillName =
-            skill.name
+            selectedSkill.name
 
-        val skillLevel =
-            skill.progress
+        tvSkillName.text =
+            skillName
 
-        // --------------------------------------------------
+        // -----------------------------------------
+        // Skill Level
+        // -----------------------------------------
+
+        val skillLevelScore =
+            selectedSkill.progress
+                .coerceIn(0, 100)
+
+        // -----------------------------------------
         // Assessment
-        // --------------------------------------------------
+        // -----------------------------------------
 
         val assessmentScore =
-            databaseHelper.getAssessmentPercentageForSkill(
-                skillName
-            )
+            databaseHelper
+                .getAssessmentPercentageForSkill(
+                    skillName
+                )
+                .coerceIn(0, 100)
 
-        // --------------------------------------------------
+        // -----------------------------------------
         // Evidence
-        // --------------------------------------------------
+        // -----------------------------------------
 
         val evidenceCount =
-            databaseHelper.getEvidenceCountForSkill(
-                skillName
+            databaseHelper
+                .getEvidenceCountForSkill(
+                    skillName
+                )
+
+        val evidenceScore =
+            calculateEvidenceScore(
+                evidenceCount
             )
+
+        // -----------------------------------------
+        // Verification
+        // -----------------------------------------
 
         val verifiedEvidenceCount =
-            databaseHelper.getVerifiedEvidenceCountForSkill(
-                skillName
-            )
-
-        // --------------------------------------------------
-        // Evidence Score
-        // --------------------------------------------------
-
-        val evidenceScore = when {
-
-            evidenceCount >= 5 -> 100
-
-            evidenceCount == 4 -> 90
-
-            evidenceCount == 3 -> 80
-
-            evidenceCount == 2 -> 65
-
-            evidenceCount == 1 -> 45
-
-            else -> 0
-        }
-
-        // --------------------------------------------------
-        // Verification Score
-        // --------------------------------------------------
+            databaseHelper
+                .getVerifiedEvidenceCountForSkill(
+                    skillName
+                )
 
         val verificationScore =
-            if (evidenceCount == 0) {
-
-                0
-
-            } else {
+            if (evidenceCount > 0) {
 
                 (
                         verifiedEvidenceCount * 100
                         ) / evidenceCount
+
+            } else {
+                0
             }
 
-        // ==================================================
-        // PROOF SCORE
-        // ==================================================
+        // -----------------------------------------
+        // Proof Score
+        // -----------------------------------------
 
         val proofScore =
             (
-                    skillLevel * 0.30 +
+                    skillLevelScore * 0.30 +
                             assessmentScore * 0.30 +
                             evidenceScore * 0.25 +
                             verificationScore * 0.15
                     ).toInt()
+                .coerceIn(0, 100)
 
-        // ==================================================
-        // TARGET
-        // ==================================================
-
-        val targetScore = 80
+        // -----------------------------------------
+        // Gap
+        // -----------------------------------------
 
         val gap =
-            (targetScore - proofScore)
-                .coerceAtLeast(0)
+            (
+                    TARGET_SCORE - proofScore
+                    ).coerceAtLeast(0)
 
-        // --------------------------------------------------
-        // Display
-        // --------------------------------------------------
-
-        tvSkillName.text =
-            "Skill: $skillName"
+        // -----------------------------------------
+        // Update Score UI
+        // -----------------------------------------
 
         tvCurrentScore.text =
             proofScore.toString()
 
         tvTargetScore.text =
-            targetScore.toString()
+            TARGET_SCORE.toString()
 
         tvGapScore.text =
             gap.toString()
 
-        // --------------------------------------------------
-        // Component Scores
-        // --------------------------------------------------
-
         tvSkillLevelScore.text =
-            "$skillLevel%"
+            "$skillLevelScore / 100"
 
         tvAssessmentScore.text =
-            "$assessmentScore%"
+            "$assessmentScore / 100"
 
         tvEvidenceScore.text =
-            "$evidenceScore%"
+            "$evidenceScore / 100"
 
         tvVerificationScore.text =
-            "$verificationScore%"
+            "$verificationScore / 100"
 
         progressSkillLevel.progress =
-            skillLevel.coerceIn(0, 100)
+            skillLevelScore
 
         progressAssessment.progress =
-            assessmentScore.coerceIn(0, 100)
+            assessmentScore
 
         progressEvidence.progress =
-            evidenceScore.coerceIn(0, 100)
+            evidenceScore
 
         progressVerification.progress =
-            verificationScore.coerceIn(0, 100)
+            verificationScore
 
-        // ==================================================
-        // GAP MESSAGE
-        // ==================================================
+        // -----------------------------------------
+        // Gap Message
+        // -----------------------------------------
 
         tvGapMessage.text =
-            when {
+            getGapMessage(
+                proofScore,
+                gap
+            )
 
-                proofScore >= 80 ->
-                    "Excellent! Your $skillName skill has reached the target readiness level."
+        // -----------------------------------------
+        // Action Plan
+        // -----------------------------------------
 
-                proofScore >= 70 ->
-                    "You are close to the target. A few improvements can make your $skillName skill placement-ready."
+        tvActionPlan.text =
+            buildActionPlan(
+                skillLevelScore,
+                assessmentScore,
+                evidenceScore,
+                verificationScore
+            )
+    }
 
-                proofScore >= 50 ->
-                    "Your $skillName skill has a moderate gap. Focus on assessment, evidence and practical work."
+    // ---------------------------------------------
+    // Evidence Score
+    // ---------------------------------------------
 
-                else ->
-                    "Your $skillName skill has a significant gap. Start by building stronger evidence and improving your assessment score."
-            }
+    private fun calculateEvidenceScore(
+        evidenceCount: Int
+    ): Int {
 
-        // ==================================================
-        // ACTION PLAN
-        // ==================================================
+        return when {
+
+            evidenceCount <= 0 ->
+                0
+
+            evidenceCount == 1 ->
+                45
+
+            evidenceCount == 2 ->
+                65
+
+            evidenceCount == 3 ->
+                80
+
+            evidenceCount == 4 ->
+                90
+
+            else ->
+                100
+        }
+    }
+
+    // ---------------------------------------------
+    // Gap Message
+    // ---------------------------------------------
+
+    private fun getGapMessage(
+        proofScore: Int,
+        gap: Int
+    ): String {
+
+        return when {
+
+            proofScore >= TARGET_SCORE ->
+                "Great job! Your current proof score has reached the target of $TARGET_SCORE."
+
+            gap <= 10 ->
+                "You're very close to the target. Focus on your weakest area to close the remaining gap."
+
+            gap <= 25 ->
+                "You're making good progress. Strengthen your evidence and assessment performance."
+
+            else ->
+                "There is a significant gap between your current proof and the target. Follow the action plan below step by step."
+        }
+    }
+
+    // ---------------------------------------------
+    // Build Action Plan
+    // ---------------------------------------------
+
+    private fun buildActionPlan(
+        skillLevel: Int,
+        assessment: Int,
+        evidence: Int,
+        verification: Int
+    ): String {
 
         val actions =
             mutableListOf<String>()
 
-        if (skillLevel < 80) {
+        // Priority 1
+        if (skillLevel < 70) {
 
             actions.add(
-                "Improve practical skill level from $skillLevel% to 80%."
+                "1. Improve practical skill level\n" +
+                        "   Practice coding and build a project related to this skill."
             )
         }
 
-        if (assessmentScore < 70) {
+        // Priority 2
+        if (assessment < 70) {
 
             actions.add(
-                "Improve your assessment score from $assessmentScore% to at least 70%."
+                "${actions.size + 1}. Improve assessment performance\n" +
+                        "   Revise concepts and retake the assessment."
             )
         }
 
-        if (evidenceCount < 3) {
+        // Priority 3
+        if (evidence < 70) {
 
             actions.add(
-                "Add at least ${3 - evidenceCount} more evidence item(s)."
+                "${actions.size + 1}. Add stronger evidence\n" +
+                        "   Submit projects, certificates or other relevant proof."
             )
         }
 
-        if (
-            evidenceCount > 0 &&
-            verifiedEvidenceCount < evidenceCount
-        ) {
+        // Priority 4
+        if (verification < 70) {
 
             actions.add(
-                "Verify your remaining evidence."
+                "${actions.size + 1}. Verify your evidence\n" +
+                        "   Use GitHub verification or other verification methods."
             )
         }
 
         if (actions.isEmpty()) {
 
-            actions.add(
-                "Your skill proof is strong. Continue adding advanced projects and certifications."
-            )
+            return "✓ Your skill is well supported.\n\n" +
+                    "Keep your assessments and evidence updated to maintain a strong Proof Score."
         }
 
-        val formattedActions =
-            actions.mapIndexed { index, action ->
-                "${index + 1}. $action"
-            }
+        return actions.joinToString(
+            separator = "\n\n"
+        )
+    }
+
+    // ---------------------------------------------
+    // No Skill State
+    // ---------------------------------------------
+
+    private fun showNoSkillState() {
+
+        tvSkillName.text =
+            "No skill added"
+
+        tvCurrentScore.text =
+            "0"
+
+        tvTargetScore.text =
+            TARGET_SCORE.toString()
+
+        tvGapScore.text =
+            TARGET_SCORE.toString()
+
+        tvGapMessage.text =
+            "Add a skill first to analyze your skill gap."
+
+        tvSkillLevelScore.text =
+            "0 / 100"
+
+        tvAssessmentScore.text =
+            "0 / 100"
+
+        tvEvidenceScore.text =
+            "0 / 100"
+
+        tvVerificationScore.text =
+            "0 / 100"
+
+        progressSkillLevel.progress =
+            0
+
+        progressAssessment.progress =
+            0
+
+        progressEvidence.progress =
+            0
+
+        progressVerification.progress =
+            0
 
         tvActionPlan.text =
-            formattedActions.joinToString("\n")
+            "1. Add a skill\n\n" +
+                    "2. Complete an assessment\n\n" +
+                    "3. Add relevant evidence\n\n" +
+                    "4. Verify your evidence"
     }
 }

@@ -3,180 +3,267 @@
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    android:clipToPadding="false"
+    tools:context=".EvidenceActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="24dp">
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="32dp">
 
+        <!-- ===================================== -->
+        <!-- Decorative Circle -->
+        <!-- ===================================== -->
+
+        <View
+            android:id="@+id/topDecoration"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:background="@drawable/bg_login_circle"
+            android:translationX="95dp"
+            android:translationY="-100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- ===================================== -->
         <!-- Back Button -->
+        <!-- ===================================== -->
 
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
+            android:padding="12dp"
             android:src="@android:drawable/ic_menu_revert"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- ===================================== -->
         <!-- Page Title -->
+        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvPageTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="20dp"
             android:text="My Evidence"
-            android:textSize="24sp"
+            android:textColor="#172033"
+            android:textSize="29sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btnBack"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnBack"
-            app:layout_constraintTop_toTopOf="@id/btnBack" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-        <!-- Evidence Summary Card -->
+        <!-- ===================================== -->
+        <!-- Subtitle -->
+        <!-- ===================================== -->
+
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Show proof of what you can actually do."
+            android:textColor="#737D8F"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
+
+        <!-- ===================================== -->
+        <!-- Evidence Summary -->
+        <!-- ===================================== -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/evidenceSummaryCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
+            android:layout_marginTop="22dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack">
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp">
+                android:padding="18dp">
 
-                <TextView
-                    android:id="@+id/tvEvidenceSummaryTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Evidence Overview"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!-- Total -->
 
                 <TextView
                     android:id="@+id/tvEvidenceCount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Total Evidence: 0"
-                    android:textSize="15sp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#172033"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/divider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvEvidenceCountLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="Total Evidence"
+                    android:textColor="#737D8F"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@id/divider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvEvidenceCount" />
+
+                <!-- Divider -->
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="1dp"
+                    android:layout_height="48dp"
+                    android:background="#E4E8F0"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvEvidenceSummaryTitle" />
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Verified -->
 
                 <TextView
                     android:id="@+id/tvVerifiedCount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Verified Evidence: 0"
-                    android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#172033"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvEvidenceCount" />
+                    app:layout_constraintStart_toEndOf="@id/divider"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvVerifiedCountLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="Verified"
+                    android:textColor="#737D8F"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/divider"
+                    app:layout_constraintTop_toBottomOf="@id/tvVerifiedCount" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Add Evidence Button -->
+        <!-- ===================================== -->
+        <!-- Add Evidence -->
+        <!-- ===================================== -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddEvidence"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="18dp"
             android:text="＋  Add Evidence"
             android:textSize="15sp"
+            android:textStyle="bold"
+            app:cornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/evidenceSummaryCard" />
 
-        <!-- GitHub Verification Button -->
+        <!-- ===================================== -->
+        <!-- GitHub Verification -->
+        <!-- ===================================== -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGithubVerification"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_height="54dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
             android:text="Verify GitHub Repository"
             android:textSize="15sp"
+            android:textStyle="bold"
+            app:cornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnAddEvidence" />
 
-        <!-- Evidence Section Title -->
+        <!-- ===================================== -->
+        <!-- Section Title -->
+        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvEvidenceListTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="28dp"
             android:text="Your Evidence"
-            android:textSize="20sp"
+            android:textColor="#172033"
+            android:textSize="19sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnGithubVerification" />
 
+        <!-- ===================================== -->
         <!-- Empty State -->
+        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvEmptyEvidence"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
             android:gravity="center"
-            android:text="No evidence added yet.\nAdd projects, certificates, GitHub repositories or other proof."
-            android:textSize="15sp"
+            android:padding="30dp"
+            android:text="No evidence added yet.\n\nAdd projects, certificates, GitHub repositories or other proof of your skills."
+            android:textColor="#737D8F"
+            android:textSize="14sp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvEvidenceListTitle" />
 
+        <!-- ===================================== -->
         <!-- Evidence RecyclerView -->
+        <!-- ===================================== -->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerEvidence"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="14dp"
+            android:clipToPadding="false"
             android:nestedScrollingEnabled="false"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingBottom="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEvidenceListTitle" />
+            app:layout_constraintTop_toBottomOf="@id/tvEvidenceListTitle"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_evidence" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

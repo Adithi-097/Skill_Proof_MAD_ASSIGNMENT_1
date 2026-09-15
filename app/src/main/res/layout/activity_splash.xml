@@ -3,144 +3,109 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground">
+    android:background="#F7F9FC"
+    tools:context=".SplashActivity">
 
     <!-- Decorative top circle -->
+
     <View
         android:id="@+id/topCircle"
-        android:layout_width="210dp"
-        android:layout_height="210dp"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
         android:alpha="0.45"
         android:background="@drawable/bg_circle"
-        android:translationX="80dp"
-        android:translationY="-80dp"
+        android:translationX="100dp"
+        android:translationY="-110dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Decorative bottom circle -->
+
     <View
         android:id="@+id/bottomCircle"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:alpha="0.3"
-        android:background="@drawable/bg_circle"
-        android:translationX="-80dp"
-        android:translationY="80dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:alpha="0.35"
+        android:background="@drawable/bg_login_circle"
+        android:translationX="-75dp"
+        android:translationY="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Main content -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/mainContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingStart="28dp"
-        android:paddingEnd="28dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!-- Logo -->
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/logoCard"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="5dp"
+        app:layout_constraintBottom_toTopOf="@id/tvAppName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:strokeColor="#E4E8F0"
+        app:strokeWidth="1dp">
 
-        <!-- Logo -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/logoCard"
-            android:layout_width="104dp"
-            android:layout_height="104dp"
-            app:cardCornerRadius="28dp"
-            app:cardElevation="6dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/tvLogoMark"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="✓"
-                android:textSize="48sp"
-                android:textStyle="bold" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- App name -->
         <TextView
-            android:id="@+id/tvAppName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="SkillProof"
-            android:textSize="34sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/logoCard" />
-
-        <!-- Tagline -->
-        <TextView
-            android:id="@+id/tvTagline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Don't just claim a skill. Prove it."
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAppName" />
+            android:text="✓"
+            android:textColor="#172033"
+            android:textSize="52sp"
+            android:textStyle="bold" />
 
-        <!-- Description -->
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:lineSpacingExtra="3dp"
-            android:text="Build skills, collect evidence, and show what you're capable of."
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTagline" />
+    </com.google.android.material.card.MaterialCardView>
 
-        <!-- Loading indicator -->
-        <ProgressBar
-            android:id="@+id/progressLoader"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginTop="34dp"
-            android:indeterminate="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+    <!-- App name -->
 
-        <!-- Loading text -->
-        <TextView
-            android:id="@+id/tvLoading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Building your proof..."
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/progressLoader" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Version -->
     <TextView
-        android:id="@+id/tvVersion"
+        android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="22dp"
-        android:letterSpacing="0.12"
-        android:text="SKILLPROOF • 1.0"
-        android:textSize="10sp"
+        android:layout_marginTop="22dp"
+        android:text="SkillProof"
+        android:textColor="#172033"
+        android:textSize="34sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logoCard" />
+
+    <!-- Tagline -->
+
+    <TextView
+        android:id="@+id/tvTagline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="40dp"
+        android:gravity="center"
+        android:text="Don't just claim a skill. Prove it."
+        android:textColor="#737D8F"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAppName" />
+
+    <!-- Bottom information -->
+
+    <TextView
+        android:id="@+id/tvLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:text="Building your career proof..."
+        android:textColor="#8A93A3"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

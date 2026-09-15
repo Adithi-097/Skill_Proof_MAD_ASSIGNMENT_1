@@ -8,11 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class SkillAdapter(
-    private val skills: MutableList<Skill>
+    private val skillList: MutableList<Skill>
 ) : RecyclerView.Adapter<SkillAdapter.SkillViewHolder>() {
 
-    class SkillViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    class SkillViewHolder(
+        itemView: View
+    ) : RecyclerView.ViewHolder(itemView) {
 
         val tvSkillName: TextView =
             itemView.findViewById(R.id.tvSkillName)
@@ -20,14 +21,14 @@ class SkillAdapter(
         val tvSkillLevel: TextView =
             itemView.findViewById(R.id.tvSkillLevel)
 
-        val skillProgress: ProgressBar =
-            itemView.findViewById(R.id.skillProgress)
+        val tvSkillProgress: TextView =
+            itemView.findViewById(R.id.tvSkillProgress)
 
-        val tvProgressValue: TextView =
-            itemView.findViewById(R.id.tvProgressValue)
+        val progressSkill: ProgressBar =
+            itemView.findViewById(R.id.progressSkill)
 
-        val tvProofStatus: TextView =
-            itemView.findViewById(R.id.tvProofStatus)
+        val tvSkillProofStatus: TextView =
+            itemView.findViewById(R.id.tvSkillProofStatus)
     }
 
     override fun onCreateViewHolder(
@@ -35,12 +36,13 @@ class SkillAdapter(
         viewType: Int
     ): SkillViewHolder {
 
-        val view = LayoutInflater.from(parent.context)
-            .inflate(
-                R.layout.item_skill,
-                parent,
-                false
-            )
+        val view =
+            LayoutInflater.from(parent.context)
+                .inflate(
+                    R.layout.item_skill,
+                    parent,
+                    false
+                )
 
         return SkillViewHolder(view)
     }
@@ -50,29 +52,65 @@ class SkillAdapter(
         position: Int
     ) {
 
-        val skill = skills[position]
+        val skill =
+            skillList[position]
 
-        holder.tvSkillName.text = skill.name
-        holder.tvSkillLevel.text = skill.level
+        // Skill name
+        holder.tvSkillName.text =
+            skill.name
 
-        holder.skillProgress.progress =
-            skill.progress
+        // Skill level
+        holder.tvSkillLevel.text =
+            "Level: ${skill.level}"
 
-        holder.tvProgressValue.text =
-            "${skill.progress}% skill level"
+        // Progress
+        val progress =
+            skill.progress.coerceIn(0, 100)
 
-        holder.tvProofStatus.text =
-            "Proof status: ${skill.proofStatus}"
+        holder.tvSkillProgress.text =
+            "$progress%"
+
+        holder.progressSkill.progress =
+            progress
+
+        // Proof status
+        holder.tvSkillProofStatus.text =
+            when (
+                skill.proofStatus.lowercase()
+            ) {
+
+                "verified" ->
+                    "✓ Verified"
+
+                else ->
+                    "● Not verified"
+            }
     }
 
-    override fun getItemCount(): Int {
-        return skills.size
+    override fun getItemCount(): Int =
+        skillList.size
+
+    fun addSkill(
+        skill: Skill
+    ) {
+
+        skillList.add(skill)
+
+        notifyItemInserted(
+            skillList.lastIndex
+        )
     }
 
-    fun addSkill(skill: Skill) {
+    fun updateSkills(
+        skills: List<Skill>
+    ) {
 
-        skills.add(skill)
+        skillList.clear()
 
-        notifyItemInserted(skills.lastIndex)
+        skillList.addAll(
+            skills
+        )
+
+        notifyDataSetChanged()
     }
 }

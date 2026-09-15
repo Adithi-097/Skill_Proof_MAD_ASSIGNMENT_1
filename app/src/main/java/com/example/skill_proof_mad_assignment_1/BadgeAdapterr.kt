@@ -1,6 +1,5 @@
 package com.example.skill_proof_mad_assignment_1
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,23 +7,32 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class BadgeAdapter(
-    private val badgeList: List<Badge>
+    private val badgeList: MutableList<Badge>
 ) : RecyclerView.Adapter<BadgeAdapter.BadgeViewHolder>() {
 
-    class BadgeViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    class BadgeViewHolder(
+        itemView: View
+    ) : RecyclerView.ViewHolder(itemView) {
 
         val tvBadgeIcon: TextView =
-            itemView.findViewById(R.id.tvBadgeIcon)
+            itemView.findViewById(
+                R.id.tvBadgeIcon
+            )
 
         val tvBadgeName: TextView =
-            itemView.findViewById(R.id.tvBadgeName)
+            itemView.findViewById(
+                R.id.tvBadgeName
+            )
 
         val tvBadgeDescription: TextView =
-            itemView.findViewById(R.id.tvBadgeDescription)
+            itemView.findViewById(
+                R.id.tvBadgeDescription
+            )
 
         val tvBadgeStatus: TextView =
-            itemView.findViewById(R.id.tvBadgeStatus)
+            itemView.findViewById(
+                R.id.tvBadgeStatus
+            )
     }
 
     override fun onCreateViewHolder(
@@ -32,8 +40,14 @@ class BadgeAdapter(
         viewType: Int
     ): BadgeViewHolder {
 
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_badge, parent, false)
+        val view =
+            LayoutInflater.from(
+                parent.context
+            ).inflate(
+                R.layout.item_badge,
+                parent,
+                false
+            )
 
         return BadgeViewHolder(view)
     }
@@ -43,33 +57,36 @@ class BadgeAdapter(
         position: Int
     ) {
 
-        val badge = badgeList[position]
+        val badge =
+            badgeList[position]
 
-        holder.tvBadgeIcon.text = badge.icon
-        holder.tvBadgeName.text = badge.name
-        holder.tvBadgeDescription.text = badge.description
+        holder.tvBadgeIcon.text =
+            badge.icon
+
+        holder.tvBadgeName.text =
+            badge.name
+
+        holder.tvBadgeDescription.text =
+            badge.description
 
         if (badge.unlocked) {
 
-            holder.tvBadgeStatus.text = "UNLOCKED ✓"
-            holder.tvBadgeStatus.setTextColor(
-                Color.parseColor("#2E7D32")
-            )
+            holder.tvBadgeStatus.text =
+                "UNLOCKED ✓"
 
-            holder.itemView.alpha = 1.0f
+            holder.itemView.alpha =
+                1.0f
 
         } else {
 
-            holder.tvBadgeStatus.text = "LOCKED 🔒"
-            holder.tvBadgeStatus.setTextColor(
-                Color.parseColor("#757575")
-            )
+            holder.tvBadgeStatus.text =
+                "LOCKED"
 
-            holder.itemView.alpha = 0.55f
+            holder.itemView.alpha =
+                0.55f
         }
     }
 
-    override fun getItemCount(): Int {
-        return badgeList.size
-    }
+    override fun getItemCount(): Int =
+        badgeList.size
 }

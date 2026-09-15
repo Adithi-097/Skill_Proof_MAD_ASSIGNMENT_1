@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -8,8 +8,9 @@
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
     android:layout_marginBottom="12dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="3dp">
+    app:cardCornerRadius="18dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,96 +18,95 @@
         android:padding="16dp">
 
         <!-- Evidence Title -->
+
         <TextView
             android:id="@+id/tvEvidenceTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Java Project"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:textColor="?android:attr/textColorPrimary"
-            android:maxLines="2"
-            android:ellipsize="end"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvEvidenceStatus"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginEnd="12dp" />
 
-        <!-- Verification Status -->
+        <!-- Status -->
+
         <TextView
             android:id="@+id/tvEvidenceStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pending"
+            android:text="✓ Verified"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:background="@drawable/bg_circle"
             android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Evidence Type -->
+        <!-- Type -->
+
         <TextView
             android:id="@+id/tvEvidenceType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Project"
-            android:textSize="14sp"
+            android:layout_marginTop="10dp"
+            android:text="Type: GitHub Project"
+            android:textSize="13sp"
             android:textColor="?android:attr/textColorSecondary"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/tvEvidenceTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvEvidenceTitle" />
 
         <!-- Skill -->
+
         <TextView
             android:id="@+id/tvEvidenceSkill"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="Skill: Java"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:textStyle="bold"
             android:textColor="?android:attr/textColorPrimary"
-            android:layout_marginTop="5dp"
-            app:layout_constraintTop_toBottomOf="@id/tvEvidenceType"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvEvidenceType" />
 
-        <!-- Attachment Preview -->
+        <!-- Attachment -->
+
         <ImageView
             android:id="@+id/ivEvidenceAttachment"
-            android:layout_width="0dp"
-            android:layout_height="180dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_marginTop="12dp"
             android:scaleType="centerCrop"
             android:contentDescription="Evidence attachment"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/tvEvidenceSkill"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tvEvidenceSkill" />
 
         <!-- Link -->
+
         <TextView
             android:id="@+id/tvEvidenceLink"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="github.com/example/project"
+            android:layout_marginTop="12dp"
+            android:text="https://github.com/example/project"
             android:textSize="13sp"
-            android:textColor="?attr/colorPrimary"
-            android:maxLines="2"
+            android:textStyle="bold"
+            android:autoLink="web"
             android:ellipsize="end"
+            android:maxLines="2"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/ivEvidenceAttachment"
+            android:textColor="?attr/colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/ivEvidenceAttachment" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

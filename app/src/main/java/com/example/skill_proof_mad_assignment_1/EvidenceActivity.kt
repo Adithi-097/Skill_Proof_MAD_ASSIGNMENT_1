@@ -1,12 +1,13 @@
 package com.example.skill_proof_mad_assignment_1
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,427 +15,193 @@ import com.google.android.material.button.MaterialButton
 
 class EvidenceActivity : AppCompatActivity() {
 
-    // =========================================================
-    // VARIABLES
-    // =========================================================
-
-    private lateinit var evidenceAdapter: EvidenceAdapter
-    private lateinit var evidenceList: MutableList<Evidence>
     private lateinit var databaseHelper: DatabaseHelper
+    private lateinit var evidenceAdapter: EvidenceAdapter
 
+    private val evidenceList =
+        mutableListOf<Evidence>()
+
+    private lateinit var btnBack: ImageButton
+    private lateinit var btnAddEvidence: MaterialButton
+    private lateinit var btnGithubVerification: MaterialButton
+
+    private lateinit var recyclerEvidence: RecyclerView
+
+    private lateinit var tvEmptyEvidence: TextView
     private lateinit var tvEvidenceCount: TextView
     private lateinit var tvVerifiedCount: TextView
 
+    private var selectedGithubSkill: String = ""
 
-    // =========================================================
-    // ADD NORMAL EVIDENCE RESULT
-    // =========================================================
-
-    private val addEvidenceLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-
-            // Check whether AddEvidenceActivity returned successfully
-            if (result.resultCode != RESULT_OK) {
-                return@registerForActivityResult
-            }
-
-            val data =
-                result.data
-                    ?: return@registerForActivityResult
-
-
-            // -----------------------------------------------------
-            // Get Evidence Title
-            // -----------------------------------------------------
-
-            val title =
-                data.getStringExtra("evidence_title")
-                    ?: return@registerForActivityResult
-
-
-            // -----------------------------------------------------
-            // Get Skill
-            // -----------------------------------------------------
-
-            val skill =
-                data.getStringExtra("evidence_skill")
-                    ?: return@registerForActivityResult
-
-
-            // -----------------------------------------------------
-            // Get Evidence Type
-            // -----------------------------------------------------
-
-            val type =
-                data.getStringExtra("evidence_type")
-                    ?: return@registerForActivityResult
-
-
-            // -----------------------------------------------------
-            // Get Link
-            // -----------------------------------------------------
-
-            val link =
-                data.getStringExtra("evidence_link")
-                    ?: return@registerForActivityResult
-
-
-            // -----------------------------------------------------
-            // Get Status
-            // -----------------------------------------------------
-
-            val status =
-                data.getStringExtra("evidence_status")
-                    ?: "Pending"
-
-
-            // -----------------------------------------------------
-            // Get Attachment URI
-            // -----------------------------------------------------
-
-            val attachmentUri =
-                data.getStringExtra(
-                    "evidence_attachment_uri"
-                ) ?: ""
-
-
-            // -----------------------------------------------------
-            // SAVE TO DATABASE
-            // -----------------------------------------------------
-
-            databaseHelper.insertEvidence(
-                title = title,
-                skill = skill,
-                type = type,
-                link = link,
-                status = status,
-                attachmentUri = attachmentUri
-            )
-
-
-            // -----------------------------------------------------
-            // CREATE Evidence OBJECT
-            // -----------------------------------------------------
-
-            val evidence =
-                Evidence(
-                    title = title,
-                    skill = skill,
-                    type = type,
-                    link = link,
-                    status = status,
-                    attachmentUri = attachmentUri
-                )
-
-
-            // -----------------------------------------------------
-            // ADD TO LIST
-            // -----------------------------------------------------
-
-            evidenceList.add(evidence)
-
-
-            // -----------------------------------------------------
-            // UPDATE RECYCLER VIEW
-            // -----------------------------------------------------
-
-            evidenceAdapter.notifyItemInserted(
-                evidenceList.lastIndex
-            )
-
-
-            // -----------------------------------------------------
-            // UPDATE COUNTS
-            // -----------------------------------------------------
-
-            updateCounts()
-        }
-
-
-    // =========================================================
-    // GITHUB VERIFICATION RESULT
-    // =========================================================
+    // ------------------------------------------------
+    // GitHub Verification Result
+    // ------------------------------------------------
 
     private val githubVerificationLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
 
-            // Check whether GitHub verification returned successfully
-            if (result.resultCode != RESULT_OK) {
-                return@registerForActivityResult
-            }
+            if (
+                result.resultCode ==
+                RESULT_OK &&
+                result.data != null
+            ) {
 
-            val data =
-                result.data
-                    ?: return@registerForActivityResult
+                val data =
+                    result.data!!
 
+                val isVerified =
+                    data.getBooleanExtra(
+                        "github_verified",
+                        false
+                    )
 
-            // -----------------------------------------------------
-            // Check whether GitHub repository was verified
-            // -----------------------------------------------------
+                if (!isVerified) {
+                    return@registerForActivityResult
+                }
 
-            val verified =
-                data.getBooleanExtra(
-                    "github_verified",
-                    false
+                val repository =
+                    data.getStringExtra(
+                        "github_repository"
+                    ) ?: "GitHub Repository"
+
+                val owner =
+                    data.getStringExtra(
+                        "github_owner"
+                    ) ?: ""
+
+                val language =
+                    data.getStringExtra(
+                        "github_language"
+                    ) ?: "Not specified"
+
+                val githubUrl =
+                    data.getStringExtra(
+                        "github_url"
+                    ) ?: ""
+
+                if (githubUrl.isBlank()) {
+                    Toast.makeText(
+                        this,
+                        "GitHub URL is missing.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    return@registerForActivityResult
+                }
+
+                val skill =
+                    if (
+                        selectedGithubSkill.isNotBlank()
+                    ) {
+                        selectedGithubSkill
+                    } else {
+                        "General"
+                    }
+
+                val evidence =
+                    Evidence(
+                        title =
+                            "$repository GitHub Repository",
+
+                        skill =
+                            skill,
+
+                        type =
+                            "GitHub Project",
+
+                        link =
+                            githubUrl,
+
+                        status =
+                            "Verified",
+
+                        attachmentUri =
+                            ""
+                    )
+
+                databaseHelper.insertEvidence(
+                    evidence
                 )
-
-            if (!verified) {
-                return@registerForActivityResult
-            }
-
-
-            // -----------------------------------------------------
-            // Get Repository Information
-            // -----------------------------------------------------
-
-            val repository =
-                data.getStringExtra(
-                    "github_repository"
-                ) ?: ""
-
-
-            val owner =
-                data.getStringExtra(
-                    "github_owner"
-                ) ?: ""
-
-
-            val githubUrl =
-                data.getStringExtra(
-                    "github_url"
-                ) ?: ""
-
-
-            val language =
-                data.getStringExtra(
-                    "github_language"
-                ) ?: "Not specified"
-
-
-            // -----------------------------------------------------
-            // CHECK WHETHER USER HAS A SKILL
-            // -----------------------------------------------------
-
-            val skills =
-                databaseHelper.getAllSkills()
-
-            if (skills.isEmpty()) {
 
                 Toast.makeText(
                     this,
-                    "Please add a skill before adding GitHub evidence.",
+                    "GitHub project added as verified evidence.",
                     Toast.LENGTH_LONG
                 ).show()
 
-                return@registerForActivityResult
+                loadEvidence()
             }
-
-
-            // -----------------------------------------------------
-            // CURRENT SKILL
-            // -----------------------------------------------------
-            //
-            // For the current MVP, the first skill is used.
-            //
-            // Later we can add a skill-selection dialog.
-            // -----------------------------------------------------
-
-            val currentSkill =
-                skills.first()
-
-            val skillName =
-                currentSkill.name
-
-
-            // -----------------------------------------------------
-            // CREATE GITHUB EVIDENCE
-            // -----------------------------------------------------
-
-            val evidenceTitle =
-                "GitHub: $repository"
-
-
-            val evidenceType =
-                "GitHub Repository"
-
-
-            val evidenceLink =
-                if (githubUrl.isNotEmpty()) {
-
-                    githubUrl
-
-                } else {
-
-                    "https://github.com/$owner/$repository"
-                }
-
-
-            // -----------------------------------------------------
-            // SAVE GITHUB EVIDENCE TO DATABASE
-            // -----------------------------------------------------
-
-            databaseHelper.insertEvidence(
-                title = evidenceTitle,
-                skill = skillName,
-                type = evidenceType,
-                link = evidenceLink,
-                status = "Verified",
-                attachmentUri = ""
-            )
-
-
-            // -----------------------------------------------------
-            // CREATE Evidence OBJECT
-            // -----------------------------------------------------
-
-            val githubEvidence =
-                Evidence(
-                    title = evidenceTitle,
-                    skill = skillName,
-                    type = evidenceType,
-                    link = evidenceLink,
-                    status = "Verified",
-                    attachmentUri = ""
-                )
-
-
-            // -----------------------------------------------------
-            // ADD TO LIST
-            // -----------------------------------------------------
-
-            evidenceList.add(
-                githubEvidence
-            )
-
-
-            // -----------------------------------------------------
-            // UPDATE RECYCLER VIEW
-            // -----------------------------------------------------
-
-            evidenceAdapter.notifyItemInserted(
-                evidenceList.lastIndex
-            )
-
-
-            // -----------------------------------------------------
-            // UPDATE COUNTS
-            // -----------------------------------------------------
-
-            updateCounts()
-
-
-            // -----------------------------------------------------
-            // SUCCESS MESSAGE
-            // -----------------------------------------------------
-
-            Toast.makeText(
-                this,
-                "GitHub repository verified and added as evidence.",
-                Toast.LENGTH_LONG
-            ).show()
         }
 
-
-    // =========================================================
-    // ON CREATE
-    // =========================================================
+    // ------------------------------------------------
+    // onCreate
+    // ------------------------------------------------
 
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
-
         super.onCreate(
             savedInstanceState
         )
-
-        // -----------------------------------------------------
-        // SET XML
-        // -----------------------------------------------------
 
         setContentView(
             R.layout.activity_evidence
         )
 
-
-        // -----------------------------------------------------
-        // DATABASE
-        // -----------------------------------------------------
-
         databaseHelper =
             DatabaseHelper(this)
 
-
-        // =====================================================
-        // FIND VIEWS
-        // =====================================================
-
-        val btnBack =
-            findViewById<ImageButton>(
+        btnBack =
+            findViewById(
                 R.id.btnBack
             )
 
-
-        val btnAddEvidence =
-            findViewById<MaterialButton>(
+        btnAddEvidence =
+            findViewById(
                 R.id.btnAddEvidence
             )
 
-
-        val btnGithubVerification =
-            findViewById<MaterialButton>(
+        btnGithubVerification =
+            findViewById(
                 R.id.btnGithubVerification
             )
 
+        recyclerEvidence =
+            findViewById(
+                R.id.recyclerEvidence
+            )
+
+        tvEmptyEvidence =
+            findViewById(
+                R.id.tvEmptyEvidence
+            )
 
         tvEvidenceCount =
             findViewById(
                 R.id.tvEvidenceCount
             )
 
-
         tvVerifiedCount =
             findViewById(
                 R.id.tvVerifiedCount
             )
 
-
-        val recyclerEvidence =
-            findViewById<RecyclerView>(
-                R.id.recyclerEvidence
-            )
-
-
-        // =====================================================
-        // LOAD DATABASE EVIDENCE
-        // =====================================================
-
-        evidenceList =
-            databaseHelper.getAllEvidence()
-
-
-        // =====================================================
-        // CREATE ADAPTER
-        // =====================================================
+        // ------------------------------------------------
+        // RecyclerView
+        // ------------------------------------------------
 
         evidenceAdapter =
             EvidenceAdapter(
                 evidenceList
             ) { evidence, position ->
 
-                showVerificationDialog(
+                showEvidenceOptions(
                     evidence,
                     position
                 )
             }
-
-
-        // =====================================================
-        // RECYCLER VIEW
-        // =====================================================
 
         recyclerEvidence.layoutManager =
             LinearLayoutManager(this)
@@ -442,27 +209,24 @@ class EvidenceActivity : AppCompatActivity() {
         recyclerEvidence.adapter =
             evidenceAdapter
 
+        recyclerEvidence.setHasFixedSize(false)
 
-        // =====================================================
-        // INITIAL COUNTS
-        // =====================================================
+        recyclerEvidence.isNestedScrollingEnabled =
+            false
 
-        updateCounts()
-
-
-        // =====================================================
-        // BACK BUTTON
-        // =====================================================
+        // ------------------------------------------------
+        // Back
+        // ------------------------------------------------
 
         btnBack.setOnClickListener {
 
-            finish()
+            onBackPressedDispatcher
+                .onBackPressed()
         }
 
-
-        // =====================================================
-        // ADD NORMAL EVIDENCE
-        // =====================================================
+        // ------------------------------------------------
+        // Add Evidence
+        // ------------------------------------------------
 
         btnAddEvidence.setOnClickListener {
 
@@ -472,271 +236,324 @@ class EvidenceActivity : AppCompatActivity() {
                     AddEvidenceActivity::class.java
                 )
 
-            addEvidenceLauncher.launch(
-                intent
-            )
+            startActivity(intent)
         }
 
-
-        // =====================================================
-        // GITHUB VERIFICATION
-        // =====================================================
+        // ------------------------------------------------
+        // GitHub Verification
+        // ------------------------------------------------
 
         btnGithubVerification.setOnClickListener {
 
-            // -------------------------------------------------
-            // First check whether at least one skill exists
-            // -------------------------------------------------
-
-            val skills =
-                databaseHelper.getAllSkills()
-
-
-            if (skills.isEmpty()) {
-
-                Toast.makeText(
-                    this,
-                    "Please add a skill first.",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                return@setOnClickListener
-            }
-
-
-            // -------------------------------------------------
-            // Open GitHub Verification Activity
-            // -------------------------------------------------
-
-            val intent =
-                Intent(
-                    this,
-                    GitHubVerificationActivity::class.java
-                )
-
-
-            githubVerificationLauncher.launch(
-                intent
-            )
+            chooseSkillForGithub()
         }
+
+        loadEvidence()
     }
 
-
-    // =========================================================
-    // ON RESUME
-    // =========================================================
-    //
-    // This makes sure the Evidence screen gets the latest
-    // database information whenever we return to it.
-    // =========================================================
+    // ------------------------------------------------
+    // Reload when returning to screen
+    // ------------------------------------------------
 
     override fun onResume() {
-
         super.onResume()
 
-
         if (
-            ::databaseHelper.isInitialized &&
-            ::evidenceAdapter.isInitialized
+            ::databaseHelper.isInitialized
         ) {
-
-            reloadEvidence()
+            loadEvidence()
         }
     }
 
+    // ------------------------------------------------
+    // Load Evidence
+    // ------------------------------------------------
 
-    // =========================================================
-    // RELOAD EVIDENCE
-    // =========================================================
+    private fun loadEvidence() {
 
-    private fun reloadEvidence() {
-
-        val latestEvidence =
-            databaseHelper.getAllEvidence()
-
-
-        // Clear old data
         evidenceList.clear()
 
+        val databaseEvidence =
+            databaseHelper.getAllEvidence()
 
-        // Add latest database data
         evidenceList.addAll(
-            latestEvidence
+            databaseEvidence
         )
 
-
-        // Refresh RecyclerView
-        evidenceAdapter.notifyDataSetChanged()
-
-
-        // Refresh counts
-        updateCounts()
+        updateEvidenceUI()
     }
 
+    // ------------------------------------------------
+    // Update UI
+    // ------------------------------------------------
 
-    // =========================================================
-    // UPDATE COUNTS
-    // =========================================================
+    private fun updateEvidenceUI() {
 
-    private fun updateCounts() {
-
-        val totalCount =
+        val total =
             evidenceList.size
 
-
-        val verifiedCount =
+        val verified =
             evidenceList.count {
-
-                it.status == "Verified"
+                it.status.equals(
+                    "Verified",
+                    ignoreCase = true
+                )
             }
 
-
         tvEvidenceCount.text =
-            "Total Evidence: $totalCount"
-
+            total.toString()
 
         tvVerifiedCount.text =
-            "Verified Evidence: $verifiedCount"
+            verified.toString()
+
+        if (evidenceList.isEmpty()) {
+
+            recyclerEvidence.visibility =
+                View.GONE
+
+            tvEmptyEvidence.visibility =
+                View.VISIBLE
+
+        } else {
+
+            recyclerEvidence.visibility =
+                View.VISIBLE
+
+            tvEmptyEvidence.visibility =
+                View.GONE
+        }
+
+        evidenceAdapter.notifyDataSetChanged()
     }
 
+    // ------------------------------------------------
+    // Choose Skill for GitHub Verification
+    // ------------------------------------------------
 
-    // =========================================================
-    // MANUAL VERIFICATION DIALOG
-    // =========================================================
+    private fun chooseSkillForGithub() {
 
-    private fun showVerificationDialog(
-        evidence: Evidence,
-        position: Int
-    ) {
+        val skills =
+            databaseHelper.getAllSkills()
 
-        // -----------------------------------------------------
-        // Already verified
-        // -----------------------------------------------------
-
-        if (
-            evidence.status == "Verified"
-        ) {
+        if (skills.isEmpty()) {
 
             Toast.makeText(
                 this,
-                "This evidence is already verified.",
-                Toast.LENGTH_SHORT
+                "Please add a skill before verifying a GitHub project.",
+                Toast.LENGTH_LONG
             ).show()
 
             return
         }
 
+        if (skills.size == 1) {
 
-        // -----------------------------------------------------
-        // Confirmation dialog
-        // -----------------------------------------------------
+            selectedGithubSkill =
+                skills[0].name
+
+            openGithubVerification()
+
+            return
+        }
+
+        val skillNames =
+            skills.map {
+                it.name
+            }.toTypedArray()
+
+        var selectedIndex =
+            0
 
         AlertDialog.Builder(this)
-
             .setTitle(
-                "Verify Evidence"
+                "Select Skill"
             )
+            .setSingleChoiceItems(
+                skillNames,
+                0
+            ) { _, which ->
 
-            .setMessage(
-                "Do you want to mark \"${evidence.title}\" as verified?"
-            )
+                selectedIndex =
+                    which
+            }
+            .setPositiveButton(
+                "Continue"
+            ) { dialog, _ ->
 
+                selectedGithubSkill =
+                    skillNames[selectedIndex]
+
+                dialog.dismiss()
+
+                openGithubVerification()
+            }
             .setNegativeButton(
                 "Cancel",
                 null
             )
+            .show()
+    }
 
-            .setPositiveButton(
-                "Verify"
-            ) { _, _ ->
+    // ------------------------------------------------
+    // Open GitHub Verification
+    // ------------------------------------------------
 
+    private fun openGithubVerification() {
 
-                // -------------------------------------------------
-                // UPDATE DATABASE
-                // -------------------------------------------------
+        val intent =
+            Intent(
+                this,
+                GitHubVerificationActivity::class.java
+            )
 
-                val updatedRows =
-                    databaseHelper.updateEvidenceStatus(
-                        evidence.title,
-                        "Verified"
-                    )
+        intent.putExtra(
+            "selected_skill",
+            selectedGithubSkill
+        )
 
+        githubVerificationLauncher.launch(
+            intent
+        )
+    }
+
+    // ------------------------------------------------
+    // Evidence Options
+    // ------------------------------------------------
+
+    private fun showEvidenceOptions(
+        evidence: Evidence,
+        position: Int
+    ) {
+
+        val options =
+            if (
+                evidence.status.equals(
+                    "Verified",
+                    ignoreCase = true
+                )
+            ) {
+                arrayOf(
+                    "Open Evidence Link"
+                )
+            } else {
+                arrayOf(
+                    "Mark as Verified",
+                    "Open Evidence Link"
+                )
+            }
+
+        AlertDialog.Builder(this)
+            .setTitle(
+                evidence.title
+            )
+            .setItems(
+                options
+            ) { _, which ->
 
                 if (
-                    updatedRows > 0
+                    evidence.status.equals(
+                        "Verified",
+                        ignoreCase = true
+                    )
                 ) {
 
-                    // -------------------------------------------------
-                    // CREATE UPDATED OBJECT
-                    // -------------------------------------------------
-
-                    val updatedEvidence =
-                        Evidence(
-                            title = evidence.title,
-                            skill = evidence.skill,
-                            type = evidence.type,
-                            link = evidence.link,
-                            status = "Verified",
-                            attachmentUri =
-                                evidence.attachmentUri
+                    if (which == 0) {
+                        openEvidenceLink(
+                            evidence
                         )
-
-
-                    // -------------------------------------------------
-                    // UPDATE ADAPTER
-                    // -------------------------------------------------
-
-                    evidenceAdapter.updateEvidence(
-                        position,
-                        updatedEvidence
-                    )
-
-
-                    // -------------------------------------------------
-                    // UPDATE LOCAL LIST
-                    // -------------------------------------------------
-
-                    if (
-                        position >= 0 &&
-                        position < evidenceList.size
-                    ) {
-
-                        evidenceList[position] =
-                            updatedEvidence
                     }
-
-
-                    // -------------------------------------------------
-                    // UPDATE COUNTS
-                    // -------------------------------------------------
-
-                    updateCounts()
-
-
-                    // -------------------------------------------------
-                    // SUCCESS
-                    // -------------------------------------------------
-
-                    Toast.makeText(
-                        this,
-                        "Evidence verified successfully.",
-                        Toast.LENGTH_SHORT
-                    ).show()
 
                 } else {
 
-                    // -------------------------------------------------
-                    // FAILURE
-                    // -------------------------------------------------
+                    when (which) {
 
-                    Toast.makeText(
-                        this,
-                        "Unable to verify evidence.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        0 -> {
+                            verifyEvidence(
+                                evidence,
+                                position
+                            )
+                        }
+
+                        1 -> {
+                            openEvidenceLink(
+                                evidence
+                            )
+                        }
+                    }
                 }
             }
-
             .show()
+    }
+
+    // ------------------------------------------------
+    // Mark Evidence as Verified
+    // ------------------------------------------------
+
+    private fun verifyEvidence(
+        evidence: Evidence,
+        position: Int
+    ) {
+
+        databaseHelper.updateEvidenceStatus(
+            evidence.link,
+            "Verified"
+        )
+
+        val updatedEvidence =
+            evidence.copy(
+                status = "Verified"
+            )
+
+        evidenceAdapter.updateEvidence(
+            position,
+            updatedEvidence
+        )
+
+        Toast.makeText(
+            this,
+            "Evidence marked as verified.",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        loadEvidence()
+    }
+
+    // ------------------------------------------------
+    // Open Evidence Link
+    // ------------------------------------------------
+
+    private fun openEvidenceLink(
+        evidence: Evidence
+    ) {
+
+        var url =
+            evidence.link.trim()
+
+        if (
+            !url.startsWith("http://") &&
+            !url.startsWith("https://")
+        ) {
+            url =
+                "https://$url"
+        }
+
+        try {
+
+            val intent =
+                Intent(
+                    Intent.ACTION_VIEW,
+                    android.net.Uri.parse(url)
+                )
+
+            startActivity(intent)
+
+        } catch (e: Exception) {
+
+            Toast.makeText(
+                this,
+                "Unable to open evidence link.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }

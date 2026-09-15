@@ -3,365 +3,457 @@
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    tools:context=".SkillGapActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="28dp">
+        android:paddingStart="20dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="32dp">
 
-        <!-- BACK -->
+        <!-- ================================= -->
+        <!-- HEADER -->
+        <!-- ================================= -->
 
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
+            android:padding="12dp"
             android:src="@android:drawable/ic_menu_revert"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- TITLE -->
+        <ImageButton
+            android:id="@+id/btnRefresh"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Refresh"
+            android:padding="12dp"
+            android:src="@android:drawable/ic_popup_sync"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvPageTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="12dp"
             android:text="Skill Gap Analyzer"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="24sp"
+            android:textColor="#172033"
+            android:textSize="28sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btnBack"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnBack"
-            app:layout_constraintTop_toTopOf="@id/btnBack" />
-
-        <!-- SCORE CARD -->
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/scoreCard"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack">
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Find what is holding your skill proof back and what to improve next."
+            android:textColor="#737D8F"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
+
+        <!-- ================================= -->
+        <!-- SKILL CARD -->
+        <!-- ================================= -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/skillCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="22dp">
+                android:padding="18dp">
+
+                <TextView
+                    android:id="@+id/tvSkillLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ANALYZING SKILL"
+                    android:textColor="#737D8F"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvSkillName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Skill: Java"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="18sp"
+                    android:layout_marginTop="5dp"
+                    android:text="Kotlin"
+                    android:textColor="#172033"
+                    android:textSize="21sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvSkillLabel" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ================================= -->
+        <!-- SCORE SUMMARY CARD -->
+        <!-- ================================= -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/gapSummaryCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/skillCard"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="18dp">
+
+                <!-- CURRENT -->
+
+                <TextView
+                    android:id="@+id/tvCurrentLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="CURRENT"
+                    android:textColor="#737D8F"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/tvTargetLabel"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tvCurrentLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Current"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="13sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvSkillName" />
-
-                <TextView
                     android:id="@+id/tvCurrentScore"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:gravity="center"
                     android:text="0"
+                    android:textColor="#172033"
                     android:textSize="30sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/tvTargetScore"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvCurrentLabel" />
 
+                <!-- TARGET -->
+
                 <TextView
                     android:id="@+id/tvTargetLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Target"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:text="TARGET"
+                    android:textColor="#737D8F"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvSkillName" />
+                    app:layout_constraintStart_toEndOf="@id/tvCurrentLabel"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvTargetScore"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:gravity="center"
                     android:text="80"
+                    android:textColor="#172033"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvCurrentScore"
                     app:layout_constraintTop_toBottomOf="@id/tvTargetLabel" />
+
+                <!-- GAP -->
 
                 <TextView
                     android:id="@+id/tvGapLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Gap"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="13sp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:text="POINTS TO TARGET"
+                    android:textColor="#737D8F"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvSkillName" />
+                    app:layout_constraintTop_toBottomOf="@id/tvCurrentScore" />
 
                 <TextView
                     android:id="@+id/tvGapScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="2dp"
                     android:text="80"
-                    android:textSize="30sp"
+                    android:textColor="#172033"
+                    android:textSize="32sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvGapLabel" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- COMPONENT BREAKDOWN -->
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/breakdownCard"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/scoreCard">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="20dp">
-
                 <TextView
-                    android:id="@+id/tvBreakdownTitle"
+                    android:id="@+id/tvGapMessage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Proof Breakdown"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvSkillLevelLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Skill Level"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toStartOf="@id/tvSkillLevelScore"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvBreakdownTitle" />
-
-                <TextView
-                    android:id="@+id/tvSkillLevelScore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0%"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tvSkillLevelLabel" />
-
-                <ProgressBar
-                    android:id="@+id/progressSkillLevel"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="8dp"
-                    android:max="100"
-                    android:progress="0"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvSkillLevelLabel" />
-
-                <TextView
-                    android:id="@+id/tvAssessmentLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Assessment"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toStartOf="@id/tvAssessmentScore"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/progressSkillLevel" />
-
-                <TextView
-                    android:id="@+id/tvAssessmentScore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0%"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tvAssessmentLabel" />
-
-                <ProgressBar
-                    android:id="@+id/progressAssessment"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="8dp"
-                    android:max="100"
-                    android:progress="0"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvAssessmentLabel" />
-
-                <TextView
-                    android:id="@+id/tvEvidenceLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Evidence"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toStartOf="@id/tvEvidenceScore"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/progressAssessment" />
-
-                <TextView
-                    android:id="@+id/tvEvidenceScore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0%"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tvEvidenceLabel" />
-
-                <ProgressBar
-                    android:id="@+id/progressEvidence"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="8dp"
-                    android:max="100"
-                    android:progress="0"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvEvidenceLabel" />
-
-                <TextView
-                    android:id="@+id/tvVerificationLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Verification"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toStartOf="@id/tvVerificationScore"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/progressEvidence" />
-
-                <TextView
-                    android:id="@+id/tvVerificationScore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0%"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tvVerificationLabel" />
-
-                <ProgressBar
-                    android:id="@+id/progressVerification"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="Build your proof to reach the target."
+                    android:textColor="#737D8F"
+                    android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvVerificationLabel"
-                    android:max="100"
-                    android:progress="0" />
+                    app:layout_constraintTop_toBottomOf="@id/tvGapScore" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- GAP MESSAGE -->
+        <!-- ================================= -->
+        <!-- BREAKDOWN TITLE -->
+        <!-- ================================= -->
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/gapMessageCard"
+        <TextView
+            android:id="@+id/tvBreakdownTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="2dp"
+            android:layout_marginTop="24dp"
+            android:text="Where Your Score Stands"
+            android:textColor="#172033"
+            android:textSize="19sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/breakdownCard">
+            app:layout_constraintTop_toBottomOf="@id/gapSummaryCard" />
 
-            <TextView
-                android:id="@+id/tvGapMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:text="Your skill gap will appear here."
-                android:textColor="?android:attr/textColorPrimary"
-                android:textSize="15sp" />
+        <!-- ================================= -->
+        <!-- SKILL LEVEL -->
+        <!-- ================================= -->
 
-        </com.google.android.material.card.MaterialCardView>
+        <TextView
+            android:id="@+id/tvSkillLevelLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Skill Level"
+            android:textColor="#172033"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvSkillLevelScore"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBreakdownTitle" />
 
+        <TextView
+            android:id="@+id/tvSkillLevelScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 / 100"
+            android:textColor="#172033"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvSkillLevelLabel" />
+
+        <ProgressBar
+            android:id="@+id/progressSkillLevel"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="7dp"
+            android:max="100"
+            android:progress="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSkillLevelLabel" />
+
+        <!-- ================================= -->
+        <!-- ASSESSMENT -->
+        <!-- ================================= -->
+
+        <TextView
+            android:id="@+id/tvAssessmentLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Assessment"
+            android:textColor="#172033"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvAssessmentScore"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressSkillLevel" />
+
+        <TextView
+            android:id="@+id/tvAssessmentScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 / 100"
+            android:textColor="#172033"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvAssessmentLabel" />
+
+        <ProgressBar
+            android:id="@+id/progressAssessment"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="7dp"
+            android:max="100"
+            android:progress="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAssessmentLabel" />
+
+        <!-- ================================= -->
+        <!-- EVIDENCE -->
+        <!-- ================================= -->
+
+        <TextView
+            android:id="@+id/tvEvidenceLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Evidence"
+            android:textColor="#172033"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvEvidenceScore"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressAssessment" />
+
+        <TextView
+            android:id="@+id/tvEvidenceScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 / 100"
+            android:textColor="#172033"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvEvidenceLabel" />
+
+        <ProgressBar
+            android:id="@+id/progressEvidence"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="7dp"
+            android:max="100"
+            android:progress="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvEvidenceLabel" />
+
+        <!-- ================================= -->
+        <!-- VERIFICATION -->
+        <!-- ================================= -->
+
+        <TextView
+            android:id="@+id/tvVerificationLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Verification"
+            android:textColor="#172033"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvVerificationScore"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressEvidence" />
+
+        <TextView
+            android:id="@+id/tvVerificationScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 / 100"
+            android:textColor="#172033"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvVerificationLabel" />
+
+        <ProgressBar
+            android:id="@+id/progressVerification"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="7dp"
+            android:max="100"
+            android:progress="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvVerificationLabel" />
+
+        <!-- ================================= -->
         <!-- ACTION PLAN -->
+        <!-- ================================= -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/actionPlanCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="18dp"
-            app:cardElevation="2dp"
+            app:cardElevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gapMessageCard">
+            app:layout_constraintTop_toBottomOf="@id/progressVerification"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp">
+                android:padding="18dp">
 
                 <TextView
                     android:id="@+id/tvActionPlanTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="🎯 Recommended Action Plan"
+                    android:text="Personalized Action Plan"
+                    android:textColor="#172033"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -373,9 +465,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:lineSpacingExtra="5dp"
-                    android:text="1. Add a skill"
-                    android:textColor="?android:attr/textColorSecondary"
+                    android:lineSpacingExtra="4dp"
+                    android:text="Improve your skill and add verified evidence."
+                    android:textColor="#737D8F"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

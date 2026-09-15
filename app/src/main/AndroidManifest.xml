@@ -1,43 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Internet access for GitHub API -->
-    <uses-permission android:name="android.permission.INTERNET" />
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ========================================= -->
+    <!-- INTERNET PERMISSION -->
+    <!-- Required for GitHub repository verification -->
+    <!-- ========================================= -->
+
+    <uses-permission
+        android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="SkillProof"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Skill_Proof_MAD_ASSIGNMENT_1">
 
-        <!-- Main Activity -->
+        <!-- ========================================= -->
+        <!-- SPLASH ACTIVITY -->
+        <!-- ========================================= -->
+
         <activity
             android:name=".SplashActivity"
             android:exported="true">
+
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+
+                <action
+                    android:name="android.intent.action.MAIN" />
+
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
+
         </activity>
 
+        <!-- ========================================= -->
+        <!-- LOGIN -->
+        <!-- ========================================= -->
 
-        <!-- Authentication -->
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
+
+        <!-- ========================================= -->
+        <!-- REGISTRATION -->
+        <!-- ========================================= -->
 
         <activity
             android:name=".RegistrationActivity"
             android:exported="false" />
 
-        <!-- Dashboard -->
+        <!-- ========================================= -->
+        <!-- DASHBOARD -->
+        <!-- ========================================= -->
+
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />
 
-        <!-- Skills -->
+        <!-- ========================================= -->
+        <!-- SKILLS -->
+        <!-- ========================================= -->
+
         <activity
             android:name=".SkillsActivity"
             android:exported="false" />
@@ -46,7 +77,10 @@
             android:name=".AddSkillActivity"
             android:exported="false" />
 
-        <!-- Evidence -->
+        <!-- ========================================= -->
+        <!-- EVIDENCE -->
+        <!-- ========================================= -->
+
         <activity
             android:name=".EvidenceActivity"
             android:exported="false" />
@@ -55,41 +89,67 @@
             android:name=".AddEvidenceActivity"
             android:exported="false" />
 
-        <!-- Assessment -->
-        <activity
-            android:name=".AssessmentActivity"
-            android:exported="false" />
-
-        <!-- Proof Score -->
-        <activity
-            android:name=".ProofScoreActivity"
-            android:exported="false" />
-
-        <!-- Career -->
-        <activity
-            android:name=".CareerActivity"
-            android:exported="false" />
-
-        <!-- Profile -->
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
-
-        <!-- Badges -->
-        <activity
-            android:name=".BadgesActivity"
-            android:exported="false" />
-
-        <!-- Skill Gap Analyzer -->
-        <activity
-            android:name=".SkillGapActivity"
-            android:exported="false" />
+        <!-- ========================================= -->
+        <!-- GITHUB VERIFICATION -->
+        <!-- ========================================= -->
 
         <activity
             android:name=".GitHubVerificationActivity"
             android:exported="false" />
 
-        <!-- FileProvider for camera/gallery evidence -->
+        <!-- ========================================= -->
+        <!-- ASSESSMENT -->
+        <!-- ========================================= -->
+
+        <activity
+            android:name=".AssessmentActivity"
+            android:exported="false" />
+
+        <!-- ========================================= -->
+        <!-- PROOF SCORE -->
+        <!-- ========================================= -->
+
+        <activity
+            android:name=".ProofScoreActivity"
+            android:exported="false" />
+
+        <!-- ========================================= -->
+        <!-- CAREER -->
+        <!-- ========================================= -->
+
+        <activity
+            android:name=".CareerActivity"
+            android:exported="false" />
+
+        <!-- ========================================= -->
+        <!-- SKILL GAP -->
+        <!-- ========================================= -->
+
+        <activity
+            android:name=".SkillGapActivity"
+            android:exported="false" />
+
+        <!-- ========================================= -->
+        <!-- BADGES -->
+        <!-- ========================================= -->
+
+        <activity
+            android:name=".BadgesActivity"
+            android:exported="false" />
+
+        <!-- ========================================= -->
+        <!-- PROFILE -->
+        <!-- ========================================= -->
+
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <!-- ========================================= -->
+        <!-- FILE PROVIDER -->
+        <!-- Used for local attachment/file sharing -->
+        <!-- ========================================= -->
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

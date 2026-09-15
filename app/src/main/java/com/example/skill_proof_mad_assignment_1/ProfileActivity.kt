@@ -1,20 +1,26 @@
 package com.example.skill_proof_mad_assignment_1
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
-    private lateinit var tvUserName: TextView
-    private lateinit var tvUserEmail: TextView
+    private lateinit var btnBack: ImageButton
+    private lateinit var btnLogout: MaterialButton
+
+    private lateinit var tvProfileName: TextView
+    private lateinit var tvProfileEmail: TextView
     private lateinit var tvSkillCount: TextView
     private lateinit var tvEvidenceCount: TextView
-    private lateinit var tvProofScore: TextView
-    private lateinit var tvCareerReadiness: TextView
+    private lateinit var tvVerifiedCount: TextView
+    private lateinit var tvAssessmentCount: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,43 +29,35 @@ class ProfileActivity : AppCompatActivity() {
 
         databaseHelper = DatabaseHelper(this)
 
-        val btnBack =
-            findViewById<ImageButton>(R.id.btnBack)
+        btnBack = findViewById(R.id.btnBack)
+        btnLogout = findViewById(R.id.btnLogout)
 
-        tvUserName =
-            findViewById(R.id.tvUserName)
-
-        tvUserEmail =
-            findViewById(R.id.tvUserEmail)
-
-        tvSkillCount =
-            findViewById(R.id.tvSkillCount)
-
-        tvEvidenceCount =
-            findViewById(R.id.tvEvidenceCount)
-
-        tvProofScore =
-            findViewById(R.id.tvProofScore)
-
-        tvCareerReadiness =
-            findViewById(R.id.tvCareerReadiness)
+        tvProfileName = findViewById(R.id.tvProfileName)
+        tvProfileEmail = findViewById(R.id.tvProfileEmail)
+        tvSkillCount = findViewById(R.id.tvSkillCount)
+        tvEvidenceCount = findViewById(R.id.tvEvidenceCount)
+        tvVerifiedCount = findViewById(R.id.tvVerifiedCount)
+        tvAssessmentCount = findViewById(R.id.tvAssessmentCount)
 
         btnBack.setOnClickListener {
-            finish()
+            onBackPressedDispatcher.onBackPressed()
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
+        btnLogout.setOnClickListener {
+            logoutUser()
+        }
 
         loadProfile()
     }
 
-    private fun loadProfile() {
+    override fun onResume() {
+        super.onResume()
+        if (::databaseHelper.isInitialized) {
+            loadProfile()
+        }
+    }
 
-        // ==========================================
-        // USER INFORMATION
-        // ==========================================
+    private fun loadProfile() {
 
         val preferences =
             getSharedPreferences(
@@ -71,20 +69,16 @@ class ProfileActivity : AppCompatActivity() {
             preferences.getString(
                 "user_name",
                 "SkillProof User"
-            )
+            ) ?: "SkillProof User"
 
         val email =
             preferences.getString(
                 "user_email",
                 "No email available"
-            )
+            ) ?: "No email available"
 
-        tvUserName.text = name
-        tvUserEmail.text = email
-
-        // ==========================================
-        // DATABASE DATA
-        // ==========================================
+        tvProfileName.text = name
+        tvProfileEmail.text = email
 
         val skills =
             databaseHelper.getAllSkills()
@@ -92,115 +86,69 @@ class ProfileActivity : AppCompatActivity() {
         val evidence =
             databaseHelper.getAllEvidence()
 
+        val verifiedEvidence =
+            evidence.count {
+                it.status.equals(
+                    "Verified",
+                    ignoreCase = true
+                )
+            }
+
+        val assessmentCount =
+            skills.count { skill ->
+                databaseHelper
+                    .getAssessmentPercentageForSkill(
+                        skill.name
+                    ) > 0
+            }
+
         tvSkillCount.text =
             skills.size.toString()
 
         tvEvidenceCount.text =
             evidence.size.toString()
 
-        // ==========================================
-        // NO SKILLS
-        // ==========================================
+        tvVerifiedCount.text =
+            verifiedEvidence.toString()
 
-        if (skills.isEmpty()) {
+        tvAssessmentCount.text =
+            assessmentCount.toString()
+    }
 
-            tvProofScore.text = "0"
-            tvCareerReadiness.text = "0"
+    private fun logoutUser() {
 
-            return
-        }
-
-        // ==========================================
-        // CURRENT SKILL
-        // ==========================================
-
-        val skill =
-            skills.first()
-
-        val skillName =
-            skill.name
-
-        val skillLevel =
-            skill.progress
-
-        // ==========================================
-        // ASSESSMENT
-        // ==========================================
-
-        val assessmentScore =
-            databaseHelper.getAssessmentPercentageForSkill(
-                skillName
+        val preferences =
+            getSharedPreferences(
+                "SkillProofPrefs",
+                MODE_PRIVATE
             )
 
-        // ==========================================
-        // EVIDENCE
-        // ==========================================
+        preferences
+            .edit()
+            .putBoolean(
+                "is_logged_in",
+                false
+            )
+            .apply()
 
-        val evidenceCount =
-            databaseHelper.getEvidenceCountForSkill(
-                skillName
+        Toast.makeText(
+            this,
+            "Logged out successfully.",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        val intent =
+            Intent(
+                this,
+                LoginActivity::class.java
             )
 
-        val verifiedEvidenceCount =
-            databaseHelper.getVerifiedEvidenceCountForSkill(
-                skillName
-            )
+        intent.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-        // ==========================================
-        // EVIDENCE SCORE
-        // ==========================================
+        startActivity(intent)
 
-        val evidenceScore =
-            when {
-                evidenceCount >= 5 -> 100
-                evidenceCount == 4 -> 90
-                evidenceCount == 3 -> 80
-                evidenceCount == 2 -> 65
-                evidenceCount == 1 -> 45
-                else -> 0
-            }
-
-        // ==========================================
-        // VERIFICATION SCORE
-        // ==========================================
-
-        val verificationScore =
-            if (evidenceCount == 0) {
-                0
-            } else {
-                (verifiedEvidenceCount * 100) / evidenceCount
-            }
-
-        // ==========================================
-        // PROOF SCORE
-        // ==========================================
-
-        val proofScore =
-            (
-                    skillLevel * 0.30 +
-                            assessmentScore * 0.30 +
-                            evidenceScore * 0.25 +
-                            verificationScore * 0.15
-                    ).toInt()
-
-        // ==========================================
-        // CAREER READINESS
-        // ==========================================
-
-        val careerReadiness =
-            (
-                    proofScore * 0.60 +
-                            assessmentScore * 0.40
-                    ).toInt()
-
-        // ==========================================
-        // DISPLAY
-        // ==========================================
-
-        tvProofScore.text =
-            proofScore.toString()
-
-        tvCareerReadiness.text =
-            careerReadiness.toString()
+        finish()
     }
 }

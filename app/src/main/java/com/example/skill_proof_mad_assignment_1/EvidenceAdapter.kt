@@ -42,13 +42,12 @@ class EvidenceAdapter(
         viewType: Int
     ): EvidenceViewHolder {
 
-        val view =
-            LayoutInflater.from(parent.context)
-                .inflate(
-                    R.layout.item_evidence,
-                    parent,
-                    false
-                )
+        val view = LayoutInflater.from(parent.context)
+            .inflate(
+                R.layout.item_evidence,
+                parent,
+                false
+            )
 
         return EvidenceViewHolder(view)
     }
@@ -58,10 +57,8 @@ class EvidenceAdapter(
         position: Int
     ) {
 
-        val evidence =
-            evidenceList[position]
+        val evidence = evidenceList[position]
 
-        // Basic information
         holder.tvEvidenceTitle.text =
             evidence.title
 
@@ -69,7 +66,7 @@ class EvidenceAdapter(
             evidence.status
 
         holder.tvEvidenceType.text =
-            evidence.type
+            "Type: ${evidence.type}"
 
         holder.tvEvidenceSkill.text =
             "Skill: ${evidence.skill}"
@@ -77,39 +74,54 @@ class EvidenceAdapter(
         holder.tvEvidenceLink.text =
             evidence.link
 
-        // -------------------------------------------------
-        // Attachment Image
-        // -------------------------------------------------
+        // -----------------------------
+        // Attachment
+        // -----------------------------
 
         if (evidence.attachmentUri.isNotEmpty()) {
 
             try {
 
-                val imageUri =
-                    Uri.parse(evidence.attachmentUri)
+                val uri =
+                    Uri.parse(
+                        evidence.attachmentUri
+                    )
 
-                holder.ivEvidenceAttachment.setImageURI(
-                    imageUri
-                )
+                holder.ivEvidenceAttachment
+                    .setImageURI(uri)
 
-                holder.ivEvidenceAttachment.visibility =
-                    View.VISIBLE
+                holder.ivEvidenceAttachment
+                    .visibility = View.VISIBLE
 
             } catch (e: Exception) {
 
-                holder.ivEvidenceAttachment.visibility =
-                    View.GONE
+                holder.ivEvidenceAttachment
+                    .visibility = View.GONE
             }
 
         } else {
 
-            holder.ivEvidenceAttachment.visibility =
-                View.GONE
+            holder.ivEvidenceAttachment
+                .visibility = View.GONE
         }
 
-        // -------------------------------------------------
-        // Open Link
-        // -------------------------------------------------
+        // -----------------------------
+        // Status
+        // -----------------------------
+
+        holder.tvEvidenceStatus.text =
+            when (evidence.status.lowercase()) {
+
+                "verified" ->
+                    "✓ Verified"
+
+                else ->
+                    "● Not Verified"
+            }
+
+        // -----------------------------
+        // Open Evidence Link
+        // -----------------------------
 
         holder.tvEvidenceLink.setOnClickListener {
 
@@ -131,9 +143,8 @@ class EvidenceAdapter(
                         Uri.parse(url)
                     )
 
-                holder.itemView.context.startActivity(
-                    intent
-                )
+                holder.itemView.context
+                    .startActivity(intent)
 
             } catch (e: Exception) {
 
@@ -145,16 +156,19 @@ class EvidenceAdapter(
             }
         }
 
-        // -------------------------------------------------
-        // Click Evidence Card
-        // -------------------------------------------------
+        // -----------------------------
+        // Evidence Card Click
+        // -----------------------------
 
         holder.itemView.setOnClickListener {
 
             val currentPosition =
                 holder.bindingAdapterPosition
 
-            if (currentPosition != RecyclerView.NO_POSITION) {
+            if (
+                currentPosition !=
+                RecyclerView.NO_POSITION
+            ) {
 
                 onEvidenceClick(
                     evidenceList[currentPosition],
@@ -167,10 +181,6 @@ class EvidenceAdapter(
     override fun getItemCount(): Int =
         evidenceList.size
 
-    // -------------------------------------------------
-    // Add Evidence
-    // -------------------------------------------------
-
     fun addEvidence(
         evidence: Evidence
     ) {
@@ -181,10 +191,6 @@ class EvidenceAdapter(
             evidenceList.lastIndex
         )
     }
-
-    // -------------------------------------------------
-    // Update Evidence
-    // -------------------------------------------------
 
     fun updateEvidence(
         position: Int,

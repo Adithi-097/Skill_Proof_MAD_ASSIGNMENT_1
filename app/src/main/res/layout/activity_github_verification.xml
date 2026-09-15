@@ -3,80 +3,98 @@
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    tools:context=".GitHubVerificationActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="24dp"
         android:paddingBottom="32dp">
 
-        <!-- ================================================= -->
-        <!-- BACK BUTTON -->
-        <!-- ================================================= -->
+        <!-- ===================================== -->
+        <!-- Decorative Circle -->
+        <!-- ===================================== -->
+
+        <View
+            android:id="@+id/topDecoration"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:background="@drawable/bg_login_circle"
+            android:translationX="95dp"
+            android:translationY="-100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- ===================================== -->
+        <!-- Back Button -->
+        <!-- ===================================== -->
 
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
+            android:padding="12dp"
             android:src="@android:drawable/ic_menu_revert"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ================================================= -->
-        <!-- PAGE TITLE -->
-        <!-- ================================================= -->
+        <!-- ===================================== -->
+        <!-- Page Title -->
+        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvPageTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="22dp"
             android:text="GitHub Verification"
-            android:textSize="24sp"
+            android:textColor="#172033"
+            android:textSize="29sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btnBack"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnBack"
-            app:layout_constraintTop_toTopOf="@id/btnBack" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-        <!-- ================================================= -->
-        <!-- DESCRIPTION -->
-        <!-- ================================================= -->
+        <!-- ===================================== -->
+        <!-- Description -->
+        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
-            android:text="Verify your GitHub repository and use it as verified evidence for your skill."
+            android:layout_marginTop="7dp"
+            android:text="Verify a public GitHub repository and use it as skill evidence."
+            android:textColor="#737D8F"
             android:textSize="15sp"
-            android:lineSpacingExtra="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack" />
+            app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
 
-        <!-- ================================================= -->
-        <!-- GITHUB URL INPUT -->
-        <!-- ================================================= -->
+        <!-- ===================================== -->
+        <!-- GitHub URL -->
+        <!-- ===================================== -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/githubUrlLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:hint="GitHub Repository URL"
-            app:boxBackgroundMode="outline"
+            android:layout_marginTop="24dp"
+            android:hint="GitHub repository URL"
+            app:boxCornerRadiusBottomEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp"
+            app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusTopStart="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvDescription">
@@ -85,59 +103,63 @@
                 android:id="@+id/etGithubUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="https://github.com/username/repository"
                 android:inputType="textUri"
                 android:maxLines="1"
-                android:hint="https://github.com/username/repository" />
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ================================================= -->
-        <!-- VERIFY BUTTON -->
-        <!-- ================================================= -->
+        <!-- ===================================== -->
+        <!-- Verify Button -->
+        <!-- ===================================== -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerify"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="18dp"
             android:text="Verify Repository"
-            android:textSize="15sp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/githubUrlLayout" />
 
-        <!-- ================================================= -->
-        <!-- RESULT CARD -->
-        <!-- ================================================= -->
+        <!-- ===================================== -->
+        <!-- Result Card -->
+        <!-- ===================================== -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/resultCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="22dp"
             android:visibility="gone"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnVerify">
+            app:layout_constraintTop_toBottomOf="@id/btnVerify"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp">
 
-                <!-- Verification Status -->
+                <!-- Status -->
 
                 <TextView
                     android:id="@+id/tvVerificationStatus"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="✓ Repository Verified"
+                    android:text="Repository Verified"
+                    android:textColor="#172033"
                     android:textSize="19sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -151,8 +173,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
-                    android:text="Repository: -"
-                    android:textSize="15sp"
+                    android:text="Repository:"
+                    android:textColor="#172033"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvVerificationStatus" />
@@ -163,9 +187,10 @@
                     android:id="@+id/tvOwner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Owner: -"
-                    android:textSize="15sp"
+                    android:layout_marginTop="9dp"
+                    android:text="Owner:"
+                    android:textColor="#737D8F"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvRepository" />
@@ -176,9 +201,10 @@
                     android:id="@+id/tvLanguage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Language: -"
-                    android:textSize="15sp"
+                    android:layout_marginTop="7dp"
+                    android:text="Language:"
+                    android:textColor="#737D8F"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvOwner" />
@@ -189,9 +215,10 @@
                     android:id="@+id/tvStars"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Stars: -"
-                    android:textSize="15sp"
+                    android:layout_marginTop="7dp"
+                    android:text="Stars:"
+                    android:textColor="#737D8F"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvLanguage" />
@@ -202,23 +229,24 @@
                     android:id="@+id/tvForks"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Forks: -"
-                    android:textSize="15sp"
+                    android:layout_marginTop="7dp"
+                    android:text="Forks:"
+                    android:textColor="#737D8F"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvStars" />
 
-                <!-- Repository Description -->
+                <!-- Description -->
 
                 <TextView
                     android:id="@+id/tvRepositoryDescription"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Description: -"
-                    android:textSize="15sp"
-                    android:lineSpacingExtra="3dp"
+                    android:layout_marginTop="14dp"
+                    android:text="Repository description"
+                    android:textColor="#737D8F"
+                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvForks" />
@@ -227,23 +255,40 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ================================================= -->
-        <!-- USE AS VERIFIED EVIDENCE -->
-        <!-- ================================================= -->
+        <!-- ===================================== -->
+        <!-- Use As Evidence -->
+        <!-- ===================================== -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnUseAsEvidence"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_height="56dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
             android:text="Use as Verified Evidence"
             android:textSize="15sp"
+            android:textStyle="bold"
             android:visibility="gone"
+            app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/resultCard" />
+
+        <!-- ===================================== -->
+        <!-- Information -->
+        <!-- ===================================== -->
+
+        <TextView
+            android:id="@+id/tvBottomHint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center"
+            android:text="Only public GitHub repositories can be verified."
+            android:textColor="#8A93A3"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnUseAsEvidence" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

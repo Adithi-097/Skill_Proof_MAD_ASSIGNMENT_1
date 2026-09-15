@@ -3,150 +3,197 @@
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="#F7F9FC"
+    android:fillViewport="true"
+    tools:context=".BadgesActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="24dp">
+        android:paddingStart="20dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="32dp">
 
-        <!-- Back Button -->
+        <!-- ================================= -->
+        <!-- BACK BUTTON -->
+        <!-- ================================= -->
+
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
+            android:padding="12dp"
             android:src="@android:drawable/ic_menu_revert"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Page Title -->
+        <!-- ================================= -->
+        <!-- TITLE -->
+        <!-- ================================= -->
+
         <TextView
             android:id="@+id/tvPageTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
-            android:text="Skill Levels &amp; Badges"
-            android:textSize="24sp"
+            android:layout_marginTop="12dp"
+            android:text="Skill Badges"
+            android:textColor="#172033"
+            android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintStart_toEndOf="@id/btnBack"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnBack"
-            app:layout_constraintBottom_toBottomOf="@id/btnBack" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-        <!-- Level Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/levelCard"
+        <TextView
+            android:id="@+id/tvDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="3dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="6dp"
+            android:text="Build your proof and unlock achievements along the way."
+            android:textColor="#737D8F"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
+
+        <!-- ================================= -->
+        <!-- SUMMARY CARD -->
+        <!-- ================================= -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/summaryCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
+            app:strokeColor="#E4E8F0"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp">
+                android:padding="18dp">
 
-                <!-- Level Icon -->
+                <!-- Unlocked -->
+
                 <TextView
-                    android:id="@+id/tvLevelIcon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:id="@+id/tvUnlockedLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="🏆"
-                    android:textSize="32sp"
+                    android:text="UNLOCKED"
+                    android:textColor="#737D8F"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/tvTotalLabel"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Level Label -->
                 <TextView
-                    android:id="@+id/tvLevelLabel"
+                    android:id="@+id/tvUnlockedCount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="CURRENT LEVEL"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="?android:attr/textColorSecondary"
-                    app:layout_constraintStart_toEndOf="@id/tvLevelIcon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-                <!-- Current Level -->
-                <TextView
-                    android:id="@+id/tvLevel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
-                    android:text="Beginner"
-                    android:textSize="22sp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#172033"
+                    android:textSize="30sp"
                     android:textStyle="bold"
-                    android:textColor="?android:attr/textColorPrimary"
-                    app:layout_constraintStart_toEndOf="@id/tvLevelIcon"
-                    app:layout_constraintTop_toBottomOf="@id/tvLevelLabel"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toStartOf="@id/tvTotalCount"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvUnlockedLabel" />
 
-                <!-- Proof Score -->
+                <!-- Total -->
+
                 <TextView
-                    android:id="@+id/tvProofScore"
+                    android:id="@+id/tvTotalLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:text="0 / 100"
-                    android:textSize="14sp"
-                    android:textColor="?android:attr/textColorSecondary"
-                    app:layout_constraintStart_toEndOf="@id/tvLevelIcon"
-                    app:layout_constraintTop_toBottomOf="@id/tvLevel"
+                    android:gravity="center"
+                    android:text="TOTAL BADGES"
+                    android:textColor="#737D8F"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintStart_toEndOf="@id/tvUnlockedLabel"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvTotalCount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="6"
+                    android:textColor="#172033"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvUnlockedCount"
+                    app:layout_constraintTop_toBottomOf="@id/tvTotalLabel" />
+
+                <TextView
+                    android:id="@+id/tvBadgeMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:text="Start building your skill proof."
+                    android:textColor="#737D8F"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvUnlockedCount" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Badges Heading -->
+        <!-- ================================= -->
+        <!-- BADGES TITLE -->
+        <!-- ================================= -->
+
         <TextView
             android:id="@+id/tvBadgesTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
-            android:text="Your Badges"
-            android:textSize="20sp"
+            android:text="Your Achievements"
+            android:textColor="#172033"
+            android:textSize="19sp"
             android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/levelCard" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/summaryCard" />
 
-        <!-- Badge List -->
+        <!-- ================================= -->
+        <!-- BADGE LIST -->
+        <!-- ================================= -->
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerBadges"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:nestedScrollingEnabled="false"
-            app:layout_constraintStart_toStartOf="parent"
+            android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvBadgesTitle"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            tools:itemCount="6"
+            tools:listitem="@layout/item_badge" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

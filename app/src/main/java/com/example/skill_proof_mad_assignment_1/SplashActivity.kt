@@ -14,31 +14,65 @@ class SplashActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_splash)
 
-        // Load fade-in animation
         val fadeAnimation =
-            AnimationUtils.loadAnimation(this, R.anim.fade_in)
-
-        // Apply animation to splash elements
-        findViewById<android.view.View>(R.id.logoCard)
-            .startAnimation(fadeAnimation)
-
-        findViewById<android.view.View>(R.id.tvAppName)
-            .startAnimation(fadeAnimation)
-
-        findViewById<android.view.View>(R.id.tvTagline)
-            .startAnimation(fadeAnimation)
-
-        // Open Login screen after 2.5 seconds
-        Handler(Looper.getMainLooper()).postDelayed({
-
-            val intent = Intent(
+            AnimationUtils.loadAnimation(
                 this,
-                LoginActivity::class.java
+                R.anim.fade_in
             )
 
-            startActivity(intent)
-            finish()
+        findViewById<android.view.View>(
+            R.id.logoCard
+        ).startAnimation(fadeAnimation)
+
+        findViewById<android.view.View>(
+            R.id.tvAppName
+        ).startAnimation(fadeAnimation)
+
+        findViewById<android.view.View>(
+            R.id.tvTagline
+        ).startAnimation(fadeAnimation)
+
+        Handler(
+            Looper.getMainLooper()
+        ).postDelayed({
+
+            checkLoginStatus()
 
         }, 2500)
+    }
+
+    private fun checkLoginStatus() {
+
+        val sharedPreferences =
+            getSharedPreferences(
+                "SkillProofPrefs",
+                MODE_PRIVATE
+            )
+
+        val isLoggedIn =
+            sharedPreferences.getBoolean(
+                "is_logged_in",
+                false
+            )
+
+        val nextActivity =
+            if (isLoggedIn) {
+
+                DashboardActivity::class.java
+
+            } else {
+
+                LoginActivity::class.java
+            }
+
+        val intent =
+            Intent(
+                this,
+                nextActivity
+            )
+
+        startActivity(intent)
+
+        finish()
     }
 }

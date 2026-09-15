@@ -3,419 +3,357 @@ package com.example.skill_proof_mad_assignment_1
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
+import android.provider.OpenableColumns
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import java.io.File
+import com.google.android.material.textfield.TextInputLayout
 
 class AddEvidenceActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
-    private var selectedImageUri: Uri? = null
-    private var cameraImageUri: Uri? = null
+    private lateinit var btnBack: ImageButton
+    private lateinit var btnSaveEvidence: MaterialButton
+    private lateinit var btnChooseFile: MaterialButton
 
-    // ==========================================
-    // GALLERY
-    // ==========================================
+    private lateinit var etEvidenceTitle: TextInputEditText
+    private lateinit var etEvidenceSkill: TextInputEditText
+    private lateinit var etEvidenceType: TextInputEditText
+    private lateinit var etEvidenceLink: TextInputEditText
 
-    private val galleryLauncher =
+    private lateinit var ivAttachmentPreview: ImageView
+    private lateinit var tvSelectedFile: TextView
+    private lateinit var tvAttachmentHint: TextView
+
+    private var selectedAttachmentUri: Uri? = null
+
+    // ------------------------------------------------
+    // File Picker
+    // ------------------------------------------------
+
+    private val filePickerLauncher =
         registerForActivityResult(
             ActivityResultContracts.GetContent()
         ) { uri ->
 
             if (uri != null) {
 
-                selectedImageUri = uri
+                selectedAttachmentUri = uri
 
-                val imagePreview =
-                    findViewById<ImageView>(
-                        R.id.ivAttachmentPreview
-                    )
-
-                imagePreview.setImageURI(uri)
-
-                imagePreview.visibility =
-                    ImageView.VISIBLE
+                displaySelectedFile(uri)
             }
         }
 
-    // ==========================================
-    // CAMERA
-    // ==========================================
-
-    private val cameraLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.TakePicture()
-        ) { success ->
-
-            if (success && cameraImageUri != null) {
-
-                selectedImageUri =
-                    cameraImageUri
-
-                val imagePreview =
-                    findViewById<ImageView>(
-                        R.id.ivAttachmentPreview
-                    )
-
-                imagePreview.setImageURI(
-                    cameraImageUri
-                )
-
-                imagePreview.visibility =
-                    ImageView.VISIBLE
-
-                Toast.makeText(
-                    this,
-                    "Photo captured successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            } else {
-
-                Toast.makeText(
-                    this,
-                    "Photo capture cancelled",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(
-            R.layout.activity_add_evidence
-        )
+        setContentView(R.layout.activity_add_evidence)
+
+        // ------------------------------------------------
+        // Database
+        // ------------------------------------------------
 
         databaseHelper =
             DatabaseHelper(this)
 
-        // ==========================================
-        // FIND VIEWS
-        // ==========================================
+        // ------------------------------------------------
+        // Find Views
+        // ------------------------------------------------
 
-        val btnBack =
-            findViewById<ImageButton>(
-                R.id.btnBack
-            )
+        btnBack =
+            findViewById(R.id.btnBack)
 
-        val etTitle =
-            findViewById<TextInputEditText>(
-                R.id.etTitle
-            )
+        btnSaveEvidence =
+            findViewById(R.id.btnSaveEvidence)
 
-        val actvSkill =
-            findViewById<AutoCompleteTextView>(
-                R.id.actvSkill
-            )
+        btnChooseFile =
+            findViewById(R.id.btnChooseFile)
 
-        val actvType =
-            findViewById<AutoCompleteTextView>(
-                R.id.actvType
-            )
+        etEvidenceTitle =
+            findViewById(R.id.etEvidenceTitle)
 
-        val etLink =
-            findViewById<TextInputEditText>(
-                R.id.etLink
-            )
+        etEvidenceSkill =
+            findViewById(R.id.etEvidenceSkill)
 
-        val btnCamera =
-            findViewById<MaterialButton>(
-                R.id.btnCamera
-            )
+        etEvidenceType =
+            findViewById(R.id.etEvidenceType)
 
-        val btnGallery =
-            findViewById<MaterialButton>(
-                R.id.btnGallery
-            )
+        etEvidenceLink =
+            findViewById(R.id.etEvidenceLink)
 
-        val btnSaveEvidence =
-            findViewById<MaterialButton>(
-                R.id.btnSaveEvidence
-            )
+        ivAttachmentPreview =
+            findViewById(R.id.ivAttachmentPreview)
 
-        val imagePreview =
-            findViewById<ImageView>(
-                R.id.ivAttachmentPreview
-            )
+        tvSelectedFile =
+            findViewById(R.id.tvSelectedFile)
 
-        // ==========================================
-        // LOAD SKILLS FROM SQLITE
-        // ==========================================
+        tvAttachmentHint =
+            findViewById(R.id.tvAttachmentHint)
 
-        val skillList =
-            databaseHelper.getAllSkills()
-
-        val skillNames =
-            skillList
-                .map { it.name }
-                .toTypedArray()
-
-        if (skillNames.isEmpty()) {
-
-            Toast.makeText(
-                this,
-                "Please add a skill first",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
-        val skillAdapter =
-            ArrayAdapter(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                skillNames
-            )
-
-        actvSkill.setAdapter(
-            skillAdapter
-        )
-
-        // ==========================================
-        // EVIDENCE TYPES
-        // ==========================================
-
-        val types =
-            arrayOf(
-                "Project",
-                "Certificate",
-                "GitHub Repository",
-                "Other"
-            )
-
-        val typeAdapter =
-            ArrayAdapter(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                types
-            )
-
-        actvType.setAdapter(
-            typeAdapter
-        )
-
-        // ==========================================
-        // BACK BUTTON
-        // ==========================================
+        // ------------------------------------------------
+        // Back
+        // ------------------------------------------------
 
         btnBack.setOnClickListener {
-            finish()
+
+            onBackPressedDispatcher.onBackPressed()
         }
 
-        // ==========================================
-        // CAMERA
-        // ==========================================
+        // ------------------------------------------------
+        // Choose Attachment
+        // ------------------------------------------------
 
-        btnCamera.setOnClickListener {
+        btnChooseFile.setOnClickListener {
 
-            try {
-
-                createCameraImageUri()
-
-            } catch (e: Exception) {
-
-                Toast.makeText(
-                    this,
-                    "Unable to open camera",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                e.printStackTrace()
-            }
+            filePickerLauncher.launch("*/*")
         }
 
-        // ==========================================
-        // GALLERY
-        // ==========================================
-
-        btnGallery.setOnClickListener {
-
-            galleryLauncher.launch(
-                "image/*"
-            )
-        }
-
-        // ==========================================
-        // SAVE EVIDENCE
-        // ==========================================
+        // ------------------------------------------------
+        // Save Evidence
+        // ------------------------------------------------
 
         btnSaveEvidence.setOnClickListener {
 
-            val title =
-                etTitle.text
-                    .toString()
-                    .trim()
-
-            val skill =
-                actvSkill.text
-                    .toString()
-                    .trim()
-
-            val type =
-                actvType.text
-                    .toString()
-                    .trim()
-
-            val link =
-                etLink.text
-                    .toString()
-                    .trim()
-
-            // ======================================
-            // VALIDATION
-            // ======================================
-
-            if (title.isEmpty()) {
-
-                etTitle.error =
-                    "Enter evidence title"
-
-                etTitle.requestFocus()
-
-                return@setOnClickListener
-            }
-
-            if (skill.isEmpty()) {
-
-                actvSkill.error =
-                    "Select a skill"
-
-                actvSkill.requestFocus()
-
-                return@setOnClickListener
-            }
-
-            if (type.isEmpty()) {
-
-                actvType.error =
-                    "Select evidence type"
-
-                actvType.requestFocus()
-
-                return@setOnClickListener
-            }
-
-            if (link.isEmpty()) {
-
-                etLink.error =
-                    "Enter a link"
-
-                etLink.requestFocus()
-
-                return@setOnClickListener
-            }
-
-            // ======================================
-            // ATTACHMENT URI
-            // ======================================
-
-            val attachmentUri =
-                selectedImageUri
-                    ?.toString()
-                    ?: ""
-
-            // ======================================
-            // RETURN DATA
-            // ======================================
-
-            val resultIntent =
-                Intent()
-
-            resultIntent.putExtra(
-                "evidence_title",
-                title
-            )
-
-            resultIntent.putExtra(
-                "evidence_skill",
-                skill
-            )
-
-            resultIntent.putExtra(
-                "evidence_type",
-                type
-            )
-
-            resultIntent.putExtra(
-                "evidence_link",
-                link
-            )
-
-            resultIntent.putExtra(
-                "evidence_status",
-                "Pending"
-            )
-
-            resultIntent.putExtra(
-                "evidence_attachment_uri",
-                attachmentUri
-            )
-
-            setResult(
-                RESULT_OK,
-                resultIntent
-            )
-
-            finish()
+            saveEvidence()
         }
     }
 
-    // ==========================================
-    // CREATE CAMERA IMAGE URI
-    // ==========================================
+    // ------------------------------------------------
+    // Save Evidence
+    // ------------------------------------------------
 
-    private fun createCameraImageUri() {
+    private fun saveEvidence() {
 
-        val imageDirectory =
-            getExternalFilesDir(
-                Environment.DIRECTORY_PICTURES
-            )
+        val title =
+            etEvidenceTitle.text
+                .toString()
+                .trim()
 
-        if (imageDirectory == null) {
+        val skill =
+            etEvidenceSkill.text
+                .toString()
+                .trim()
 
-            Toast.makeText(
-                this,
-                "Unable to access picture directory",
-                Toast.LENGTH_SHORT
-            ).show()
+        val type =
+            etEvidenceType.text
+                .toString()
+                .trim()
+
+        val link =
+            etEvidenceLink.text
+                .toString()
+                .trim()
+
+        // ------------------------------------------------
+        // Title Validation
+        // ------------------------------------------------
+
+        if (title.isEmpty()) {
+
+            etEvidenceTitle.error =
+                "Enter an evidence title"
+
+            etEvidenceTitle.requestFocus()
 
             return
         }
 
-        // Make sure directory exists
-        if (!imageDirectory.exists()) {
-            imageDirectory.mkdirs()
+        // ------------------------------------------------
+        // Skill Validation
+        // ------------------------------------------------
+
+        if (skill.isEmpty()) {
+
+            etEvidenceSkill.error =
+                "Enter the related skill"
+
+            etEvidenceSkill.requestFocus()
+
+            return
         }
 
-        val imageFile =
-            File.createTempFile(
-                "skillproof_",
-                ".jpg",
-                imageDirectory
+        // ------------------------------------------------
+        // Type Validation
+        // ------------------------------------------------
+
+        if (type.isEmpty()) {
+
+            etEvidenceType.error =
+                "Enter the evidence type"
+
+            etEvidenceType.requestFocus()
+
+            return
+        }
+
+        // ------------------------------------------------
+        // Link Validation
+        // ------------------------------------------------
+
+        if (link.isEmpty()) {
+
+            etEvidenceLink.error =
+                "Enter a project, certificate or evidence link"
+
+            etEvidenceLink.requestFocus()
+
+            return
+        }
+
+        // ------------------------------------------------
+        // Basic URL Validation
+        // ------------------------------------------------
+
+        val formattedLink =
+            if (
+                link.startsWith("http://") ||
+                link.startsWith("https://")
+            ) {
+                link
+            } else {
+                "https://$link"
+            }
+
+        // ------------------------------------------------
+        // Create Evidence
+        // ------------------------------------------------
+
+        val evidence =
+            Evidence(
+                title = title,
+                skill = skill,
+                type = type,
+                link = formattedLink,
+                status = "Not verified",
+                attachmentUri =
+                    selectedAttachmentUri?.toString()
+                        ?: ""
             )
 
-        cameraImageUri =
-            FileProvider.getUriForFile(
-                this,
-                "${packageName}.fileprovider",
-                imageFile
-            )
+        // ------------------------------------------------
+        // Save To Database
+        // ------------------------------------------------
 
-        cameraLauncher.launch(
-            cameraImageUri!!
-        )
+        databaseHelper.insertEvidence(evidence)
+
+        // ------------------------------------------------
+        // Success
+        // ------------------------------------------------
+
+        Toast.makeText(
+            this,
+            "Evidence added successfully!",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        // ------------------------------------------------
+        // Return To Evidence
+        // ------------------------------------------------
+
+        finish()
+    }
+
+    // ------------------------------------------------
+    // Display Selected File
+    // ------------------------------------------------
+
+    private fun displaySelectedFile(uri: Uri) {
+
+        val fileName =
+            getFileName(uri)
+
+        tvSelectedFile.text =
+            fileName
+
+        tvSelectedFile.visibility =
+            View.VISIBLE
+
+        tvAttachmentHint.text =
+            "Attachment selected"
+
+        // ------------------------------------------------
+        // Show Image Preview If Possible
+        // ------------------------------------------------
+
+        val mimeType =
+            contentResolver.getType(uri)
+
+        if (
+            mimeType != null &&
+            mimeType.startsWith("image/")
+        ) {
+
+            try {
+
+                ivAttachmentPreview.setImageURI(uri)
+
+                ivAttachmentPreview.visibility =
+                    View.VISIBLE
+
+            } catch (e: Exception) {
+
+                ivAttachmentPreview.visibility =
+                    View.GONE
+            }
+
+        } else {
+
+            ivAttachmentPreview.visibility =
+                View.GONE
+        }
+    }
+
+    // ------------------------------------------------
+    // Get File Name
+    // ------------------------------------------------
+
+    private fun getFileName(uri: Uri): String {
+
+        var result: String? = null
+
+        if (uri.scheme == "content") {
+
+            val cursor =
+                contentResolver.query(
+                    uri,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+
+            cursor?.use {
+
+                if (it.moveToFirst()) {
+
+                    val nameIndex =
+                        it.getColumnIndex(
+                            OpenableColumns.DISPLAY_NAME
+                        )
+
+                    if (nameIndex >= 0) {
+
+                        result =
+                            it.getString(nameIndex)
+                    }
+                }
+            }
+        }
+
+        if (result == null) {
+
+            result =
+                uri.path
+                    ?.substringAfterLast('/')
+        }
+
+        return result ?: "Selected file"
     }
 }

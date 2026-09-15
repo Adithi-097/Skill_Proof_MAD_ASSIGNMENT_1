@@ -2,9 +2,9 @@ package com.example.skill_proof_mad_assignment_1
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,151 +12,64 @@ import com.google.android.material.button.MaterialButton
 
 class SkillsActivity : AppCompatActivity() {
 
-    private lateinit var skillAdapter: SkillAdapter
-    private lateinit var skills: MutableList<Skill>
-    private lateinit var tvSkillCount: TextView
-
     private lateinit var databaseHelper: DatabaseHelper
+    private lateinit var skillAdapter: SkillAdapter
 
-    private val addSkillLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
+    private val skillList = mutableListOf<Skill>()
 
-            if (result.resultCode == RESULT_OK) {
-
-                val data = result.data
-                    ?: return@registerForActivityResult
-
-                val skillName =
-                    data.getStringExtra("skill_name")
-                        ?: return@registerForActivityResult
-
-                val level =
-                    data.getStringExtra("skill_level")
-                        ?: return@registerForActivityResult
-
-                val progress =
-                    data.getIntExtra(
-                        "skill_progress",
-                        40
-                    )
-
-                val proofStatus =
-                    data.getStringExtra("proof_status")
-                        ?: "Not verified"
-
-                /*
-                 * Save the new skill into SQLite.
-                 */
-                databaseHelper.insertSkill(
-                    skillName,
-                    level,
-                    progress,
-                    proofStatus
-                )
-
-                /*
-                 * Add the same skill to the RecyclerView.
-                 */
-                val newSkill = Skill(
-                    skillName,
-                    level,
-                    progress,
-                    proofStatus
-                )
-
-                skillAdapter.addSkill(newSkill)
-
-                updateSkillCount()
-            }
-        }
+    private lateinit var recyclerSkills: RecyclerView
+    private lateinit var tvEmptySkills: TextView
+    private lateinit var tvSkillCount: TextView
+    private lateinit var btnAddSkill: MaterialButton
+    private lateinit var btnBack: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_skills)
 
-        /*
-         * Initialize SQLite database helper.
-         */
+        // -----------------------------------------
+        // Database
+        // -----------------------------------------
+
         databaseHelper = DatabaseHelper(this)
 
-        val btnBack =
-            findViewById<ImageButton>(R.id.btnBack)
+        // -----------------------------------------
+        // Find Views
+        // -----------------------------------------
 
-        val btnAddSkill =
-            findViewById<MaterialButton>(R.id.btnAddSkill)
+        btnBack = findViewById(R.id.btnBack)
+        btnAddSkill = findViewById(R.id.btnAddSkill)
 
-        tvSkillCount =
-            findViewById(R.id.tvSkillCount)
+        recyclerSkills = findViewById(R.id.recyclerSkills)
+        tvEmptySkills = findViewById(R.id.tvEmptySkills)
+        tvSkillCount = findViewById(R.id.tvSkillCount)
 
-        val recyclerSkills =
-            findViewById<RecyclerView>(R.id.recyclerSkills)
+        // -----------------------------------------
+        // Back Button
+        // -----------------------------------------
 
-        /*
-         * Load skills from SQLite.
-         */
-        skills =
-            databaseHelper.getAllSkills()
-
-        /*
-         * If database is empty, add demo data once.
-         */
-        if (skills.isEmpty()) {
-
-            databaseHelper.insertSkill(
-                "Java",
-                "Intermediate",
-                70,
-                "Not verified"
-            )
-
-            databaseHelper.insertSkill(
-                "Kotlin",
-                "Beginner",
-                45,
-                "Not verified"
-            )
-
-            databaseHelper.insertSkill(
-                "Python",
-                "Advanced",
-                88,
-                "Verified"
-            )
-
-            /*
-             * Load the newly inserted data.
-             */
-            skills =
-                databaseHelper.getAllSkills()
+        btnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
 
-        /*
-         * RecyclerView setup.
-         */
-        skillAdapter =
-            SkillAdapter(skills)
+        // -----------------------------------------
+        // RecyclerView
+        // -----------------------------------------
+
+        skillAdapter = SkillAdapter(skillList)
 
         recyclerSkills.layoutManager =
             LinearLayoutManager(this)
 
-        recyclerSkills.adapter =
-            skillAdapter
+        recyclerSkills.adapter = skillAdapter
 
-        updateSkillCount()
+        recyclerSkills.setHasFixedSize(true)
 
-        /*
-         * Back button.
-         */
-        btnBack.setOnClickListener {
-            finish()
-        }
+        // -----------------------------------------
+        // Add Skill
+        // -----------------------------------------
 
-        /*
-         * Add Skill button.
-         */
         btnAddSkill.setOnClickListener {
 
             val intent =
@@ -165,13 +78,119 @@ class SkillsActivity : AppCompatActivity() {
                     AddSkillActivity::class.java
                 )
 
-            addSkillLauncher.launch(intent)
+            startActivity(intent)
         }
+
+        // -----------------------------------------
+        // Load Skills
+        // -----------------------------------------
+
+        loadSkills()
     }
 
-    private fun updateSkillCount() {
+    // ---------------------------------------------
+    // Reload whenever screen becomes visible again
+    // ---------------------------------------------
+
+    override fun onResume() {
+        super.onResume()
+
+        loadSkills()
+    }
+
+    // ---------------------------------------------
+    // Load Skills From Database
+    // ---------------------------------------------
+
+    private fun loadSkills() {
+
+        skillList.clear()
+
+        val databaseSkills =
+            databaseHelper.getAllSkills()
+
+        // -----------------------------------------
+        // Add demo skills only if database is empty
+        // -----------------------------------------
+
+        if (databaseSkills.isEmpty()) {
+
+            databaseHelper.insertSkill(
+                Skill(
+                    name = "Java",
+                    level = "Intermediate",
+                    progress = 70,
+                    proofStatus = "Not verified"
+                )
+            )
+
+            databaseHelper.insertSkill(
+                Skill(
+                    name = "Kotlin",
+                    level = "Beginner",
+                    progress = 45,
+                    proofStatus = "Not verified"
+                )
+            )
+
+            databaseHelper.insertSkill(
+                Skill(
+                    name = "Python",
+                    level = "Advanced",
+                    progress = 88,
+                    proofStatus = "Verified"
+                )
+            )
+
+            // Load again after inserting demo data
+            skillList.addAll(
+                databaseHelper.getAllSkills()
+            )
+
+        } else {
+
+            skillList.addAll(databaseSkills)
+        }
+
+        // -----------------------------------------
+        // Update UI
+        // -----------------------------------------
+
+        updateSkillUI()
+    }
+
+    // ---------------------------------------------
+    // Update Skill Screen UI
+    // ---------------------------------------------
+
+    private fun updateSkillUI() {
+
+        val count = skillList.size
 
         tvSkillCount.text =
-            skills.size.toString()
+            if (count == 1) {
+                "1 skill added"
+            } else {
+                "$count skills added"
+            }
+
+        if (skillList.isEmpty()) {
+
+            recyclerSkills.visibility =
+                View.GONE
+
+            tvEmptySkills.visibility =
+                View.VISIBLE
+
+        } else {
+
+            recyclerSkills.visibility =
+                View.VISIBLE
+
+            tvEmptySkills.visibility =
+                View.GONE
+        }
+
+        skillAdapter.notifyDataSetChanged()
     }
 }

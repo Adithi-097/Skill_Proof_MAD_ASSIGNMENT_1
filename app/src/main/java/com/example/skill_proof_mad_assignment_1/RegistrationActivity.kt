@@ -11,119 +11,254 @@ import com.google.android.material.textfield.TextInputEditText
 
 class RegistrationActivity : AppCompatActivity() {
 
+    private lateinit var etName: TextInputEditText
+    private lateinit var etEmail: TextInputEditText
+    private lateinit var etPassword: TextInputEditText
+    private lateinit var etConfirmPassword: TextInputEditText
+
+    private lateinit var btnRegister: MaterialButton
+    private lateinit var btnBack: ImageButton
+    private lateinit var tvLogin: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_registration)
+        setContentView(
+            R.layout.activity_register
+        )
 
-        val etName =
-            findViewById<TextInputEditText>(R.id.etName)
+        // =========================================
+        // FIND VIEWS
+        // =========================================
 
-        val etEmail =
-            findViewById<TextInputEditText>(R.id.etEmail)
+        etName =
+            findViewById(
+                R.id.etName
+            )
 
-        val etPassword =
-            findViewById<TextInputEditText>(R.id.etPassword)
+        etEmail =
+            findViewById(
+                R.id.etEmail
+            )
 
-        val etConfirmPassword =
-            findViewById<TextInputEditText>(R.id.etConfirmPassword)
+        etPassword =
+            findViewById(
+                R.id.etPassword
+            )
 
-        val btnRegister =
-            findViewById<MaterialButton>(R.id.btnRegister)
+        etConfirmPassword =
+            findViewById(
+                R.id.etConfirmPassword
+            )
 
-        val btnBack =
-            findViewById<ImageButton>(R.id.btnBack)
+        btnRegister =
+            findViewById(
+                R.id.btnRegister
+            )
 
-        val tvLogin =
-            findViewById<TextView>(R.id.tvLogin)
+        btnBack =
+            findViewById(
+                R.id.btnBack
+            )
+
+        tvLogin =
+            findViewById(
+                R.id.tvLogin
+            )
+
+        // =========================================
+        // BACK
+        // =========================================
+
+        btnBack.setOnClickListener {
+
+            onBackPressedDispatcher
+                .onBackPressed()
+        }
+
+        // =========================================
+        // REGISTER
+        // =========================================
 
         btnRegister.setOnClickListener {
 
-            val name = etName.text.toString().trim()
-            val email = etEmail.text.toString().trim()
-            val password = etPassword.text.toString()
-            val confirmPassword = etConfirmPassword.text.toString()
+            registerUser()
+        }
 
-            if (name.isEmpty()) {
-                etName.error = "Enter your name"
-                etName.requestFocus()
-                return@setOnClickListener
-            }
+        // =========================================
+        // LOGIN LINK
+        // =========================================
 
-            if (email.isEmpty()) {
-                etEmail.error = "Enter your email"
-                etEmail.requestFocus()
-                return@setOnClickListener
-            }
+        tvLogin.setOnClickListener {
 
-            if (!android.util.Patterns.EMAIL_ADDRESS
-                    .matcher(email)
-                    .matches()
-            ) {
-                etEmail.error = "Enter a valid email address"
-                etEmail.requestFocus()
-                return@setOnClickListener
-            }
+            onBackPressedDispatcher
+                .onBackPressed()
+        }
+    }
 
-            if (password.isEmpty()) {
-                etPassword.error = "Enter a password"
-                etPassword.requestFocus()
-                return@setOnClickListener
-            }
+    // =============================================
+    // REGISTER USER
+    // =============================================
 
-            if (password.length < 6) {
-                etPassword.error =
-                    "Password must contain at least 6 characters"
-                etPassword.requestFocus()
-                return@setOnClickListener
-            }
+    private fun registerUser() {
 
-            if (confirmPassword.isEmpty()) {
-                etConfirmPassword.error =
-                    "Confirm your password"
-                etConfirmPassword.requestFocus()
-                return@setOnClickListener
-            }
+        val name =
+            etName.text
+                .toString()
+                .trim()
 
-            if (password != confirmPassword) {
-                etConfirmPassword.error =
-                    "Passwords do not match"
-                etConfirmPassword.requestFocus()
-                return@setOnClickListener
-            }
+        val email =
+            etEmail.text
+                .toString()
+                .trim()
 
-            Toast.makeText(
-                this,
-                "Account created successfully!",
-                Toast.LENGTH_SHORT
-            ).show()
+        val password =
+            etPassword.text
+                .toString()
 
-            val sharedPreferences =
-                getSharedPreferences(
-                    "SkillProofPrefs",
-                    MODE_PRIVATE
-                )
+        val confirmPassword =
+            etConfirmPassword.text
+                .toString()
 
-            sharedPreferences.edit()
-                .putString("user_name", name)
-                .putString("user_email", email)
-                .apply()
+        // =========================================
+        // NAME VALIDATION
+        // =========================================
 
-            val intent = Intent(
+        if (name.isEmpty()) {
+
+            etName.error =
+                "Enter your name"
+
+            etName.requestFocus()
+
+            return
+        }
+
+        // =========================================
+        // EMAIL VALIDATION
+        // =========================================
+
+        if (email.isEmpty()) {
+
+            etEmail.error =
+                "Enter your email"
+
+            etEmail.requestFocus()
+
+            return
+        }
+
+        if (
+            !android.util.Patterns
+                .EMAIL_ADDRESS
+                .matcher(email)
+                .matches()
+        ) {
+
+            etEmail.error =
+                "Enter a valid email address"
+
+            etEmail.requestFocus()
+
+            return
+        }
+
+        // =========================================
+        // PASSWORD VALIDATION
+        // =========================================
+
+        if (password.isEmpty()) {
+
+            etPassword.error =
+                "Enter a password"
+
+            etPassword.requestFocus()
+
+            return
+        }
+
+        if (password.length < 6) {
+
+            etPassword.error =
+                "Password must contain at least 6 characters"
+
+            etPassword.requestFocus()
+
+            return
+        }
+
+        // =========================================
+        // CONFIRM PASSWORD
+        // =========================================
+
+        if (confirmPassword.isEmpty()) {
+
+            etConfirmPassword.error =
+                "Confirm your password"
+
+            etConfirmPassword.requestFocus()
+
+            return
+        }
+
+        if (password != confirmPassword) {
+
+            etConfirmPassword.error =
+                "Passwords do not match"
+
+            etConfirmPassword.requestFocus()
+
+            return
+        }
+
+        // =========================================
+        // SAVE ACCOUNT
+        // =========================================
+
+        val sharedPreferences =
+            getSharedPreferences(
+                "SkillProofPrefs",
+                MODE_PRIVATE
+            )
+
+        sharedPreferences
+            .edit()
+            .putString(
+                "user_name",
+                name
+            )
+            .putString(
+                "user_email",
+                email
+            )
+            .putString(
+                "user_password",
+                password
+            )
+            .putBoolean(
+                "is_logged_in",
+                false
+            )
+            .apply()
+
+        // =========================================
+        // SUCCESS
+        // =========================================
+
+        Toast.makeText(
+            this,
+            "Account created successfully!",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        val intent =
+            Intent(
                 this,
                 LoginActivity::class.java
             )
 
-            startActivity(intent)
-            finish()
-        }
+        startActivity(intent)
 
-        btnBack.setOnClickListener {
-            finish()
-        }
-
-        tvLogin.setOnClickListener {
-            finish()
-        }
+        finish()
     }
 }
