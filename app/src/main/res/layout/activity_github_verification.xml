@@ -10,9 +10,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="24dp">
+        android:paddingBottom="32dp">
 
-        <!-- Back Button -->
+        <!-- ================================================= -->
+        <!-- BACK BUTTON -->
+        <!-- ================================================= -->
 
         <ImageButton
             android:id="@+id/btnBack"
@@ -26,7 +28,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Page Title -->
+        <!-- ================================================= -->
+        <!-- PAGE TITLE -->
+        <!-- ================================================= -->
 
         <TextView
             android:id="@+id/tvPageTitle"
@@ -42,7 +46,9 @@
             app:layout_constraintStart_toEndOf="@id/btnBack"
             app:layout_constraintTop_toTopOf="@id/btnBack" />
 
-        <!-- Description -->
+        <!-- ================================================= -->
+        <!-- DESCRIPTION -->
+        <!-- ================================================= -->
 
         <TextView
             android:id="@+id/tvDescription"
@@ -51,23 +57,26 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="20dp"
-            android:text="Verify your GitHub repository and use it as trusted skill evidence."
+            android:text="Verify your GitHub repository and use it as verified evidence for your skill."
             android:textSize="15sp"
+            android:lineSpacingExtra="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-        <!-- GitHub URL Input -->
+        <!-- ================================================= -->
+        <!-- GITHUB URL INPUT -->
+        <!-- ================================================= -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/githubUrlLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:hint="GitHub Repository URL"
+            app:boxBackgroundMode="outline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvDescription">
@@ -82,7 +91,9 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Verify Button -->
+        <!-- ================================================= -->
+        <!-- VERIFY BUTTON -->
+        <!-- ================================================= -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerify"
@@ -97,7 +108,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/githubUrlLayout" />
 
-        <!-- Result Card -->
+        <!-- ================================================= -->
+        <!-- RESULT CARD -->
+        <!-- ================================================= -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/resultCard"
@@ -125,7 +138,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="✓ Repository Verified"
-                    android:textSize="20sp"
+                    android:textSize="19sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +150,7 @@
                     android:id="@+id/tvRepository"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="18dp"
                     android:text="Repository: -"
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -150,7 +163,7 @@
                     android:id="@+id/tvOwner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:text="Owner: -"
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -163,7 +176,7 @@
                     android:id="@+id/tvLanguage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:text="Language: -"
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -176,7 +189,7 @@
                     android:id="@+id/tvStars"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:text="Stars: -"
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -189,23 +202,23 @@
                     android:id="@+id/tvForks"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:text="Forks: -"
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvStars" />
 
-                <!-- Description -->
+                <!-- Repository Description -->
 
                 <TextView
                     android:id="@+id/tvRepositoryDescription"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     android:text="Description: -"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:lineSpacingExtra="3dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvForks" />
@@ -213,6 +226,24 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <!-- ================================================= -->
+        <!-- USE AS VERIFIED EVIDENCE -->
+        <!-- ================================================= -->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUseAsEvidence"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:text="Use as Verified Evidence"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/resultCard" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
