@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="1dp"
+    app:strokeColor="#E4E8F0"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp">
+
+        <!-- ================================= -->
+        <!-- SKILL NAME -->
+        <!-- ================================= -->
+
+        <TextView
+            android:id="@+id/tvSkill"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Python"
+            android:textColor="#172033"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvPercentage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- ================================= -->
+        <!-- PERCENTAGE -->
+        <!-- ================================= -->
+
+        <TextView
+            android:id="@+id/tvPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80%"
+            android:textColor="#172033"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- ================================= -->
+        <!-- SCORE -->
+        <!-- ================================= -->
+
+        <TextView
+            android:id="@+id/tvScore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="4 / 5 Correct"
+            android:textColor="#737D8F"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@id/tvPercentage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSkill" />
+
+        <!-- ================================= -->
+        <!-- PERFORMANCE -->
+        <!-- ================================= -->
+
+        <TextView
+            android:id="@+id/tvPerformance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Very Good"
+            android:textColor="#6750A4"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvScore" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

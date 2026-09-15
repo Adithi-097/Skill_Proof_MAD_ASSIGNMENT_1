@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="?android:attr/colorBackground"
+    tools:context=".AssessmentResultActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <!-- Back Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBack"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← Back"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Assessment Result"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/btnBack"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Result Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardResult"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="1dp"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp">
+
+                <!-- Completed -->
+                <TextView
+                    android:id="@+id/tvCompleted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✓ Assessment Completed"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Skill Label -->
+                <TextView
+                    android:id="@+id/tvSkillName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Python"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintTop_toBottomOf="@id/tvCompleted"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Percentage -->
+                <TextView
+                    android:id="@+id/tvPercentage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="80%"
+                    android:textSize="52sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintTop_toBottomOf="@id/tvSkillName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Score -->
+                <TextView
+                    android:id="@+id/tvScore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="4 / 5 Correct"
+                    android:textSize="17sp"
+                    android:gravity="center"
+                    android:textColor="?android:attr/textColorSecondary"
+                    app:layout_constraintTop_toBottomOf="@id/tvPercentage"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Performance Label -->
+                <TextView
+                    android:id="@+id/tvPerformanceLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:text="Performance"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorSecondary"
+                    app:layout_constraintTop_toBottomOf="@id/tvScore"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Performance -->
+                <TextView
+                    android:id="@+id/tvPerformance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Very Good"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintTop_toBottomOf="@id/tvPerformanceLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Message -->
+                <TextView
+                    android:id="@+id/tvMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Great work! Keep practicing to improve your skills."
+                    android:textSize="15sp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="?android:attr/textColorSecondary"
+                    app:layout_constraintTop_toBottomOf="@id/tvPerformance"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Retake Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRetake"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Retake Assessment"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@id/cardResult"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Done Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Done"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@id/btnRetake"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
