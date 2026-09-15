@@ -832,6 +832,26 @@ class DatabaseHelper(context: Context) :
             }
         }
 
+        fun hasCompletedAssessment(): Boolean {
+
+            val db = readableDatabase
+
+            val cursor = db.rawQuery(
+                "SELECT COUNT(*) FROM assessments",
+                null
+            )
+
+            var completed = false
+
+            if (cursor.moveToFirst()) {
+                completed = cursor.getInt(0) > 0
+            }
+
+            cursor.close()
+
+            return completed
+        }
+
         return 0
     }
 }

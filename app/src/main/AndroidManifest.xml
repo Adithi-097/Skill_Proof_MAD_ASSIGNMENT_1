@@ -77,6 +77,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
 
+            <activity
+                android:name=".BadgesActivity"
+                android:exported="false" />
+
+
         </provider>
 
     </application>

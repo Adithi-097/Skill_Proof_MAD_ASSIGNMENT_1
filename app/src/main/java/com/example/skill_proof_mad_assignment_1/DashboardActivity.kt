@@ -2,6 +2,8 @@ package com.example.skill_proof_mad_assignment_1
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -9,10 +11,13 @@ class DashboardActivity : AppCompatActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
-    private lateinit var tvSkillCount: TextView
-    private lateinit var tvEvidenceCount: TextView
     private lateinit var tvProofScore: TextView
-    private lateinit var tvCareerScore: TextView
+    private lateinit var tvSkillsDescription: TextView
+    private lateinit var tvEvidenceDescription: TextView
+    private lateinit var tvCareerDescription: TextView
+    private lateinit var tvProofMessage: TextView
+    private lateinit var tvProofHint: TextView
+    private lateinit var proofProgress: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,17 +30,26 @@ class DashboardActivity : AppCompatActivity() {
         // FIND VIEWS
         // ==========================================
 
-        tvSkillCount =
-            findViewById(R.id.tvSkillCount)
-
-        tvEvidenceCount =
-            findViewById(R.id.tvEvidenceCount)
-
         tvProofScore =
             findViewById(R.id.tvProofScore)
 
-        tvCareerScore =
-            findViewById(R.id.tvCareerScore)
+        tvSkillsDescription =
+            findViewById(R.id.tvSkillsDescription)
+
+        tvEvidenceDescription =
+            findViewById(R.id.tvEvidenceDescription)
+
+        tvCareerDescription =
+            findViewById(R.id.tvCareerDescription)
+
+        tvProofMessage =
+            findViewById(R.id.tvProofMessage)
+
+        tvProofHint =
+            findViewById(R.id.tvProofHint)
+
+        proofProgress =
+            findViewById(R.id.proofProgress)
 
         val tvViewSkills =
             findViewById<TextView>(R.id.tvViewSkills)
@@ -49,16 +63,17 @@ class DashboardActivity : AppCompatActivity() {
         val tvViewCareer =
             findViewById<TextView>(R.id.tvViewCareer)
 
+        // IMPORTANT:
+        // tvProfile is a MaterialCardView in XML,
+        // so use View instead of TextView.
         val tvProfile =
-            findViewById<TextView>(R.id.tvProfile)
+            findViewById<View>(R.id.tvProfile)
 
         val proofScoreCard =
-            findViewById<android.view.View>(
-                R.id.proofScoreCard
-            )
+            findViewById<View>(R.id.proofScoreCard)
 
         // ==========================================
-        // NAVIGATION
+        // PROOF SCORE CARD
         // ==========================================
 
         proofScoreCard.setOnClickListener {
@@ -71,6 +86,10 @@ class DashboardActivity : AppCompatActivity() {
             )
         }
 
+        // ==========================================
+        // SKILLS
+        // ==========================================
+
         tvViewSkills.setOnClickListener {
 
             startActivity(
@@ -80,6 +99,10 @@ class DashboardActivity : AppCompatActivity() {
                 )
             )
         }
+
+        // ==========================================
+        // EVIDENCE
+        // ==========================================
 
         tvViewEvidence.setOnClickListener {
 
@@ -91,6 +114,10 @@ class DashboardActivity : AppCompatActivity() {
             )
         }
 
+        // ==========================================
+        // ASSESSMENT
+        // ==========================================
+
         tvViewAssessment.setOnClickListener {
 
             startActivity(
@@ -101,6 +128,10 @@ class DashboardActivity : AppCompatActivity() {
             )
         }
 
+        // ==========================================
+        // CAREER
+        // ==========================================
+
         tvViewCareer.setOnClickListener {
 
             startActivity(
@@ -110,6 +141,10 @@ class DashboardActivity : AppCompatActivity() {
                 )
             )
         }
+
+        // ==========================================
+        // PROFILE
+        // ==========================================
 
         tvProfile.setOnClickListener {
 
@@ -141,73 +176,121 @@ class DashboardActivity : AppCompatActivity() {
             databaseHelper.getAllEvidence()
 
         // ==========================================
-        // SKILL COUNT
+        // SKILLS COUNT
         // ==========================================
 
-        tvSkillCount.text =
-            skills.size.toString()
+        tvSkillsDescription.text =
+            "${skills.size} skill(s) added"
 
         // ==========================================
         // EVIDENCE COUNT
         // ==========================================
 
-        tvEvidenceCount.text =
-            evidence.size.toString()
+        tvEvidenceDescription.text =
+            "${evidence.size} evidence item(s) added"
 
         // ==========================================
-        // PROOF SCORE
+        // NO SKILLS
         // ==========================================
 
         if (skills.isEmpty()) {
 
             tvProofScore.text =
-                "0"
+                "0/100"
 
-            tvCareerScore.text =
-                "0"
+            tvCareerDescription.text =
+                "Add a skill to begin"
+
+            tvProofMessage.text =
+                "Start building your proof!"
+
+            tvProofHint.text =
+                "Add your first skill to get started →"
+
+            proofProgress.progress = 0
 
             return
         }
 
-        val selectedSkill =
+        // ==========================================
+        // CURRENT SKILL
+        // ==========================================
+
+        val skill =
             skills.first()
 
+        val skillName =
+            skill.name
+
         val skillLevel =
-            selectedSkill.progress
+            skill.progress
+
+        // ==========================================
+        // ASSESSMENT
+        // ==========================================
 
         val assessmentScore =
             databaseHelper.getAssessmentPercentageForSkill(
-                selectedSkill.name
+                skillName
             )
+
+        // ==========================================
+        // EVIDENCE
+        // ==========================================
 
         val evidenceCount =
             databaseHelper.getEvidenceCountForSkill(
-                selectedSkill.name
+                skillName
             )
 
         val verifiedEvidenceCount =
             databaseHelper.getVerifiedEvidenceCountForSkill(
-                selectedSkill.name
+                skillName
             )
+
+        // ==========================================
+        // EVIDENCE SCORE
+        // ==========================================
 
         val evidenceScore =
             when {
 
-                evidenceCount >= 5 -> 100
-                evidenceCount == 4 -> 90
-                evidenceCount == 3 -> 80
-                evidenceCount == 2 -> 65
-                evidenceCount == 1 -> 45
-                else -> 0
+                evidenceCount >= 5 ->
+                    100
+
+                evidenceCount == 4 ->
+                    90
+
+                evidenceCount == 3 ->
+                    80
+
+                evidenceCount == 2 ->
+                    65
+
+                evidenceCount == 1 ->
+                    45
+
+                else ->
+                    0
             }
+
+        // ==========================================
+        // VERIFICATION SCORE
+        // ==========================================
 
         val verificationScore =
             if (evidenceCount == 0) {
+
                 0
+
             } else {
-                (verifiedEvidenceCount * 100) /
-                        evidenceCount
+
+                (verifiedEvidenceCount * 100) / evidenceCount
             }
+
+        // ==========================================
+        // PROOF SCORE
+        // ==========================================
 
         val proofScore =
             (
@@ -216,9 +299,6 @@ class DashboardActivity : AppCompatActivity() {
                             evidenceScore * 0.25 +
                             verificationScore * 0.15
                     ).toInt()
-
-        tvProofScore.text =
-            proofScore.toString()
 
         // ==========================================
         // CAREER READINESS
@@ -230,7 +310,61 @@ class DashboardActivity : AppCompatActivity() {
                             assessmentScore * 0.40
                     ).toInt()
 
-        tvCareerScore.text =
-            careerReadiness.toString()
+        // ==========================================
+        // DISPLAY PROOF SCORE
+        // ==========================================
+
+        tvProofScore.text =
+            "$proofScore/100"
+
+        proofProgress.progress =
+            proofScore
+
+        // ==========================================
+        // PROOF MESSAGE
+        // ==========================================
+
+        tvProofMessage.text =
+            when {
+
+                proofScore >= 85 ->
+                    "Excellent proof! You're highly prepared."
+
+                proofScore >= 70 ->
+                    "You're building strong proof!"
+
+                proofScore >= 50 ->
+                    "Keep improving your proof."
+
+                else ->
+                    "Start building stronger evidence."
+            }
+
+        // ==========================================
+        // PROOF HINT
+        // ==========================================
+
+        tvProofHint.text =
+            when {
+
+                evidenceCount == 0 ->
+                    "Add evidence to increase your score →"
+
+                verifiedEvidenceCount < evidenceCount ->
+                    "Verify your evidence to increase trust →"
+
+                assessmentScore < 70 ->
+                    "Improve your assessment score →"
+
+                else ->
+                    "Keep building your proof →"
+            }
+
+        // ==========================================
+        // CAREER READINESS
+        // ==========================================
+
+        tvCareerDescription.text =
+            "Career readiness: $careerReadiness/100"
     }
 }
