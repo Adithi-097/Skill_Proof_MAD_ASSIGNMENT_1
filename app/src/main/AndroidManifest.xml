@@ -14,7 +14,7 @@
 
         <!-- Main Activity -->
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,10 +22,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Splash -->
-        <activity
-            android:name=".SplashActivity"
-            android:exported="false" />
 
         <!-- Authentication -->
         <activity
@@ -89,7 +85,6 @@
             android:name=".SkillGapActivity"
             android:exported="false" />
 
-        <!-- GitHub Verification -->
         <activity
             android:name=".GitHubVerificationActivity"
             android:exported="false" />
