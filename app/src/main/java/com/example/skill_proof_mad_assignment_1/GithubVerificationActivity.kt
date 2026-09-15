@@ -32,9 +32,9 @@ class GitHubVerificationActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_github_verification)
 
-        // --------------------------------------------------
-        // Find Views
-        // --------------------------------------------------
+        // -----------------------------
+        // Initialize views
+        // -----------------------------
 
         val btnBack =
             findViewById<ImageButton>(R.id.btnBack)
@@ -69,22 +69,22 @@ class GitHubVerificationActivity : AppCompatActivity() {
         tvRepositoryDescription =
             findViewById(R.id.tvRepositoryDescription)
 
-        // --------------------------------------------------
-        // Back
-        // --------------------------------------------------
+        // -----------------------------
+        // Back button
+        // -----------------------------
 
         btnBack.setOnClickListener {
             finish()
         }
 
-        // --------------------------------------------------
-        // Verify
-        // --------------------------------------------------
+        // -----------------------------
+        // Verify button
+        // -----------------------------
 
         btnVerify.setOnClickListener {
 
             val githubUrl =
-                etGithubUrl.text.toString().trim()
+                etGithubUrl.text?.toString()?.trim() ?: ""
 
             if (githubUrl.isEmpty()) {
 
@@ -116,9 +116,9 @@ class GitHubVerificationActivity : AppCompatActivity() {
         }
     }
 
-    // ======================================================
-    // EXTRACT OWNER + REPOSITORY
-    // ======================================================
+    // =====================================================
+    // EXTRACT OWNER AND REPOSITORY
+    // =====================================================
 
     private fun extractRepository(
         githubUrl: String
@@ -126,27 +126,15 @@ class GitHubVerificationActivity : AppCompatActivity() {
 
         var url = githubUrl.trim()
 
-        // Remove trailing slash
         url = url.removeSuffix("/")
 
-        // Remove .git if present
         url = url.removeSuffix(".git")
 
-        // --------------------------------------------------
-        // Supported formats:
-        //
-        // https://github.com/user/repository
-        // http://github.com/user/repository
-        // github.com/user/repository
-        // --------------------------------------------------
+        val regex = Regex(
+            """^(?:https?://)?(?:www\.)?github\.com/([^/\s]+)/([^/\s]+)$"""
+        )
 
-        val regex =
-            Regex(
-                """(?:https?://)?(?:www\.)?github\.com/([^/\s]+)/([^/\s]+)"""
-            )
-
-        val match =
-            regex.find(url)
+        val match = regex.matchEntire(url)
 
         if (match != null) {
 
@@ -162,27 +150,19 @@ class GitHubVerificationActivity : AppCompatActivity() {
         return null
     }
 
-    // ======================================================
-    // VERIFY REPOSITORY
-    // ======================================================
+    // =====================================================
+    // VERIFY GITHUB REPOSITORY
+    // =====================================================
 
     private fun verifyRepository(
         owner: String,
         repo: String
     ) {
 
-        // --------------------------------------------------
-        // Disable button while checking
-        // --------------------------------------------------
-
         btnVerify.isEnabled = false
         btnVerify.text = "Verifying..."
 
         resultCard.visibility = View.GONE
-
-        // --------------------------------------------------
-        // Run network request on background thread
-        // --------------------------------------------------
 
         thread {
 
@@ -218,17 +198,17 @@ class GitHubVerificationActivity : AppCompatActivity() {
                 val responseCode =
                     connection.responseCode
 
-                // ==================================================
+                // -----------------------------
                 // SUCCESS
-                // ==================================================
+                // -----------------------------
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
 
                     val response =
                         connection.inputStream
                             .bufferedReader()
-                            .use {
-                                it.readText()
+                            .use { reader ->
+                                reader.readText()
                             }
 
                     val json =
@@ -289,9 +269,9 @@ class GitHubVerificationActivity : AppCompatActivity() {
 
                 }
 
-                // ==================================================
-                // NOT FOUND
-                // ==================================================
+                // -----------------------------
+                // REPOSITORY NOT FOUND
+                // -----------------------------
 
                 else if (
                     responseCode ==
@@ -310,11 +290,14 @@ class GitHubVerificationActivity : AppCompatActivity() {
 
                 }
 
-                // ==================================================
+                // -----------------------------
                 // RATE LIMIT
-                // ==================================================
+                // -----------------------------
 
-                else if (responseCode == 403) {
+                else if (
+                    responseCode ==
+                    HttpURLConnection.HTTP_FORBIDDEN
+                ) {
 
                     runOnUiThread {
 
@@ -328,9 +311,9 @@ class GitHubVerificationActivity : AppCompatActivity() {
 
                 }
 
-                // ==================================================
+                // -----------------------------
                 // OTHER ERROR
-                // ==================================================
+                // -----------------------------
 
                 else {
 
@@ -350,7 +333,7 @@ class GitHubVerificationActivity : AppCompatActivity() {
                 runOnUiThread {
 
                     showVerificationFailed(
-                        "Network error. Please check your internet connection."
+                        "Network error. Check your internet connection."
                     )
 
                     btnVerify.isEnabled = true
@@ -370,9 +353,9 @@ class GitHubVerificationActivity : AppCompatActivity() {
         }
     }
 
-    // ======================================================
-    // SHOW VERIFIED RESULT
-    // ======================================================
+    // =====================================================
+    // DISPLAY VERIFIED REPOSITORY
+    // =====================================================
 
     private fun showVerifiedRepository(
         repositoryName: String,
@@ -408,9 +391,9 @@ class GitHubVerificationActivity : AppCompatActivity() {
             "Description: $description"
     }
 
-    // ======================================================
-    // SHOW FAILURE
-    // ======================================================
+    // =====================================================
+    // DISPLAY VERIFICATION FAILURE
+    // =====================================================
 
     private fun showVerificationFailed(
         message: String
