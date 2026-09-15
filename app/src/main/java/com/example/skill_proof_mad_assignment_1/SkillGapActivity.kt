@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 
-class SkillGapActivity : AppCompatActivity() {
+class SkillGapActivity : BaseActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
@@ -33,6 +32,8 @@ class SkillGapActivity : AppCompatActivity() {
 
     companion object {
         private const val TARGET_SCORE = 80
+        private const val PREFS_NAME = "SkillProofPrefs"
+        private const val CURRENT_SKILL_KEY = "current_skill"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,23 +117,32 @@ class SkillGapActivity : AppCompatActivity() {
             analyzeSkillGap()
         }
 
+        // -----------------------------------------
+        // Analyze
+        // -----------------------------------------
+
         analyzeSkillGap()
     }
 
     override fun onResume() {
+
         super.onResume()
 
         analyzeSkillGap()
     }
 
-    // ---------------------------------------------
-    // Analyze Skill Gap
-    // ---------------------------------------------
+    // =================================================
+    // ANALYZE CURRENT SKILL GAP
+    // =================================================
 
     private fun analyzeSkillGap() {
 
         val skills =
             databaseHelper.getAllSkills()
+
+        // -----------------------------------------
+        // No skills in database
+        // -----------------------------------------
 
         if (skills.isEmpty()) {
 
@@ -142,11 +152,55 @@ class SkillGapActivity : AppCompatActivity() {
         }
 
         // -----------------------------------------
-        // Current Skill
+        // Get Current Skill
+        // -----------------------------------------
+
+        val preferences =
+            getSharedPreferences(
+                PREFS_NAME,
+                MODE_PRIVATE
+            )
+
+        val currentSkillName =
+            preferences.getString(
+                CURRENT_SKILL_KEY,
+                null
+            )
+
+        // -----------------------------------------
+        // No Current Skill Selected
+        // -----------------------------------------
+
+        if (currentSkillName.isNullOrBlank()) {
+
+            showNoCurrentSkillState()
+
+            return
+        }
+
+        // -----------------------------------------
+        // Find Current Skill
         // -----------------------------------------
 
         val selectedSkill =
-            skills.first()
+            skills.firstOrNull {
+
+                it.name.equals(
+                    currentSkillName,
+                    ignoreCase = true
+                )
+            }
+
+        // -----------------------------------------
+        // Current Skill Not Found
+        // -----------------------------------------
+
+        if (selectedSkill == null) {
+
+            showNoCurrentSkillState()
+
+            return
+        }
 
         val skillName =
             selectedSkill.name
@@ -154,28 +208,34 @@ class SkillGapActivity : AppCompatActivity() {
         tvSkillName.text =
             skillName
 
-        // -----------------------------------------
-        // Skill Level
-        // -----------------------------------------
+        // =================================================
+        // SKILL LEVEL
+        // =================================================
 
         val skillLevelScore =
             selectedSkill.progress
-                .coerceIn(0, 100)
+                .coerceIn(
+                    0,
+                    100
+                )
 
-        // -----------------------------------------
-        // Assessment
-        // -----------------------------------------
+        // =================================================
+        // ASSESSMENT
+        // =================================================
 
         val assessmentScore =
             databaseHelper
                 .getAssessmentPercentageForSkill(
                     skillName
                 )
-                .coerceIn(0, 100)
+                .coerceIn(
+                    0,
+                    100
+                )
 
-        // -----------------------------------------
-        // Evidence
-        // -----------------------------------------
+        // =================================================
+        // EVIDENCE
+        // =================================================
 
         val evidenceCount =
             databaseHelper
@@ -188,9 +248,9 @@ class SkillGapActivity : AppCompatActivity() {
                 evidenceCount
             )
 
-        // -----------------------------------------
-        // Verification
-        // -----------------------------------------
+        // =================================================
+        // VERIFICATION
+        // =================================================
 
         val verifiedEvidenceCount =
             databaseHelper
@@ -206,12 +266,13 @@ class SkillGapActivity : AppCompatActivity() {
                         ) / evidenceCount
 
             } else {
+
                 0
             }
 
-        // -----------------------------------------
-        // Proof Score
-        // -----------------------------------------
+        // =================================================
+        // PROOF SCORE
+        // =================================================
 
         val proofScore =
             (
@@ -219,21 +280,25 @@ class SkillGapActivity : AppCompatActivity() {
                             assessmentScore * 0.30 +
                             evidenceScore * 0.25 +
                             verificationScore * 0.15
-                    ).toInt()
-                .coerceIn(0, 100)
+                    )
+                .toInt()
+                .coerceIn(
+                    0,
+                    100
+                )
 
-        // -----------------------------------------
-        // Gap
-        // -----------------------------------------
+        // =================================================
+        // GAP
+        // =================================================
 
         val gap =
             (
                     TARGET_SCORE - proofScore
                     ).coerceAtLeast(0)
 
-        // -----------------------------------------
-        // Update Score UI
-        // -----------------------------------------
+        // =================================================
+        // UPDATE SCORE UI
+        // =================================================
 
         tvCurrentScore.text =
             proofScore.toString()
@@ -268,32 +333,34 @@ class SkillGapActivity : AppCompatActivity() {
         progressVerification.progress =
             verificationScore
 
-        // -----------------------------------------
-        // Gap Message
-        // -----------------------------------------
+        // =================================================
+        // GAP MESSAGE
+        // =================================================
 
         tvGapMessage.text =
             getGapMessage(
                 proofScore,
-                gap
+                gap,
+                skillName
             )
 
-        // -----------------------------------------
-        // Action Plan
-        // -----------------------------------------
+        // =================================================
+        // ACTION PLAN
+        // =================================================
 
         tvActionPlan.text =
             buildActionPlan(
                 skillLevelScore,
                 assessmentScore,
                 evidenceScore,
-                verificationScore
+                verificationScore,
+                skillName
             )
     }
 
-    // ---------------------------------------------
-    // Evidence Score
-    // ---------------------------------------------
+    // =================================================
+    // EVIDENCE SCORE
+    // =================================================
 
     private fun calculateEvidenceScore(
         evidenceCount: Int
@@ -321,84 +388,106 @@ class SkillGapActivity : AppCompatActivity() {
         }
     }
 
-    // ---------------------------------------------
-    // Gap Message
-    // ---------------------------------------------
+    // =================================================
+    // GAP MESSAGE
+    // =================================================
 
     private fun getGapMessage(
         proofScore: Int,
-        gap: Int
+        gap: Int,
+        skillName: String
     ): String {
 
         return when {
 
             proofScore >= TARGET_SCORE ->
-                "Great job! Your current proof score has reached the target of $TARGET_SCORE."
+
+                "Excellent! Your $skillName proof score has reached the target of $TARGET_SCORE."
 
             gap <= 10 ->
-                "You're very close to the target. Focus on your weakest area to close the remaining gap."
+
+                "You're very close to the target. Focus on your weakest $skillName area to close the remaining gap."
 
             gap <= 25 ->
-                "You're making good progress. Strengthen your evidence and assessment performance."
+
+                "You're making good progress in $skillName. Strengthen your evidence and assessment performance."
 
             else ->
-                "There is a significant gap between your current proof and the target. Follow the action plan below step by step."
+
+                "There is a significant gap in your $skillName proof. Follow the action plan below step by step."
         }
     }
 
-    // ---------------------------------------------
-    // Build Action Plan
-    // ---------------------------------------------
+    // =================================================
+    // ACTION PLAN
+    // =================================================
 
     private fun buildActionPlan(
         skillLevel: Int,
         assessment: Int,
         evidence: Int,
-        verification: Int
+        verification: Int,
+        skillName: String
     ): String {
 
         val actions =
             mutableListOf<String>()
 
-        // Priority 1
+        // -----------------------------------------
+        // Skill Level
+        // -----------------------------------------
+
         if (skillLevel < 70) {
 
             actions.add(
-                "1. Improve practical skill level\n" +
-                        "   Practice coding and build a project related to this skill."
+                "1. Improve $skillName practical skills\n" +
+                        "   Practice coding and build a project related to $skillName."
             )
         }
 
-        // Priority 2
+        // -----------------------------------------
+        // Assessment
+        // -----------------------------------------
+
         if (assessment < 70) {
 
             actions.add(
-                "${actions.size + 1}. Improve assessment performance\n" +
+                "${actions.size + 1}. Improve $skillName assessment performance\n" +
                         "   Revise concepts and retake the assessment."
             )
         }
 
-        // Priority 3
+        // -----------------------------------------
+        // Evidence
+        // -----------------------------------------
+
         if (evidence < 70) {
 
             actions.add(
-                "${actions.size + 1}. Add stronger evidence\n" +
+                "${actions.size + 1}. Add stronger $skillName evidence\n" +
                         "   Submit projects, certificates or other relevant proof."
             )
         }
 
-        // Priority 4
+        // -----------------------------------------
+        // Verification
+        // -----------------------------------------
+
         if (verification < 70) {
 
             actions.add(
-                "${actions.size + 1}. Verify your evidence\n" +
+                "${actions.size + 1}. Verify your $skillName evidence\n" +
                         "   Use GitHub verification or other verification methods."
             )
         }
 
+        // -----------------------------------------
+        // Everything Good
+        // -----------------------------------------
+
         if (actions.isEmpty()) {
 
-            return "✓ Your skill is well supported.\n\n" +
+            return "✓ Your $skillName skill is well supported.\n\n" +
                     "Keep your assessments and evidence updated to maintain a strong Proof Score."
         }
 
@@ -407,9 +496,62 @@ class SkillGapActivity : AppCompatActivity() {
         )
     }
 
-    // ---------------------------------------------
-    // No Skill State
-    // ---------------------------------------------
+    // =================================================
+    // NO CURRENT SKILL
+    // =================================================
+
+    private fun showNoCurrentSkillState() {
+
+        tvSkillName.text =
+            "Select a skill"
+
+        tvCurrentScore.text =
+            "0"
+
+        tvTargetScore.text =
+            TARGET_SCORE.toString()
+
+        tvGapScore.text =
+            TARGET_SCORE.toString()
+
+        tvGapMessage.text =
+            "Go to Skills and select the skill you are currently focusing on."
+
+        tvSkillLevelScore.text =
+            "0 / 100"
+
+        tvAssessmentScore.text =
+            "0 / 100"
+
+        tvEvidenceScore.text =
+            "0 / 100"
+
+        tvVerificationScore.text =
+            "0 / 100"
+
+        progressSkillLevel.progress =
+            0
+
+        progressAssessment.progress =
+            0
+
+        progressEvidence.progress =
+            0
+
+        progressVerification.progress =
+            0
+
+        tvActionPlan.text =
+            "1. Go to Skills\n\n" +
+                    "2. Select your current skill\n\n" +
+                    "3. Complete an assessment\n\n" +
+                    "4. Add relevant evidence\n\n" +
+                    "5. Verify your evidence"
+    }
+
+    // =================================================
+    // NO SKILL
+    // =================================================
 
     private fun showNoSkillState() {
 
@@ -454,8 +596,9 @@ class SkillGapActivity : AppCompatActivity() {
 
         tvActionPlan.text =
             "1. Add a skill\n\n" +
-                    "2. Complete an assessment\n\n" +
-                    "3. Add relevant evidence\n\n" +
-                    "4. Verify your evidence"
+                    "2. Select it as your current skill\n\n" +
+                    "3. Complete an assessment\n\n" +
+                    "4. Add relevant evidence\n\n" +
+                    "5. Verify your evidence"
     }
 }

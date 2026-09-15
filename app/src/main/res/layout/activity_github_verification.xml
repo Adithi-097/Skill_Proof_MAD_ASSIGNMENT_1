@@ -18,9 +18,9 @@
         android:paddingEnd="24dp"
         android:paddingBottom="32dp">
 
-        <!-- ===================================== -->
-        <!-- Decorative Circle -->
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
+        <!-- Decorative Top Circle -->
+        <!-- ===================================================== -->
 
         <View
             android:id="@+id/topDecoration"
@@ -32,9 +32,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
         <!-- Back Button -->
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
 
         <ImageButton
             android:id="@+id/btnBack"
@@ -47,9 +47,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
         <!-- Page Title -->
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
 
         <TextView
             android:id="@+id/tvPageTitle"
@@ -64,9 +64,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
         <!-- Description -->
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
 
         <TextView
             android:id="@+id/tvDescription"
@@ -80,9 +80,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
 
-        <!-- ===================================== -->
-        <!-- GitHub URL -->
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
+        <!-- GitHub URL Input -->
+        <!-- ===================================================== -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/githubUrlLayout"
@@ -103,7 +103,6 @@
                 android:id="@+id/etGithubUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="https://github.com/username/repository"
                 android:inputType="textUri"
                 android:maxLines="1"
                 android:paddingTop="15dp"
@@ -111,26 +110,42 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
+        <!-- URL Example -->
+        <!-- ===================================================== -->
+
+        <TextView
+            android:id="@+id/tvUrlExample"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Example: https://github.com/username/repository"
+            android:textColor="#8A93A3"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/githubUrlLayout" />
+
+        <!-- ===================================================== -->
         <!-- Verify Button -->
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerify"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="20dp"
             android:text="Verify Repository"
             android:textSize="16sp"
             android:textStyle="bold"
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/githubUrlLayout" />
+            app:layout_constraintTop_toBottomOf="@id/tvUrlExample" />
 
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
         <!-- Result Card -->
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/resultCard"
@@ -140,104 +155,118 @@
             android:visibility="gone"
             app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="18dp"
-            app:cardElevation="2dp"
+            app:cardElevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnVerify"
             app:strokeColor="#E4E8F0"
-            app:strokeWidth="1dp">
+            app:strokeWidth="1dp"
+            tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp">
 
-                <!-- Status -->
+                <!-- ================================================= -->
+                <!-- Verification Status -->
+                <!-- ================================================= -->
 
                 <TextView
                     android:id="@+id/tvVerificationStatus"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Repository Verified"
+                    android:text="✓ Repository Verified"
                     android:textColor="#172033"
-                    android:textSize="19sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <!-- ================================================= -->
                 <!-- Repository -->
+                <!-- ================================================= -->
 
                 <TextView
                     android:id="@+id/tvRepository"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
-                    android:text="Repository:"
-                    android:textColor="#172033"
+                    android:text="Repository: SkillProof"
+                    android:textColor="#3C4658"
                     android:textSize="14sp"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvVerificationStatus" />
 
+                <!-- ================================================= -->
                 <!-- Owner -->
+                <!-- ================================================= -->
 
                 <TextView
                     android:id="@+id/tvOwner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:text="Owner:"
-                    android:textColor="#737D8F"
+                    android:layout_marginTop="10dp"
+                    android:text="Owner: username"
+                    android:textColor="#3C4658"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvRepository" />
 
+                <!-- ================================================= -->
                 <!-- Language -->
+                <!-- ================================================= -->
 
                 <TextView
                     android:id="@+id/tvLanguage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:text="Language:"
-                    android:textColor="#737D8F"
+                    android:layout_marginTop="10dp"
+                    android:text="Language: Kotlin"
+                    android:textColor="#3C4658"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvOwner" />
 
+                <!-- ================================================= -->
                 <!-- Stars -->
+                <!-- ================================================= -->
 
                 <TextView
                     android:id="@+id/tvStars"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:text="Stars:"
-                    android:textColor="#737D8F"
+                    android:layout_marginTop="10dp"
+                    android:text="Stars: 0"
+                    android:textColor="#3C4658"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvLanguage" />
 
+                <!-- ================================================= -->
                 <!-- Forks -->
+                <!-- ================================================= -->
 
                 <TextView
                     android:id="@+id/tvForks"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:text="Forks:"
-                    android:textColor="#737D8F"
+                    android:layout_marginTop="10dp"
+                    android:text="Forks: 0"
+                    android:textColor="#3C4658"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvStars" />
 
+                <!-- ================================================= -->
                 <!-- Description -->
+                <!-- ================================================= -->
 
                 <TextView
                     android:id="@+id/tvRepositoryDescription"
@@ -255,15 +284,15 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
         <!-- Use As Evidence -->
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnUseAsEvidence"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="18dp"
             android:text="Use as Verified Evidence"
             android:textSize="15sp"
             android:textStyle="bold"
@@ -273,15 +302,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/resultCard" />
 
-        <!-- ===================================== -->
-        <!-- Information -->
-        <!-- ===================================== -->
+        <!-- ===================================================== -->
+        <!-- Bottom Information -->
+        <!-- ===================================================== -->
 
         <TextView
             android:id="@+id/tvBottomHint"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="Only public GitHub repositories can be verified."
             android:textColor="#8A93A3"

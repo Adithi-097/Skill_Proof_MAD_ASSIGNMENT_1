@@ -23,6 +23,9 @@ class SkillsActivity : AppCompatActivity() {
     private lateinit var btnAddSkill: MaterialButton
     private lateinit var btnBack: ImageButton
 
+    private val preferencesName = "SkillProofPrefs"
+    private val currentSkillKey = "current_skill"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,18 +41,27 @@ class SkillsActivity : AppCompatActivity() {
         // Find Views
         // -----------------------------------------
 
-        btnBack = findViewById(R.id.btnBack)
-        btnAddSkill = findViewById(R.id.btnAddSkill)
+        btnBack =
+            findViewById(R.id.btnBack)
 
-        recyclerSkills = findViewById(R.id.recyclerSkills)
-        tvEmptySkills = findViewById(R.id.tvEmptySkills)
-        tvSkillCount = findViewById(R.id.tvSkillCount)
+        btnAddSkill =
+            findViewById(R.id.btnAddSkill)
+
+        recyclerSkills =
+            findViewById(R.id.recyclerSkills)
+
+        tvEmptySkills =
+            findViewById(R.id.tvEmptySkills)
+
+        tvSkillCount =
+            findViewById(R.id.tvSkillCount)
 
         // -----------------------------------------
         // Back Button
         // -----------------------------------------
 
         btnBack.setOnClickListener {
+
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -57,12 +69,21 @@ class SkillsActivity : AppCompatActivity() {
         // RecyclerView
         // -----------------------------------------
 
-        skillAdapter = SkillAdapter(skillList)
+        skillAdapter =
+            SkillAdapter(
+                skillList
+            ) { selectedSkill ->
+
+                selectCurrentSkill(
+                    selectedSkill
+                )
+            }
 
         recyclerSkills.layoutManager =
             LinearLayoutManager(this)
 
-        recyclerSkills.adapter = skillAdapter
+        recyclerSkills.adapter =
+            skillAdapter
 
         recyclerSkills.setHasFixedSize(true)
 
@@ -89,10 +110,11 @@ class SkillsActivity : AppCompatActivity() {
     }
 
     // ---------------------------------------------
-    // Reload whenever screen becomes visible again
+    // Reload whenever screen becomes visible
     // ---------------------------------------------
 
     override fun onResume() {
+
         super.onResume()
 
         loadSkills()
@@ -142,15 +164,43 @@ class SkillsActivity : AppCompatActivity() {
                 )
             )
 
-            // Load again after inserting demo data
             skillList.addAll(
                 databaseHelper.getAllSkills()
             )
 
         } else {
 
-            skillList.addAll(databaseSkills)
+            skillList.addAll(
+                databaseSkills
+            )
         }
+
+        // -----------------------------------------
+        // Check current skill
+        // -----------------------------------------
+
+        val preferences =
+            getSharedPreferences(
+                preferencesName,
+                MODE_PRIVATE
+            )
+
+        val currentSkill =
+            preferences.getString(
+                currentSkillKey,
+                null
+            )
+
+        /*
+         * We do NOT automatically select a skill.
+         *
+         * If the user has already selected a skill,
+         * keep that selection.
+         */
+
+        skillAdapter.setCurrentSkill(
+            currentSkill
+        )
 
         // -----------------------------------------
         // Update UI
@@ -160,12 +210,53 @@ class SkillsActivity : AppCompatActivity() {
     }
 
     // ---------------------------------------------
+    // Select Current Skill
+    // ---------------------------------------------
+
+    private fun selectCurrentSkill(
+        skill: Skill
+    ) {
+
+        val preferences =
+            getSharedPreferences(
+                preferencesName,
+                MODE_PRIVATE
+            )
+
+        preferences.edit()
+            .putString(
+                currentSkillKey,
+                skill.name
+            )
+            .apply()
+
+        // Update adapter
+        skillAdapter.setCurrentSkill(
+            skill.name
+        )
+
+        // Refresh cards
+        skillAdapter.notifyDataSetChanged()
+
+        // -----------------------------------------
+        // Confirmation
+        // -----------------------------------------
+
+        android.widget.Toast.makeText(
+            this,
+            "${skill.name} selected as current skill",
+            android.widget.Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    // ---------------------------------------------
     // Update Skill Screen UI
     // ---------------------------------------------
 
     private fun updateSkillUI() {
 
-        val count = skillList.size
+        val count =
+            skillList.size
 
         tvSkillCount.text =
             if (count == 1) {

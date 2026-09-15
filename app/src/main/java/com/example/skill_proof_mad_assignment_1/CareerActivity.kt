@@ -5,10 +5,9 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
-class CareerActivity : AppCompatActivity() {
+class CareerActivity : BaseActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
@@ -31,7 +30,8 @@ class CareerActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_career)
 
-        databaseHelper = DatabaseHelper(this)
+        databaseHelper =
+            DatabaseHelper(this)
 
         // -----------------------------------------
         // Find Views
@@ -73,7 +73,8 @@ class CareerActivity : AppCompatActivity() {
 
         btnBack.setOnClickListener {
 
-            onBackPressedDispatcher.onBackPressed()
+            onBackPressedDispatcher
+                .onBackPressed()
         }
 
         // -----------------------------------------
@@ -82,13 +83,12 @@ class CareerActivity : AppCompatActivity() {
 
         btnBadges.setOnClickListener {
 
-            val intent =
+            startActivity(
                 Intent(
                     this,
                     BadgesActivity::class.java
                 )
-
-            startActivity(intent)
+            )
         }
 
         // -----------------------------------------
@@ -97,19 +97,19 @@ class CareerActivity : AppCompatActivity() {
 
         btnSkillGap.setOnClickListener {
 
-            val intent =
+            startActivity(
                 Intent(
                     this,
                     SkillGapActivity::class.java
                 )
-
-            startActivity(intent)
+            )
         }
 
         calculateCareerReadiness()
     }
 
     override fun onResume() {
+
         super.onResume()
 
         calculateCareerReadiness()
@@ -124,6 +124,10 @@ class CareerActivity : AppCompatActivity() {
         val skills =
             databaseHelper.getAllSkills()
 
+        // -----------------------------------------
+        // No skills
+        // -----------------------------------------
+
         if (skills.isEmpty()) {
 
             showNoSkillState()
@@ -132,11 +136,55 @@ class CareerActivity : AppCompatActivity() {
         }
 
         // -----------------------------------------
-        // Current Skill
+        // Get Current Skill
+        // -----------------------------------------
+
+        val preferences =
+            getSharedPreferences(
+                "SkillProofPrefs",
+                MODE_PRIVATE
+            )
+
+        val currentSkillName =
+            preferences.getString(
+                "current_skill",
+                null
+            )
+
+        // -----------------------------------------
+        // No Current Skill Selected
+        // -----------------------------------------
+
+        if (currentSkillName.isNullOrBlank()) {
+
+            showNoCurrentSkillState()
+
+            return
+        }
+
+        // -----------------------------------------
+        // Find Selected Skill
         // -----------------------------------------
 
         val selectedSkill =
-            skills.first()
+            skills.firstOrNull {
+
+                it.name.equals(
+                    currentSkillName,
+                    ignoreCase = true
+                )
+            }
+
+        // -----------------------------------------
+        // Selected Skill Not Found
+        // -----------------------------------------
+
+        if (selectedSkill == null) {
+
+            showNoCurrentSkillState()
+
+            return
+        }
 
         val skillName =
             selectedSkill.name
@@ -149,10 +197,11 @@ class CareerActivity : AppCompatActivity() {
         // -----------------------------------------
 
         val skillLevelScore =
-            selectedSkill.progress.coerceIn(
-                0,
-                100
-            )
+            selectedSkill.progress
+                .coerceIn(
+                    0,
+                    100
+                )
 
         // -----------------------------------------
         // Assessment
@@ -214,7 +263,8 @@ class CareerActivity : AppCompatActivity() {
                             assessmentScore * 0.30 +
                             evidenceScore * 0.25 +
                             verificationScore * 0.15
-                    ).toInt()
+                    )
+                .toInt()
                 .coerceIn(
                     0,
                     100
@@ -231,7 +281,8 @@ class CareerActivity : AppCompatActivity() {
             (
                     proofScore * 0.60 +
                             assessmentScore * 0.40
-                    ).toInt()
+                    )
+                .toInt()
                 .coerceIn(
                     0,
                     100
@@ -260,9 +311,7 @@ class CareerActivity : AppCompatActivity() {
 
         tvCareerMessage.text =
             getCareerMessage(
-                careerReadiness,
-                proofScore,
-                assessmentScore
+                careerReadiness
             )
     }
 
@@ -325,40 +374,59 @@ class CareerActivity : AppCompatActivity() {
     // ---------------------------------------------
 
     private fun getCareerMessage(
-        careerScore: Int,
-        proofScore: Int,
-        assessmentScore: Int
+        score: Int
     ): String {
 
         return when {
 
-            careerScore >= 85 -> {
+            score >= 85 ->
 
                 "Excellent! Your skill has strong proof and you are showing good career readiness. Keep your evidence updated."
 
-            }
-
-            careerScore >= 70 -> {
+            score >= 70 ->
 
                 "You're close to being career ready. Strengthen your weaker areas and add more verified evidence."
 
-            }
-
-            careerScore >= 50 -> {
+            score >= 50 ->
 
                 "You're making progress. Complete more assessments, improve your skill level and build stronger evidence."
 
-            }
-
-            else -> {
+            else ->
 
                 "Start building your proof by improving your skill, completing assessments and adding verified evidence."
-            }
         }
     }
 
     // ---------------------------------------------
-    // No Skill State
+    // No Current Skill Selected
+    // ---------------------------------------------
+
+    private fun showNoCurrentSkillState() {
+
+        tvSkillName.text =
+            "Select a skill"
+
+        tvCareerScore.text =
+            "0"
+
+        tvCareerStatus.text =
+            "Select Current Skill"
+
+        tvCareerMessage.text =
+            "Go to Skills and select the skill you are currently focusing on."
+
+        tvProofScore.text =
+            "0 / 100"
+
+        tvAssessmentScore.text =
+            "0 / 100"
+
+        progressCareer.progress =
+            0
+    }
+
+    // ---------------------------------------------
+    // No Skills
     // ---------------------------------------------
 
     private fun showNoSkillState() {
@@ -373,7 +441,7 @@ class CareerActivity : AppCompatActivity() {
             "Start Building"
 
         tvCareerMessage.text =
-            "Add a skill first. Then complete an assessment and submit evidence to calculate your career readiness."
+            "Add a skill first. Then select it as your current skill to calculate career readiness."
 
         tvProofScore.text =
             "0 / 100"

@@ -1,12 +1,12 @@
 package com.example.skill_proof_mad_assignment_1
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 
-class ProofScoreActivity : AppCompatActivity() {
+class ProofScoreActivity : BaseActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
@@ -36,9 +36,9 @@ class ProofScoreActivity : AppCompatActivity() {
 
         databaseHelper = DatabaseHelper(this)
 
-        // -----------------------------------------
-        // Find Views
-        // -----------------------------------------
+        // =========================================
+        // FIND VIEWS
+        // =========================================
 
         btnBack =
             findViewById(R.id.btnBack)
@@ -82,23 +82,27 @@ class ProofScoreActivity : AppCompatActivity() {
         tvRecommendation =
             findViewById(R.id.tvRecommendation)
 
-        // -----------------------------------------
-        // Back
-        // -----------------------------------------
+        // =========================================
+        // BACK
+        // =========================================
 
         btnBack.setOnClickListener {
 
             onBackPressedDispatcher.onBackPressed()
         }
 
-        // -----------------------------------------
-        // Refresh
-        // -----------------------------------------
+        // =========================================
+        // REFRESH
+        // =========================================
 
         btnRefresh.setOnClickListener {
 
             calculateProofScore()
         }
+
+        // =========================================
+        // INITIAL LOAD
+        // =========================================
 
         calculateProofScore()
     }
@@ -109,14 +113,18 @@ class ProofScoreActivity : AppCompatActivity() {
         calculateProofScore()
     }
 
-    // ---------------------------------------------
-    // Calculate Proof Score
-    // ---------------------------------------------
+    // =============================================
+    // CALCULATE PROOF SCORE
+    // =============================================
 
     private fun calculateProofScore() {
 
         val skills =
             databaseHelper.getAllSkills()
+
+        // =========================================
+        // NO SKILLS
+        // =========================================
 
         if (skills.isEmpty()) {
 
@@ -125,28 +133,68 @@ class ProofScoreActivity : AppCompatActivity() {
             return
         }
 
-        // -----------------------------------------
-        // Currently use the first skill
-        // -----------------------------------------
+        // =========================================
+        // GET CURRENT SKILL
+        // =========================================
+
+        val sharedPreferences =
+            getSharedPreferences(
+                "SkillProofPrefs",
+                MODE_PRIVATE
+            )
+
+        val currentSkillName =
+            sharedPreferences.getString(
+                "current_skill",
+                null
+            )
+
+        // =========================================
+        // FIND CURRENT SKILL
+        // =========================================
 
         val selectedSkill =
-            skills.first()
+            if (!currentSkillName.isNullOrBlank()) {
+
+                skills.firstOrNull {
+
+                    it.name.equals(
+                        currentSkillName,
+                        ignoreCase = true
+                    )
+                }
+
+            } else {
+                null
+            }
+
+        // =========================================
+        // NO CURRENT SKILL SELECTED
+        // =========================================
+
+        if (selectedSkill == null) {
+
+            showNoCurrentSkillState()
+
+            return
+        }
 
         val skillName =
             selectedSkill.name
 
-        // -----------------------------------------
-        // Skill Level
+        // =========================================
+        // SKILL LEVEL
         // Weight = 30%
-        // -----------------------------------------
+        // =========================================
 
         val skillLevelScore =
-            selectedSkill.progress.coerceIn(0, 100)
+            selectedSkill.progress
+                .coerceIn(0, 100)
 
-        // -----------------------------------------
-        // Assessment
+        // =========================================
+        // ASSESSMENT
         // Weight = 30%
-        // -----------------------------------------
+        // =========================================
 
         val assessmentScore =
             databaseHelper
@@ -155,10 +203,10 @@ class ProofScoreActivity : AppCompatActivity() {
                 )
                 .coerceIn(0, 100)
 
-        // -----------------------------------------
-        // Evidence
+        // =========================================
+        // EVIDENCE
         // Weight = 25%
-        // -----------------------------------------
+        // =========================================
 
         val evidenceCount =
             databaseHelper
@@ -171,10 +219,10 @@ class ProofScoreActivity : AppCompatActivity() {
                 evidenceCount
             )
 
-        // -----------------------------------------
-        // Verification
+        // =========================================
+        // VERIFICATION
         // Weight = 15%
-        // -----------------------------------------
+        // =========================================
 
         val verifiedEvidenceCount =
             databaseHelper
@@ -193,9 +241,9 @@ class ProofScoreActivity : AppCompatActivity() {
                 0
             }
 
-        // -----------------------------------------
-        // Final Score
-        // -----------------------------------------
+        // =========================================
+        // FINAL PROOF SCORE
+        // =========================================
 
         val proofScore =
             (
@@ -206,9 +254,9 @@ class ProofScoreActivity : AppCompatActivity() {
                     ).toInt()
                 .coerceIn(0, 100)
 
-        // -----------------------------------------
-        // Update UI
-        // -----------------------------------------
+        // =========================================
+        // UPDATE UI
+        // =========================================
 
         tvSkillName.text =
             skillName
@@ -252,9 +300,9 @@ class ProofScoreActivity : AppCompatActivity() {
             )
     }
 
-    // ---------------------------------------------
-    // Evidence Score
-    // ---------------------------------------------
+    // =============================================
+    // EVIDENCE SCORE
+    // =============================================
 
     private fun calculateEvidenceScore(
         evidenceCount: Int
@@ -282,9 +330,9 @@ class ProofScoreActivity : AppCompatActivity() {
         }
     }
 
-    // ---------------------------------------------
-    // Proof Level
-    // ---------------------------------------------
+    // =============================================
+    // PROOF LEVEL
+    // =============================================
 
     private fun getProofLevel(
         score: Int
@@ -309,9 +357,9 @@ class ProofScoreActivity : AppCompatActivity() {
         }
     }
 
-    // ---------------------------------------------
-    // Recommendation
-    // ---------------------------------------------
+    // =============================================
+    // RECOMMENDATION
+    // =============================================
 
     private fun getRecommendation(
         skillLevel: Int,
@@ -363,9 +411,52 @@ class ProofScoreActivity : AppCompatActivity() {
         }
     }
 
-    // ---------------------------------------------
-    // No Skill State
-    // ---------------------------------------------
+    // =============================================
+    // NO CURRENT SKILL STATE
+    // =============================================
+
+    private fun showNoCurrentSkillState() {
+
+        tvSkillName.text =
+            "Select a skill"
+
+        tvProofScore.text =
+            "0"
+
+        tvProofLevel.text =
+            "Select Current Skill"
+
+        tvSkillLevelScore.text =
+            "0 / 100"
+
+        tvAssessmentScore.text =
+            "0 / 100"
+
+        tvEvidenceScore.text =
+            "0 / 100"
+
+        tvVerificationScore.text =
+            "0 / 100"
+
+        progressSkillLevel.progress =
+            0
+
+        progressAssessment.progress =
+            0
+
+        progressEvidence.progress =
+            0
+
+        progressVerification.progress =
+            0
+
+        tvRecommendation.text =
+            "Open Skills and select a skill as your Current Skill to view its Proof Score."
+    }
+
+    // =============================================
+    // NO SKILL STATE
+    // =============================================
 
     private fun showNoSkillState() {
 

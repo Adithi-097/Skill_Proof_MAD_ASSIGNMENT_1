@@ -15,7 +15,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-class AddEvidenceActivity : AppCompatActivity() {
+class AddEvidenceActivity :  BaseActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 

@@ -7,7 +7,7 @@ import android.os.Looper
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity :  BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

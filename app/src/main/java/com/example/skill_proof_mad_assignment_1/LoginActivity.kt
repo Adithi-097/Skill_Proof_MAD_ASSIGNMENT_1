@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity :  BaseActivity() {
 
     private lateinit var etEmail: TextInputEditText
     private lateinit var etPassword: TextInputEditText

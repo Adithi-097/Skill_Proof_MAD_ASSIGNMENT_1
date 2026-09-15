@@ -3,173 +3,147 @@
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F9FC"
-    android:fillViewport="true"
-    tools:context=".AssessmentActivity">
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="24dp"
-        android:paddingTop="20dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="32dp">
+        android:padding="16dp">
 
         <!-- Back Button -->
-
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
-            android:padding="12dp"
             android:src="@android:drawable/ic_menu_revert"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Page Title -->
-
+        <!-- Title -->
         <TextView
-            android:id="@+id/tvPageTitle"
+            android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:text="Skill Assessment"
-            android:textColor="#172033"
-            android:textSize="29sp"
+            android:textSize="26sp"
             android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@id/btnBack"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnBack" />
+            app:layout_constraintTop_toTopOf="@id/btnBack"
+            app:layout_constraintBottom_toBottomOf="@id/btnBack" />
 
         <!-- Description -->
-
         <TextView
             android:id="@+id/tvDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:text="Test your knowledge and strengthen your skill proof."
-            android:textColor="#737D8F"
+            android:layout_marginTop="16dp"
+            android:text="Test your knowledge and improve your SkillProof score."
             android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-        <!-- Skill Selection Card -->
+        <!-- Skill Label -->
+        <TextView
+            android:id="@+id/tvSkillLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Select Skill"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
+        <!-- Skill Spinner -->
+        <Spinner
+            android:id="@+id/spinnerSkill"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSkillLabel" />
+
+        <!-- Question 1 Card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/skillSelectionCard"
+            android:id="@+id/cardQuestion1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="18dp"
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvDescription"
-            app:strokeColor="#E4E8F0"
-            app:strokeWidth="1dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spinnerSkill">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp">
-
-                <TextView
-                    android:id="@+id/tvSkillLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Select skill"
-                    android:textColor="#172033"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Spinner
-                    android:id="@+id/spinnerSkill"
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:drawable/btn_dropdown"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvSkillLabel" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Question 1 -->
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/questionCard1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/skillSelectionCard">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="18dp">
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/tvQuestion1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="1. Which keyword is used to declare a variable that cannot be reassigned in Kotlin?"
-                    android:textColor="#172033"
-                    android:textSize="15sp"
+                    android:text="Question 1"
+                    android:textSize="17sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textColor="?android:attr/textColorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <RadioGroup
                     android:id="@+id/rgQuestion1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvQuestion1">
 
                     <RadioButton
-                        android:id="@+id/q1Option1"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ1Option1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="var" />
+                        android:text="Option 1"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q1Option2"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ1Option2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="val" />
+                        android:text="Option 2"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q1Option3"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ1Option3"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="let" />
+                        android:text="Option 3"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q1Option4"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ1Option4"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="constant" />
+                        android:text="Option 4"
+                        android:textSize="15sp" />
 
                 </RadioGroup>
 
@@ -177,69 +151,73 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Question 2 -->
 
+        <!-- Question 2 Card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/questionCard2"
+            android:id="@+id/cardQuestion2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/questionCard1">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardQuestion1">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="18dp">
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/tvQuestion2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="2. Which data structure follows the FIFO principle?"
-                    android:textColor="#172033"
-                    android:textSize="15sp"
+                    android:text="Question 2"
+                    android:textSize="17sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textColor="?android:attr/textColorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <RadioGroup
                     android:id="@+id/rgQuestion2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvQuestion2">
 
                     <RadioButton
-                        android:id="@+id/q2Option1"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ2Option1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Queue" />
+                        android:text="Option 1"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q2Option2"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ2Option2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Stack" />
+                        android:text="Option 2"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q2Option3"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ2Option3"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tree" />
+                        android:text="Option 3"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q2Option4"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ2Option4"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Graph" />
+                        android:text="Option 4"
+                        android:textSize="15sp" />
 
                 </RadioGroup>
 
@@ -247,69 +225,73 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Question 3 -->
 
+        <!-- Question 3 Card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/questionCard3"
+            android:id="@+id/cardQuestion3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/questionCard2">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardQuestion2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="18dp">
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/tvQuestion3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="3. Which SQL command is used to retrieve data from a table?"
-                    android:textColor="#172033"
-                    android:textSize="15sp"
+                    android:text="Question 3"
+                    android:textSize="17sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textColor="?android:attr/textColorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <RadioGroup
                     android:id="@+id/rgQuestion3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvQuestion3">
 
                     <RadioButton
-                        android:id="@+id/q3Option1"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ3Option1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="INSERT" />
+                        android:text="Option 1"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q3Option2"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ3Option2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="UPDATE" />
+                        android:text="Option 2"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q3Option3"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ3Option3"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="SELECT" />
+                        android:text="Option 3"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q3Option4"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ3Option4"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="DELETE" />
+                        android:text="Option 4"
+                        android:textSize="15sp" />
 
                 </RadioGroup>
 
@@ -317,69 +299,73 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Question 4 -->
 
+        <!-- Question 4 Card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/questionCard4"
+            android:id="@+id/cardQuestion4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/questionCard3">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardQuestion3">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="18dp">
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/tvQuestion4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="4. Which Android component is commonly used to display a scrollable list?"
-                    android:textColor="#172033"
-                    android:textSize="15sp"
+                    android:text="Question 4"
+                    android:textSize="17sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textColor="?android:attr/textColorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <RadioGroup
                     android:id="@+id/rgQuestion4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvQuestion4">
 
                     <RadioButton
-                        android:id="@+id/q4Option1"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ4Option1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="ImageView" />
+                        android:text="Option 1"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q4Option2"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ4Option2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="RecyclerView" />
+                        android:text="Option 2"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q4Option3"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ4Option3"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:text="Option 3"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q4Option4"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ4Option4"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Switch" />
+                        android:text="Option 4"
+                        android:textSize="15sp" />
 
                 </RadioGroup>
 
@@ -387,69 +373,73 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Question 5 -->
 
+        <!-- Question 5 Card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/questionCard5"
+            android:id="@+id/cardQuestion5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/questionCard4">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardQuestion4">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="18dp">
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/tvQuestion5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="5. Which HTTP method is normally used to retrieve data from an API?"
-                    android:textColor="#172033"
-                    android:textSize="15sp"
+                    android:text="Question 5"
+                    android:textSize="17sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textColor="?android:attr/textColorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <RadioGroup
                     android:id="@+id/rgQuestion5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_to_startOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvQuestion5">
 
                     <RadioButton
-                        android:id="@+id/q5Option1"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ5Option1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="GET" />
+                        android:text="Option 1"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q5Option2"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ5Option2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="POST" />
+                        android:text="Option 2"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q5Option3"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ5Option3"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="DELETE" />
+                        android:text="Option 3"
+                        android:textSize="15sp" />
 
                     <RadioButton
-                        android:id="@+id/q5Option4"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/rbQ5Option4"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="PATCH" />
+                        android:text="Option 4"
+                        android:textSize="15sp" />
 
                 </RadioGroup>
 
@@ -457,67 +447,28 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Submit -->
 
+        <!-- Submit Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmit"
             android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="22dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="Submit Assessment"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:cornerRadius="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:minHeight="52dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/questionCard5" />
-
-        <!-- Result Title -->
-
-        <TextView
-            android:id="@+id/tvResultTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:gravity="center"
-            android:text="Assessment Result"
-            android:textColor="#172033"
-            android:textSize="20sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardQuestion5" />
+
+        <!-- Bottom Spacing -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toBottomOf="@id/btnSubmit"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSubmit" />
-
-        <!-- Result Score -->
-
-        <TextView
-            android:id="@+id/tvResultScore"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="4 / 5 • 80%"
-            android:textColor="#172033"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvResultTitle" />
-
-        <!-- Result Message -->
-
-        <TextView
-            android:id="@+id/tvResultMessage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="Excellent!"
-            android:textColor="#737D8F"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvResultScore" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

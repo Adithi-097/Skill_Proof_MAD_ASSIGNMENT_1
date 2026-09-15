@@ -145,6 +145,14 @@
             android:name=".ProfileActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".AssessmentResultActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AssessmentHistoryActivity"
+            android:exported="false" />
+
         <!-- ========================================= -->
         <!-- FILE PROVIDER -->
         <!-- Used for local attachment/file sharing -->

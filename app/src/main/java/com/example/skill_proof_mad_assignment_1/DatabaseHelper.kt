@@ -16,98 +16,60 @@ class DatabaseHelper(
 
     companion object {
 
-        private const val DATABASE_NAME =
-            "SkillProof.db"
+        private const val DATABASE_NAME = "SkillProof.db"
+        private const val DATABASE_VERSION = 4
 
-        private const val DATABASE_VERSION =
-            3
-
-        // =========================================
+        // =====================================================
         // SKILLS TABLE
-        // =========================================
+        // =====================================================
 
-        private const val TABLE_SKILLS =
-            "skills"
+        private const val TABLE_SKILLS = "skills"
 
-        private const val COL_SKILL_ID =
-            "id"
+        private const val COL_SKILL_ID = "id"
+        private const val COL_SKILL_NAME = "name"
+        private const val COL_SKILL_LEVEL = "level"
+        private const val COL_SKILL_PROGRESS = "progress"
+        private const val COL_SKILL_PROOF_STATUS = "proof_status"
 
-        private const val COL_SKILL_NAME =
-            "name"
-
-        private const val COL_SKILL_LEVEL =
-            "level"
-
-        private const val COL_SKILL_PROGRESS =
-            "progress"
-
-        private const val COL_SKILL_PROOF_STATUS =
-            "proof_status"
-
-        // =========================================
+        // =====================================================
         // EVIDENCE TABLE
-        // =========================================
+        // =====================================================
 
-        private const val TABLE_EVIDENCE =
-            "evidence"
+        private const val TABLE_EVIDENCE = "evidence"
 
-        private const val COL_EVIDENCE_ID =
-            "id"
+        private const val COL_EVIDENCE_ID = "id"
+        private const val COL_EVIDENCE_TITLE = "title"
+        private const val COL_EVIDENCE_SKILL = "skill"
+        private const val COL_EVIDENCE_TYPE = "type"
+        private const val COL_EVIDENCE_LINK = "link"
+        private const val COL_EVIDENCE_STATUS = "status"
+        private const val COL_EVIDENCE_ATTACHMENT = "attachment_uri"
 
-        private const val COL_EVIDENCE_TITLE =
-            "title"
-
-        private const val COL_EVIDENCE_SKILL =
-            "skill"
-
-        private const val COL_EVIDENCE_TYPE =
-            "type"
-
-        private const val COL_EVIDENCE_LINK =
-            "link"
-
-        private const val COL_EVIDENCE_STATUS =
-            "status"
-
-        private const val COL_EVIDENCE_ATTACHMENT =
-            "attachment_uri"
-
-        // =========================================
+        // =====================================================
         // ASSESSMENT TABLE
-        // =========================================
+        // =====================================================
 
-        private const val TABLE_ASSESSMENTS =
-            "assessments"
+        private const val TABLE_ASSESSMENTS = "assessments"
 
-        private const val COL_ASSESSMENT_ID =
-            "id"
-
-        private const val COL_ASSESSMENT_SKILL =
-            "skill"
-
-        private const val COL_ASSESSMENT_SCORE =
-            "score"
-
-        private const val COL_ASSESSMENT_TOTAL =
-            "total"
-
-        private const val COL_ASSESSMENT_PERCENTAGE =
-            "percentage"
+        private const val COL_ASSESSMENT_ID = "id"
+        private const val COL_ASSESSMENT_SKILL = "skill"
+        private const val COL_ASSESSMENT_SCORE = "score"
+        private const val COL_ASSESSMENT_TOTAL = "total"
+        private const val COL_ASSESSMENT_PERCENTAGE = "percentage"
     }
 
     // =====================================================
-    // CREATE DATABASE
+    // DATABASE CREATION
     // =====================================================
 
-    override fun onCreate(
-        db: SQLiteDatabase
-    ) {
+    override fun onCreate(db: SQLiteDatabase) {
 
-        // =========================================
+        // -----------------------------------------------------
         // SKILLS TABLE
-        // =========================================
+        // -----------------------------------------------------
 
-        val createSkillsTable = """
+        db.execSQL(
+            """
             CREATE TABLE $TABLE_SKILLS (
                 $COL_SKILL_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $COL_SKILL_NAME TEXT NOT NULL,
@@ -115,17 +77,15 @@ class DatabaseHelper(
                 $COL_SKILL_PROGRESS INTEGER NOT NULL,
                 $COL_SKILL_PROOF_STATUS TEXT NOT NULL
             )
-        """.trimIndent()
-
-        db.execSQL(
-            createSkillsTable
+            """.trimIndent()
         )
 
-        // =========================================
+        // -----------------------------------------------------
         // EVIDENCE TABLE
-        // =========================================
+        // -----------------------------------------------------
 
-        val createEvidenceTable = """
+        db.execSQL(
+            """
             CREATE TABLE $TABLE_EVIDENCE (
                 $COL_EVIDENCE_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $COL_EVIDENCE_TITLE TEXT NOT NULL,
@@ -135,17 +95,15 @@ class DatabaseHelper(
                 $COL_EVIDENCE_STATUS TEXT NOT NULL,
                 $COL_EVIDENCE_ATTACHMENT TEXT DEFAULT ''
             )
-        """.trimIndent()
-
-        db.execSQL(
-            createEvidenceTable
+            """.trimIndent()
         )
 
-        // =========================================
+        // -----------------------------------------------------
         // ASSESSMENTS TABLE
-        // =========================================
+        // -----------------------------------------------------
 
-        val createAssessmentTable = """
+        db.execSQL(
+            """
             CREATE TABLE $TABLE_ASSESSMENTS (
                 $COL_ASSESSMENT_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $COL_ASSESSMENT_SKILL TEXT NOT NULL,
@@ -153,10 +111,7 @@ class DatabaseHelper(
                 $COL_ASSESSMENT_TOTAL INTEGER NOT NULL,
                 $COL_ASSESSMENT_PERCENTAGE INTEGER NOT NULL
             )
-        """.trimIndent()
-
-        db.execSQL(
-            createAssessmentTable
+            """.trimIndent()
         )
     }
 
@@ -170,53 +125,62 @@ class DatabaseHelper(
         newVersion: Int
     ) {
 
+        // Version 1 → Version 2
         if (oldVersion < 2) {
 
             db.execSQL(
                 """
-                CREATE TABLE IF NOT EXISTS $TABLE_ASSESSMENTS (
-                    $COL_ASSESSMENT_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    $COL_ASSESSMENT_SKILL TEXT NOT NULL,
-                    $COL_ASSESSMENT_SCORE INTEGER NOT NULL,
-                    $COL_ASSESSMENT_TOTAL INTEGER NOT NULL,
-                    $COL_ASSESSMENT_PERCENTAGE INTEGER NOT NULL
-                )
-                """.trimIndent()
+            CREATE TABLE IF NOT EXISTS $TABLE_ASSESSMENTS (
+                $COL_ASSESSMENT_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COL_ASSESSMENT_SKILL TEXT NOT NULL,
+                $COL_ASSESSMENT_SCORE INTEGER NOT NULL,
+                $COL_ASSESSMENT_TOTAL INTEGER NOT NULL,
+                $COL_ASSESSMENT_PERCENTAGE INTEGER NOT NULL
+            )
+            """.trimIndent()
             )
         }
 
+        // Version 2 → Version 3
         if (oldVersion < 3) {
 
             try {
 
                 db.execSQL(
                     """
-                    ALTER TABLE $TABLE_EVIDENCE
-                    ADD COLUMN $COL_EVIDENCE_ATTACHMENT TEXT DEFAULT ''
-                    """.trimIndent()
+                ALTER TABLE $TABLE_EVIDENCE
+                ADD COLUMN $COL_EVIDENCE_ATTACHMENT TEXT DEFAULT ''
+                """.trimIndent()
                 )
 
-            } catch (
-                e: Exception
-            ) {
-                // Column may already exist.
+            } catch (e: Exception) {
+                // Column already exists.
             }
         }
+
+        // Version 3 → Version 4
+        if (oldVersion < 4) {
+
+            db.execSQL(
+                """
+            CREATE TABLE IF NOT EXISTS $TABLE_ASSESSMENTS (
+                $COL_ASSESSMENT_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COL_ASSESSMENT_SKILL TEXT NOT NULL,
+                $COL_ASSESSMENT_SCORE INTEGER NOT NULL,
+                $COL_ASSESSMENT_TOTAL INTEGER NOT NULL,
+                $COL_ASSESSMENT_PERCENTAGE INTEGER NOT NULL
+            )
+            """.trimIndent()
+            )
+        }
     }
-
-    // =====================================================
-    // SKILL METHODS
-    // =====================================================
-
     fun insertSkill(
         skill: Skill
     ): Long {
 
-        val db =
-            writableDatabase
+        val db = writableDatabase
 
-        val values =
-            ContentValues()
+        val values = ContentValues()
 
         values.put(
             COL_SKILL_NAME,
@@ -230,7 +194,7 @@ class DatabaseHelper(
 
         values.put(
             COL_SKILL_PROGRESS,
-            skill.progress
+            skill.progress.coerceIn(0, 100)
         )
 
         values.put(
@@ -238,71 +202,66 @@ class DatabaseHelper(
             skill.proofStatus
         )
 
-        val result =
-            db.insert(
-                TABLE_SKILLS,
-                null,
-                values
-            )
+        val result = db.insert(
+            TABLE_SKILLS,
+            null,
+            values
+        )
 
         db.close()
 
         return result
     }
 
+    // =====================================================
+    // GET ALL SKILLS
+    // =====================================================
+
     fun getAllSkills(): List<Skill> {
 
-        val skills =
-            mutableListOf<Skill>()
+        val skills = mutableListOf<Skill>()
 
-        val db =
-            readableDatabase
+        val db = readableDatabase
 
-        val cursor =
-            db.query(
-                TABLE_SKILLS,
-                null,
-                null,
-                null,
-                null,
-                null,
-                "$COL_SKILL_ID ASC"
-            )
+        val cursor = db.query(
+            TABLE_SKILLS,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "$COL_SKILL_ID ASC"
+        )
 
         cursor.use {
 
             while (it.moveToNext()) {
 
-                val skill =
-                    Skill(
-                        name =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_SKILL_NAME
-                                )
-                            ),
+                val skill = Skill(
+                    name = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_NAME
+                        )
+                    ),
 
-                        level =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_SKILL_LEVEL
-                                )
-                            ),
+                    level = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_LEVEL
+                        )
+                    ),
 
-                        progress =
-                            it.getInt(
-                                it.getColumnIndexOrThrow(
-                                    COL_SKILL_PROGRESS
-                                )
-                            ),
+                    progress = it.getInt(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_PROGRESS
+                        )
+                    ),
 
-                        proofStatus =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_SKILL_PROOF_STATUS
-                                )
-                            )
+                    proofStatus = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_PROOF_STATUS
+                        )
                     )
+                )
 
                 skills.add(skill)
             }
@@ -321,20 +280,18 @@ class DatabaseHelper(
         skillName: String
     ): Skill? {
 
-        val db =
-            readableDatabase
+        val db = readableDatabase
 
-        val cursor =
-            db.query(
-                TABLE_SKILLS,
-                null,
-                "$COL_SKILL_NAME = ?",
-                arrayOf(skillName),
-                null,
-                null,
-                "$COL_SKILL_ID DESC",
-                "1"
-            )
+        val cursor = db.query(
+            TABLE_SKILLS,
+            null,
+            "LOWER($COL_SKILL_NAME) = LOWER(?)",
+            arrayOf(skillName),
+            null,
+            null,
+            "$COL_SKILL_ID DESC",
+            "1"
+        )
 
         var skill: Skill? = null
 
@@ -342,36 +299,31 @@ class DatabaseHelper(
 
             if (it.moveToFirst()) {
 
-                skill =
-                    Skill(
-                        name =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_SKILL_NAME
-                                )
-                            ),
+                skill = Skill(
+                    name = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_NAME
+                        )
+                    ),
 
-                        level =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_SKILL_LEVEL
-                                )
-                            ),
+                    level = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_LEVEL
+                        )
+                    ),
 
-                        progress =
-                            it.getInt(
-                                it.getColumnIndexOrThrow(
-                                    COL_SKILL_PROGRESS
-                                )
-                            ),
+                    progress = it.getInt(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_PROGRESS
+                        )
+                    ),
 
-                        proofStatus =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_SKILL_PROOF_STATUS
-                                )
-                            )
+                    proofStatus = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_SKILL_PROOF_STATUS
+                        )
                     )
+                )
             }
         }
 
@@ -388,11 +340,9 @@ class DatabaseHelper(
         evidence: Evidence
     ): Long {
 
-        val db =
-            writableDatabase
+        val db = writableDatabase
 
-        val values =
-            ContentValues()
+        val values = ContentValues()
 
         values.put(
             COL_EVIDENCE_TITLE,
@@ -424,12 +374,11 @@ class DatabaseHelper(
             evidence.attachmentUri
         )
 
-        val result =
-            db.insert(
-                TABLE_EVIDENCE,
-                null,
-                values
-            )
+        val result = db.insert(
+            TABLE_EVIDENCE,
+            null,
+            values
+        )
 
         db.close()
 
@@ -442,75 +391,63 @@ class DatabaseHelper(
 
     fun getAllEvidence(): List<Evidence> {
 
-        val evidenceList =
-            mutableListOf<Evidence>()
+        val evidenceList = mutableListOf<Evidence>()
 
-        val db =
-            readableDatabase
+        val db = readableDatabase
 
-        val cursor =
-            db.query(
-                TABLE_EVIDENCE,
-                null,
-                null,
-                null,
-                null,
-                null,
-                "$COL_EVIDENCE_ID DESC"
-            )
+        val cursor = db.query(
+            TABLE_EVIDENCE,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "$COL_EVIDENCE_ID DESC"
+        )
 
         cursor.use {
 
             while (it.moveToNext()) {
 
-                val evidence =
-                    Evidence(
-                        title =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_EVIDENCE_TITLE
-                                )
-                            ),
+                val evidence = Evidence(
+                    title = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_EVIDENCE_TITLE
+                        )
+                    ),
 
-                        skill =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_EVIDENCE_SKILL
-                                )
-                            ),
+                    skill = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_EVIDENCE_SKILL
+                        )
+                    ),
 
-                        type =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_EVIDENCE_TYPE
-                                )
-                            ),
+                    type = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_EVIDENCE_TYPE
+                        )
+                    ),
 
-                        link =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_EVIDENCE_LINK
-                                )
-                            ),
+                    link = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_EVIDENCE_LINK
+                        )
+                    ),
 
-                        status =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_EVIDENCE_STATUS
-                                )
-                            ),
+                    status = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_EVIDENCE_STATUS
+                        )
+                    ),
 
-                        attachmentUri =
-                            it.getString(
-                                it.getColumnIndexOrThrow(
-                                    COL_EVIDENCE_ATTACHMENT
-                                )
-                            )
+                    attachmentUri = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_EVIDENCE_ATTACHMENT
+                        )
                     )
-
-                evidenceList.add(
-                    evidence
                 )
+
+                evidenceList.add(evidence)
             }
         }
 
@@ -528,24 +465,21 @@ class DatabaseHelper(
         newStatus: String
     ): Int {
 
-        val db =
-            writableDatabase
+        val db = writableDatabase
 
-        val values =
-            ContentValues()
+        val values = ContentValues()
 
         values.put(
             COL_EVIDENCE_STATUS,
             newStatus
         )
 
-        val rowsUpdated =
-            db.update(
-                TABLE_EVIDENCE,
-                values,
-                "$COL_EVIDENCE_LINK = ?",
-                arrayOf(link)
-            )
+        val rowsUpdated = db.update(
+            TABLE_EVIDENCE,
+            values,
+            "$COL_EVIDENCE_LINK = ?",
+            arrayOf(link)
+        )
 
         db.close()
 
@@ -553,25 +487,23 @@ class DatabaseHelper(
     }
 
     // =====================================================
-    // GET EVIDENCE COUNT
+    // GET EVIDENCE COUNT FOR SKILL
     // =====================================================
 
     fun getEvidenceCountForSkill(
         skillName: String
     ): Int {
 
-        val db =
-            readableDatabase
+        val db = readableDatabase
 
-        val cursor =
-            db.rawQuery(
-                """
-                SELECT COUNT(*)
-                FROM $TABLE_EVIDENCE
-                WHERE LOWER($COL_EVIDENCE_SKILL) = LOWER(?)
-                """.trimIndent(),
-                arrayOf(skillName)
-            )
+        val cursor = db.rawQuery(
+            """
+            SELECT COUNT(*)
+            FROM $TABLE_EVIDENCE
+            WHERE LOWER($COL_EVIDENCE_SKILL) = LOWER(?)
+            """.trimIndent(),
+            arrayOf(skillName)
+        )
 
         var count = 0
 
@@ -588,26 +520,24 @@ class DatabaseHelper(
     }
 
     // =====================================================
-    // VERIFIED EVIDENCE COUNT
+    // GET VERIFIED EVIDENCE COUNT FOR SKILL
     // =====================================================
 
     fun getVerifiedEvidenceCountForSkill(
         skillName: String
     ): Int {
 
-        val db =
-            readableDatabase
+        val db = readableDatabase
 
-        val cursor =
-            db.rawQuery(
-                """
-                SELECT COUNT(*)
-                FROM $TABLE_EVIDENCE
-                WHERE LOWER($COL_EVIDENCE_SKILL) = LOWER(?)
-                AND LOWER($COL_EVIDENCE_STATUS) = LOWER('Verified')
-                """.trimIndent(),
-                arrayOf(skillName)
-            )
+        val cursor = db.rawQuery(
+            """
+            SELECT COUNT(*)
+            FROM $TABLE_EVIDENCE
+            WHERE LOWER($COL_EVIDENCE_SKILL) = LOWER(?)
+            AND LOWER($COL_EVIDENCE_STATUS) = LOWER('Verified')
+            """.trimIndent(),
+            arrayOf(skillName)
+        )
 
         var count = 0
 
@@ -629,17 +559,15 @@ class DatabaseHelper(
 
     fun getEvidenceScore(): Int {
 
-        val db =
-            readableDatabase
+        val db = readableDatabase
 
-        val cursor =
-            db.rawQuery(
-                """
-                SELECT COUNT(*)
-                FROM $TABLE_EVIDENCE
-                """.trimIndent(),
-                null
-            )
+        val cursor = db.rawQuery(
+            """
+            SELECT COUNT(*)
+            FROM $TABLE_EVIDENCE
+            """.trimIndent(),
+            null
+        )
 
         var count = 0
 
@@ -652,9 +580,7 @@ class DatabaseHelper(
 
         db.close()
 
-        return calculateEvidenceScore(
-            count
-        )
+        return calculateEvidenceScore(count)
     }
 
     private fun calculateEvidenceScore(
@@ -663,23 +589,17 @@ class DatabaseHelper(
 
         return when {
 
-            count <= 0 ->
-                0
+            count <= 0 -> 0
 
-            count == 1 ->
-                45
+            count == 1 -> 45
 
-            count == 2 ->
-                65
+            count == 2 -> 65
 
-            count == 3 ->
-                80
+            count == 3 -> 80
 
-            count == 4 ->
-                90
+            count == 4 -> 90
 
-            else ->
-                100
+            else -> 100
         }
     }
 
@@ -689,17 +609,15 @@ class DatabaseHelper(
 
     fun getVerificationScore(): Int {
 
-        val db =
-            readableDatabase
+        val db = readableDatabase
 
-        val totalCursor =
-            db.rawQuery(
-                """
-                SELECT COUNT(*)
-                FROM $TABLE_EVIDENCE
-                """.trimIndent(),
-                null
-            )
+        val totalCursor = db.rawQuery(
+            """
+            SELECT COUNT(*)
+            FROM $TABLE_EVIDENCE
+            """.trimIndent(),
+            null
+        )
 
         var total = 0
 
@@ -710,16 +628,15 @@ class DatabaseHelper(
             }
         }
 
-        val verifiedCursor =
-            db.rawQuery(
-                """
-                SELECT COUNT(*)
-                FROM $TABLE_EVIDENCE
-                WHERE LOWER($COL_EVIDENCE_STATUS)
-                = LOWER('Verified')
-                """.trimIndent(),
-                null
-            )
+        val verifiedCursor = db.rawQuery(
+            """
+            SELECT COUNT(*)
+            FROM $TABLE_EVIDENCE
+            WHERE LOWER($COL_EVIDENCE_STATUS)
+            = LOWER('Verified')
+            """.trimIndent(),
+            null
+        )
 
         var verified = 0
 
@@ -736,9 +653,7 @@ class DatabaseHelper(
             return 0
         }
 
-        return (
-                verified * 100
-                ) / total
+        return (verified * 100) / total
     }
 
     // =====================================================
@@ -752,11 +667,9 @@ class DatabaseHelper(
         percentage: Int
     ): Long {
 
-        val db =
-            writableDatabase
+        val db = writableDatabase
 
-        val values =
-            ContentValues()
+        val values = ContentValues()
 
         values.put(
             COL_ASSESSMENT_SKILL,
@@ -775,15 +688,14 @@ class DatabaseHelper(
 
         values.put(
             COL_ASSESSMENT_PERCENTAGE,
-            percentage
+            percentage.coerceIn(0, 100)
         )
 
-        val result =
-            db.insert(
-                TABLE_ASSESSMENTS,
-                null,
-                values
-            )
+        val result = db.insert(
+            TABLE_ASSESSMENTS,
+            null,
+            values
+        )
 
         db.close()
 
@@ -791,27 +703,25 @@ class DatabaseHelper(
     }
 
     // =====================================================
-    // LATEST ASSESSMENT
+    // GET LATEST ASSESSMENT PERCENTAGE
     // =====================================================
 
     fun getLatestAssessmentPercentage(): Int {
 
-        val db =
-            readableDatabase
+        val db = readableDatabase
 
-        val cursor =
-            db.query(
-                TABLE_ASSESSMENTS,
-                arrayOf(
-                    COL_ASSESSMENT_PERCENTAGE
-                ),
-                null,
-                null,
-                null,
-                null,
-                "$COL_ASSESSMENT_ID DESC",
-                "1"
-            )
+        val cursor = db.query(
+            TABLE_ASSESSMENTS,
+            arrayOf(
+                COL_ASSESSMENT_PERCENTAGE
+            ),
+            null,
+            null,
+            null,
+            null,
+            "$COL_ASSESSMENT_ID DESC",
+            "1"
+        )
 
         var percentage = 0
 
@@ -819,12 +729,11 @@ class DatabaseHelper(
 
             if (it.moveToFirst()) {
 
-                percentage =
-                    it.getInt(
-                        it.getColumnIndexOrThrow(
-                            COL_ASSESSMENT_PERCENTAGE
-                        )
+                percentage = it.getInt(
+                    it.getColumnIndexOrThrow(
+                        COL_ASSESSMENT_PERCENTAGE
                     )
+                )
             }
         }
 
@@ -834,29 +743,27 @@ class DatabaseHelper(
     }
 
     // =====================================================
-    // ASSESSMENT FOR SPECIFIC SKILL
+    // GET ASSESSMENT FOR SPECIFIC SKILL
     // =====================================================
 
     fun getAssessmentPercentageForSkill(
         skillName: String
     ): Int {
 
-        val db =
-            readableDatabase
+        val db = readableDatabase
 
-        val cursor =
-            db.query(
-                TABLE_ASSESSMENTS,
-                arrayOf(
-                    COL_ASSESSMENT_PERCENTAGE
-                ),
-                "LOWER($COL_ASSESSMENT_SKILL) = LOWER(?)",
-                arrayOf(skillName),
-                null,
-                null,
-                "$COL_ASSESSMENT_ID DESC",
-                "1"
-            )
+        val cursor = db.query(
+            TABLE_ASSESSMENTS,
+            arrayOf(
+                COL_ASSESSMENT_PERCENTAGE
+            ),
+            "LOWER($COL_ASSESSMENT_SKILL) = LOWER(?)",
+            arrayOf(skillName),
+            null,
+            null,
+            "$COL_ASSESSMENT_ID DESC",
+            "1"
+        )
 
         var percentage = 0
 
@@ -864,12 +771,11 @@ class DatabaseHelper(
 
             if (it.moveToFirst()) {
 
-                percentage =
-                    it.getInt(
-                        it.getColumnIndexOrThrow(
-                            COL_ASSESSMENT_PERCENTAGE
-                        )
+                percentage = it.getInt(
+                    it.getColumnIndexOrThrow(
+                        COL_ASSESSMENT_PERCENTAGE
                     )
+                )
             }
         }
 
@@ -879,39 +785,98 @@ class DatabaseHelper(
     }
 
     // =====================================================
-    // AVERAGE SKILL PROGRESS
+    // GET AVERAGE SKILL PROGRESS
     // =====================================================
 
     fun getAverageSkillProgress(): Int {
 
-        val db =
-            readableDatabase
+        val db = readableDatabase
 
-        val cursor =
-            db.rawQuery(
-                """
-                SELECT AVG($COL_SKILL_PROGRESS)
-                FROM $TABLE_SKILLS
-                """.trimIndent(),
-                null
-            )
+        val cursor = db.rawQuery(
+            """
+            SELECT AVG($COL_SKILL_PROGRESS)
+            FROM $TABLE_SKILLS
+            """.trimIndent(),
+            null
+        )
 
         var average = 0
 
         cursor.use {
 
-            if (it.moveToFirst() &&
-                !it.isNull(0)
-            ) {
+            if (it.moveToFirst() && !it.isNull(0)) {
 
-                average =
-                    it.getDouble(0)
-                        .toInt()
+                average = it.getDouble(0).toInt()
             }
         }
 
         db.close()
 
         return average
+    }
+
+    // =====================================================
+// GET ASSESSMENT HISTORY
+// =====================================================
+
+    fun getAssessmentHistory(): List<Assessment> {
+
+        val assessmentList = mutableListOf<Assessment>()
+
+        val db = readableDatabase
+
+        val cursor = db.query(
+            TABLE_ASSESSMENTS,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "$COL_ASSESSMENT_ID DESC"
+        )
+
+        cursor.use {
+
+            while (it.moveToNext()) {
+
+                val assessment = Assessment(
+                    id = it.getInt(
+                        it.getColumnIndexOrThrow(
+                            COL_ASSESSMENT_ID
+                        )
+                    ),
+
+                    skill = it.getString(
+                        it.getColumnIndexOrThrow(
+                            COL_ASSESSMENT_SKILL
+                        )
+                    ),
+
+                    score = it.getInt(
+                        it.getColumnIndexOrThrow(
+                            COL_ASSESSMENT_SCORE
+                        )
+                    ),
+
+                    total = it.getInt(
+                        it.getColumnIndexOrThrow(
+                            COL_ASSESSMENT_TOTAL
+                        )
+                    ),
+
+                    percentage = it.getInt(
+                        it.getColumnIndexOrThrow(
+                            COL_ASSESSMENT_PERCENTAGE
+                        )
+                    )
+                )
+
+                assessmentList.add(assessment)
+            }
+        }
+
+        db.close()
+
+        return assessmentList
     }
 }

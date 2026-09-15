@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 
-class EvidenceActivity : AppCompatActivity() {
+class EvidenceActivity :  BaseActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var evidenceAdapter: EvidenceAdapter

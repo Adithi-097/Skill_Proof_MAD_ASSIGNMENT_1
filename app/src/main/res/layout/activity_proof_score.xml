@@ -19,7 +19,7 @@
         android:paddingBottom="32dp">
 
         <!-- ===================================== -->
-        <!-- Back Button -->
+        <!-- BACK BUTTON -->
         <!-- ===================================== -->
 
         <ImageButton
@@ -34,7 +34,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- ===================================== -->
-        <!-- Refresh Button -->
+        <!-- REFRESH BUTTON -->
         <!-- ===================================== -->
 
         <ImageButton
@@ -49,7 +49,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- ===================================== -->
-        <!-- Page Title -->
+        <!-- PAGE TITLE -->
         <!-- ===================================== -->
 
         <TextView
@@ -66,7 +66,7 @@
             app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
         <!-- ===================================== -->
-        <!-- Subtitle -->
+        <!-- SUBTITLE -->
         <!-- ===================================== -->
 
         <TextView
@@ -74,7 +74,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:text="A measurable score based on how well you prove your skills."
+            android:text="A measurable score based on how well you prove your current skill."
             android:textColor="#737D8F"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +82,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
 
         <!-- ===================================== -->
-        <!-- Score Card -->
+        <!-- SCORE CARD -->
         <!-- ===================================== -->
 
         <com.google.android.material.card.MaterialCardView
@@ -104,6 +104,8 @@
                 android:layout_height="wrap_content"
                 android:padding="24dp">
 
+                <!-- SCORE LABEL -->
+
                 <TextView
                     android:id="@+id/tvScoreLabel"
                     android:layout_width="0dp"
@@ -116,6 +118,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- SCORE -->
 
                 <TextView
                     android:id="@+id/tvProofScore"
@@ -130,6 +134,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvScoreLabel" />
 
+                <!-- OUT OF -->
+
                 <TextView
                     android:id="@+id/tvOutOf"
                     android:layout_width="wrap_content"
@@ -141,19 +147,38 @@
                     app:layout_constraintBottom_toBottomOf="@id/tvProofScore"
                     app:layout_constraintStart_toEndOf="@id/tvProofScore" />
 
+                <!-- CURRENT SKILL LABEL -->
+
                 <TextView
-                    android:id="@+id/tvSkillName"
-                    android:layout_width="0dp"
+                    android:id="@+id/tvCurrentSkillLabel"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="Kotlin"
-                    android:textColor="#172033"
-                    android:textSize="17sp"
+                    android:layout_marginTop="10dp"
+                    android:text="CURRENT SKILL"
+                    android:textColor="#737D8F"
+                    android:textSize="11sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvProofScore" />
+
+                <!-- CURRENT SKILL -->
+
+                <TextView
+                    android:id="@+id/tvSkillName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="Kotlin"
+                    android:textColor="#172033"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCurrentSkillLabel" />
+
+                <!-- PROOF LEVEL -->
 
                 <TextView
                     android:id="@+id/tvProofLevel"
@@ -164,6 +189,7 @@
                     android:text="Beginner"
                     android:textColor="#737D8F"
                     android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvSkillName" />
@@ -173,7 +199,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <!-- ===================================== -->
-        <!-- Breakdown Title -->
+        <!-- BREAKDOWN TITLE -->
         <!-- ===================================== -->
 
         <TextView
@@ -190,7 +216,7 @@
             app:layout_constraintTop_toBottomOf="@id/scoreCard" />
 
         <!-- ===================================== -->
-        <!-- Skill Level -->
+        <!-- SKILL LEVEL -->
         <!-- ===================================== -->
 
         <TextView
@@ -241,7 +267,7 @@
             app:layout_constraintTop_toBottomOf="@id/progressSkillLevel" />
 
         <!-- ===================================== -->
-        <!-- Assessment -->
+        <!-- ASSESSMENT -->
         <!-- ===================================== -->
 
         <TextView
@@ -292,7 +318,7 @@
             app:layout_constraintTop_toBottomOf="@id/progressAssessment" />
 
         <!-- ===================================== -->
-        <!-- Evidence -->
+        <!-- EVIDENCE -->
         <!-- ===================================== -->
 
         <TextView
@@ -343,7 +369,7 @@
             app:layout_constraintTop_toBottomOf="@id/progressEvidence" />
 
         <!-- ===================================== -->
-        <!-- Verification -->
+        <!-- VERIFICATION -->
         <!-- ===================================== -->
 
         <TextView
@@ -394,7 +420,7 @@
             app:layout_constraintTop_toBottomOf="@id/progressVerification" />
 
         <!-- ===================================== -->
-        <!-- Recommendation Card -->
+        <!-- RECOMMENDATION CARD -->
         <!-- ===================================== -->
 
         <com.google.android.material.card.MaterialCardView

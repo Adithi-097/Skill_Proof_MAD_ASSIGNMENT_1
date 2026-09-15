@@ -70,7 +70,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
 
         <!-- ================================= -->
-        <!-- SKILL CARD -->
+        <!-- CURRENT SKILL CARD -->
         <!-- ================================= -->
 
         <com.google.android.material.card.MaterialCardView
@@ -96,7 +96,7 @@
                     android:id="@+id/tvSkillLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ANALYZING SKILL"
+                    android:text="CURRENT SKILL"
                     android:textColor="#737D8F"
                     android:textSize="11sp"
                     android:textStyle="bold"
@@ -108,7 +108,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Kotlin"
+                    android:text="Select a skill"
                     android:textColor="#172033"
                     android:textSize="21sp"
                     android:textStyle="bold"

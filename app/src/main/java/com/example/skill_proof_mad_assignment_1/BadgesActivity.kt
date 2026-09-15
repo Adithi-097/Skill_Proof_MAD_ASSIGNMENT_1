@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class BadgesActivity : AppCompatActivity() {
+class BadgesActivity :  BaseActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 

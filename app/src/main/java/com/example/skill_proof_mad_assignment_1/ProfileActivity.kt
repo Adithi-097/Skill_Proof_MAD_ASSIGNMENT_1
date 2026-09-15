@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity :  BaseActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 

@@ -2,11 +2,11 @@ package com.example.skill_proof_mad_assignment_1
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.card.MaterialCardView
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : BaseActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
@@ -15,13 +15,13 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var tvProofScore: TextView
     private lateinit var tvProofMessage: TextView
     private lateinit var tvProofHint: TextView
-    private lateinit var proofProgress: android.widget.ProgressBar
-
+    private lateinit var proofProgress: ProgressBar
     private lateinit var tvProgressTitle: TextView
 
     private lateinit var skillsCard: MaterialCardView
     private lateinit var evidenceCard: MaterialCardView
     private lateinit var assessmentCard: MaterialCardView
+    private lateinit var assessmentHistoryCard: MaterialCardView
     private lateinit var careerCard: MaterialCardView
     private lateinit var proofScoreCard: MaterialCardView
     private lateinit var tvProfile: MaterialCardView
@@ -29,12 +29,9 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(
-            R.layout.activity_dashboard
-        )
+        setContentView(R.layout.activity_dashboard)
 
-        databaseHelper =
-            DatabaseHelper(this)
+        databaseHelper = DatabaseHelper(this)
 
         // =========================================
         // FIND VIEWS
@@ -76,11 +73,14 @@ class DashboardActivity : AppCompatActivity() {
         assessmentCard =
             findViewById(R.id.assessmentCard)
 
+        assessmentHistoryCard =
+            findViewById(R.id.assessmentHistoryCard)
+
         careerCard =
             findViewById(R.id.careerCard)
 
         // =========================================
-        // NAVIGATION
+        // SKILLS NAVIGATION
         // =========================================
 
         skillsCard.setOnClickListener {
@@ -93,6 +93,10 @@ class DashboardActivity : AppCompatActivity() {
             )
         }
 
+        // =========================================
+        // EVIDENCE NAVIGATION
+        // =========================================
+
         evidenceCard.setOnClickListener {
 
             startActivity(
@@ -102,6 +106,10 @@ class DashboardActivity : AppCompatActivity() {
                 )
             )
         }
+
+        // =========================================
+        // ASSESSMENT NAVIGATION
+        // =========================================
 
         assessmentCard.setOnClickListener {
 
@@ -113,6 +121,24 @@ class DashboardActivity : AppCompatActivity() {
             )
         }
 
+        // =========================================
+        // ASSESSMENT HISTORY
+        // =========================================
+
+        assessmentHistoryCard.setOnClickListener {
+
+            startActivity(
+                Intent(
+                    this,
+                    AssessmentHistoryActivity::class.java
+                )
+            )
+        }
+
+        // =========================================
+        // CAREER
+        // =========================================
+
         careerCard.setOnClickListener {
 
             startActivity(
@@ -123,6 +149,10 @@ class DashboardActivity : AppCompatActivity() {
             )
         }
 
+        // =========================================
+        // PROOF SCORE
+        // =========================================
+
         proofScoreCard.setOnClickListener {
 
             startActivity(
@@ -132,6 +162,10 @@ class DashboardActivity : AppCompatActivity() {
                 )
             )
         }
+
+        // =========================================
+        // PROFILE
+        // =========================================
 
         tvProfile.setOnClickListener {
 
@@ -185,8 +219,7 @@ class DashboardActivity : AppCompatActivity() {
                 "User"
             ) ?: "User"
 
-        tvUserName.text =
-            name
+        tvUserName.text = name
 
         tvGoodMorning.text =
             getGreeting(name)
@@ -228,7 +261,7 @@ class DashboardActivity : AppCompatActivity() {
             databaseHelper.getAllSkills()
 
         // -----------------------------------------
-        // No skill
+        // NO SKILLS
         // -----------------------------------------
 
         if (skills.isEmpty()) {
@@ -238,23 +271,66 @@ class DashboardActivity : AppCompatActivity() {
             return
         }
 
-        // -----------------------------------------
-        // Current skill
-        // -----------------------------------------
+        // =========================================
+        // GET CURRENT SELECTED SKILL
+        // =========================================
+
+        val sharedPreferences =
+            getSharedPreferences(
+                "SkillProofPrefs",
+                MODE_PRIVATE
+            )
+
+        val currentSkillName =
+            sharedPreferences.getString(
+                "current_skill",
+                null
+            )
+
+        // =========================================
+        // FIND SELECTED SKILL
+        // =========================================
 
         val selectedSkill =
-            skills.first()
+            if (!currentSkillName.isNullOrBlank()) {
+
+                skills.firstOrNull {
+
+                    it.name.equals(
+                        currentSkillName,
+                        ignoreCase = true
+                    )
+                }
+
+            } else {
+                null
+            }
+
+        // =========================================
+        // NO CURRENT SKILL SELECTED
+        // =========================================
+
+        if (selectedSkill == null) {
+
+            showNoCurrentSkillState()
+
+            return
+        }
 
         val skillName =
             selectedSkill.name
+
+        // =========================================
+        // SKILL LEVEL
+        // =========================================
 
         val skillLevelScore =
             selectedSkill.progress
                 .coerceIn(0, 100)
 
-        // -----------------------------------------
-        // Assessment
-        // -----------------------------------------
+        // =========================================
+        // ASSESSMENT
+        // =========================================
 
         val assessmentScore =
             databaseHelper
@@ -263,9 +339,9 @@ class DashboardActivity : AppCompatActivity() {
                 )
                 .coerceIn(0, 100)
 
-        // -----------------------------------------
-        // Evidence
-        // -----------------------------------------
+        // =========================================
+        // EVIDENCE
+        // =========================================
 
         val evidenceCount =
             databaseHelper
@@ -278,9 +354,9 @@ class DashboardActivity : AppCompatActivity() {
                 evidenceCount
             )
 
-        // -----------------------------------------
-        // Verification
-        // -----------------------------------------
+        // =========================================
+        // VERIFICATION
+        // =========================================
 
         val verifiedEvidenceCount =
             databaseHelper
@@ -299,9 +375,9 @@ class DashboardActivity : AppCompatActivity() {
                 0
             }
 
-        // -----------------------------------------
-        // Weighted Proof Score
-        // -----------------------------------------
+        // =========================================
+        // WEIGHTED PROOF SCORE
+        // =========================================
 
         val proofScore =
             (
@@ -312,9 +388,9 @@ class DashboardActivity : AppCompatActivity() {
                     ).toInt()
                 .coerceIn(0, 100)
 
-        // -----------------------------------------
-        // Display
-        // -----------------------------------------
+        // =========================================
+        // DISPLAY
+        // =========================================
 
         tvProofScore.text =
             proofScore.toString()
@@ -326,7 +402,9 @@ class DashboardActivity : AppCompatActivity() {
             "Progress for $skillName"
 
         tvProofMessage.text =
-            getProofMessage(proofScore)
+            getProofMessage(
+                proofScore
+            )
 
         tvProofHint.text =
             getProofHint(
@@ -427,6 +505,28 @@ class DashboardActivity : AppCompatActivity() {
             else ->
                 "Tip: Verify more of your submitted evidence."
         }
+    }
+
+    // =============================================
+    // NO CURRENT SKILL STATE
+    // =============================================
+
+    private fun showNoCurrentSkillState() {
+
+        tvProofScore.text =
+            "0"
+
+        proofProgress.progress =
+            0
+
+        tvProgressTitle.text =
+            "Select Your Current Skill"
+
+        tvProofMessage.text =
+            "Choose a skill to start tracking your proof."
+
+        tvProofHint.text =
+            "Tip: Open Skills and select a skill as your Current Skill."
     }
 
     // =============================================

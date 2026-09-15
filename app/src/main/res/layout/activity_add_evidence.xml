@@ -18,9 +18,7 @@
         android:paddingEnd="24dp"
         android:paddingBottom="32dp">
 
-        <!-- ===================================== -->
         <!-- Decorative Circle -->
-        <!-- ===================================== -->
 
         <View
             android:id="@+id/topDecoration"
@@ -32,9 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ===================================== -->
         <!-- Back Button -->
-        <!-- ===================================== -->
 
         <ImageButton
             android:id="@+id/btnBack"
@@ -47,9 +43,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ===================================== -->
         <!-- Page Title -->
-        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvPageTitle"
@@ -64,9 +58,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-        <!-- ===================================== -->
         <!-- Subtitle -->
-        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvSubtitle"
@@ -80,9 +72,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
 
-        <!-- ===================================== -->
         <!-- Evidence Title -->
-        <!-- ===================================== -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/evidenceTitleLayout"
@@ -103,7 +93,6 @@
                 android:id="@+id/etEvidenceTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Example: E-Commerce Project"
                 android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:paddingTop="15dp"
@@ -111,9 +100,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ===================================== -->
         <!-- Related Skill -->
-        <!-- ===================================== -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/evidenceSkillLayout"
@@ -134,7 +121,6 @@
                 android:id="@+id/etEvidenceSkill"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Example: Java"
                 android:inputType="textCapWords"
                 android:maxLines="1"
                 android:paddingTop="15dp"
@@ -142,9 +128,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ===================================== -->
         <!-- Evidence Type -->
-        <!-- ===================================== -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/evidenceTypeLayout"
@@ -165,7 +149,6 @@
                 android:id="@+id/etEvidenceType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Example: Project, Certificate, Course"
                 android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:paddingTop="15dp"
@@ -173,9 +156,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ===================================== -->
         <!-- Evidence Link -->
-        <!-- ===================================== -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/evidenceLinkLayout"
@@ -196,7 +177,6 @@
                 android:id="@+id/etEvidenceLink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="https://github.com/..."
                 android:inputType="textUri"
                 android:maxLines="1"
                 android:paddingTop="15dp"
@@ -204,9 +184,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ===================================== -->
         <!-- Attachment Card -->
-        <!-- ===================================== -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/attachmentCard"
@@ -241,7 +219,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Hint -->
+                <!-- Attachment Hint -->
 
                 <TextView
                     android:id="@+id/tvAttachmentHint"
@@ -306,9 +284,7 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ===================================== -->
         <!-- Save Button -->
-        <!-- ===================================== -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSaveEvidence"
@@ -323,9 +299,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/attachmentCard" />
 
-        <!-- ===================================== -->
         <!-- Bottom Hint -->
-        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvBottomHint"

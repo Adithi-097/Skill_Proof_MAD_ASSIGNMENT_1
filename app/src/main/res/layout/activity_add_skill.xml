@@ -18,9 +18,7 @@
         android:paddingEnd="24dp"
         android:paddingBottom="32dp">
 
-        <!-- ===================================== -->
         <!-- Decorative Circle -->
-        <!-- ===================================== -->
 
         <View
             android:id="@+id/topDecoration"
@@ -32,9 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ===================================== -->
         <!-- Back Button -->
-        <!-- ===================================== -->
 
         <ImageButton
             android:id="@+id/btnBack"
@@ -47,9 +43,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- ===================================== -->
         <!-- Page Title -->
-        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvPageTitle"
@@ -64,9 +58,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-        <!-- ===================================== -->
         <!-- Subtitle -->
-        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvSubtitle"
@@ -80,9 +72,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvPageTitle" />
 
-        <!-- ===================================== -->
         <!-- Information Card -->
-        <!-- ===================================== -->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/infoCard"
@@ -131,9 +121,7 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ===================================== -->
         <!-- Skill Name -->
-        <!-- ===================================== -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/skillNameLayout"
@@ -161,9 +149,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ===================================== -->
         <!-- Skill Level -->
-        <!-- ===================================== -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/skillLevelLayout"
@@ -184,7 +170,6 @@
                 android:id="@+id/etSkillLevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Example: Beginner, Intermediate, Advanced"
                 android:inputType="textCapWords"
                 android:maxLines="1"
                 android:paddingTop="15dp"
@@ -192,9 +177,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ===================================== -->
-        <!-- Progress -->
-        <!-- ===================================== -->
+        <!-- Current Skill Progress -->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/skillProgressLayout"
@@ -215,7 +198,6 @@
                 android:id="@+id/etSkillProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="0 - 100"
                 android:inputType="number"
                 android:maxLength="3"
                 android:maxLines="1"
@@ -224,9 +206,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- ===================================== -->
         <!-- Save Button -->
-        <!-- ===================================== -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSaveSkill"
@@ -241,9 +221,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/skillProgressLayout" />
 
-        <!-- ===================================== -->
         <!-- Bottom Hint -->
-        <!-- ===================================== -->
 
         <TextView
             android:id="@+id/tvBottomHint"

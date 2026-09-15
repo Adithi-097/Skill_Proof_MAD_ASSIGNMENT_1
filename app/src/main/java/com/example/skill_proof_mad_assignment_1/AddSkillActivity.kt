@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
-class AddSkillActivity : AppCompatActivity() {
+class AddSkillActivity :  BaseActivity() {
 
     private lateinit var databaseHelper: DatabaseHelper
 
