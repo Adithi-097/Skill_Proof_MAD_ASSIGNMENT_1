@@ -1,218 +1,217 @@
-SkillProof – Skill Verification & Career Readiness App
+# SkillProof – Skill Verification & Career Readiness App
 
-Don't just claim a skill. Prove it.
+> **Don't just claim a skill. Prove it.**
 
-📌 About
+## 📌 About
 
-SkillProof is an Android application designed to help students build, assess, verify, and prove their technical skills.
+**SkillProof** is an Android application designed to help students **build, assess, verify, and prove their technical skills**.
 
-Instead of simply listing skills on a resume, SkillProof connects skills with assessments, projects, certificates, GitHub repositories, evidence, and verification to provide a measurable Proof Score.
+Instead of simply listing skills on a resume, SkillProof connects skills with assessments, projects, certificates, GitHub repositories, evidence, and verification to provide a measurable **Proof Score**.
 
-🚀 Overview
+## 🚀 Overview
 
-The application follows a simple workflow:
+The application follows this workflow:
 
+```
 Claim Skill
-    ↓
+   ↓
 Select Current Skill
-    ↓
+   ↓
 Take Assessment
-    ↓
+   ↓
 Add Evidence
-    ↓
+   ↓
 Verify Evidence
-    ↓
+   ↓
 Proof Score
-    ↓
+   ↓
 Skill Gap
-    ↓
+   ↓
 Career Readiness
+```
 
-The goal is to provide students with a structured view of what they know, what they have built, and what they need to improve.
+The goal is to provide students with a structured view of **what they know, what they have built, and what they need to improve**.
 
-✨ Features
+## ✨ Features
 
-🔐 User Authentication – Login and registration
+- 🔐 **User Authentication** – Login and registration
+- 🧠 **Skill Management** – Add and manage technical skills
+- ⭐ **Current Skill** – Select the skill currently being focused on
+- 📝 **Skill Assessments** – Skill-specific MCQ assessments
+- 📊 **Assessment Results** – Score and performance analysis
+- 📚 **Assessment History** – Track previous assessment attempts
+- 📎 **Evidence Management** – Add projects, certificates, and links
+- 🔗 **GitHub Verification** – Verify public GitHub repositories
+- 🏆 **Proof Score** – Calculate an overall skill-proof score
+- 🎖️ **Skill Badges** – Unlock achievements based on progress
+- 📉 **Skill Gap Analyzer** – Identify areas that need improvement
+- 💼 **Career Readiness** – Analyze current skill readiness
+- 👤 **Profile Management** – Manage user information
 
-🧠 Skill Management – Add and manage technical skills
-
-⭐ Current Skill – Select the skill currently being focused on
-
-📝 Skill Assessments – Skill-specific MCQ assessments
-
-📊 Assessment Results – Score and performance analysis
-
-📚 Assessment History – Track previous attempts
-
-📎 Evidence Management – Add projects, certificates, and links
-
-🔗 GitHub Verification – Connect GitHub projects with skills
-
-🏆 Proof Score – Calculate an overall skill-proof score
-
-📉 Skill Gap Analyzer – Identify areas that need improvement
-
-💼 Career Readiness – View career-related insights
-
-👤 Profile Management – Manage user information
-
-🏆 Proof Score
+## 🏆 Proof Score
 
 SkillProof calculates a score based on four major factors:
 
-Component
+| Component    | Weight |
+|--------------|-------:|
+| Skill Level  |    30% |
+| Assessment   |    30% |
+| Evidence     |    25% |
+| Verification |    15% |
 
-Weight
+**Formula:**
 
-Skill Level
-
-30%
-
-Assessment
-
-30%
-
-Evidence
-
-25%
-
-Verification
-
-15%
-
+```
 Proof Score =
-(Skill Level × 30%)
-+ (Assessment × 30%)
-+ (Evidence × 25%)
-+ (Verification × 15%)
+    (Skill Level   × 30%)
+  + (Assessment    × 30%)
+  + (Evidence      × 25%)
+  + (Verification  × 15%)
+```
 
-The final score is calculated out of 100.
+The final score is calculated out of **100**.
 
-⭐ Current Skill
+## ⭐ Current Skill
 
-Users can select one skill as their Current Skill.
+Users can select one skill as their **Current Skill**.
 
-For example:
+**Example:**
 
-Current Skill → Python
+```
+Current Skill → Kotlin
+```
 
 The selected skill is automatically used throughout:
 
+```
 Assessment
-    ↓
+   ↓
 Proof Score
-    ↓
+   ↓
 Skill Gap
-    ↓
-Career
+   ↓
+Career Readiness
+```
 
 This keeps the application focused on the skill the student is currently developing.
 
-📝 Assessment
+## 📝 Assessment
 
 Skill-specific assessments are currently available for:
 
-Python
-
-Java
-
-Kotlin
-
-SQL
-
-Android
+- Python
+- Java
+- Kotlin
+- SQL
+- Android
 
 Each assessment contains multiple-choice questions and automatically calculates the user's score and percentage.
 
-📎 Evidence & Verification
+Users can also view their previous assessment attempts through **Assessment History**.
+
+## 📎 Evidence & Verification
 
 Students can submit evidence related to their skills, including:
 
-Projects
+- Projects
+- Certificates
+- GitHub repositories
+- Portfolio links
+- File/image attachments
 
-Certificates
+GitHub projects can be associated with a particular skill and verified through the GitHub Verification module.
 
-GitHub repositories
+## 🎖️ Skill Badges
 
-Portfolio links
+SkillProof includes an achievement system that rewards users for completing activities such as:
 
-File/image attachments
+- First Skill
+- Assessment Completed
+- First Evidence
+- Verified Evidence
+- Evidence Collector
+- Skill Progress
 
-GitHub projects can also be associated with a particular skill for verification.
-
-📉 Skill Gap Analyzer
+## 📉 Skill Gap Analyzer
 
 The Skill Gap module analyzes the selected skill and identifies areas that require improvement.
 
 It considers:
 
+```
 Skill Level
 Assessment
 Evidence
 Verification
 Proof Score
+```
 
-Based on these factors, the application provides an improvement action plan.
+Based on these factors, the application provides a **Personalized Action Plan**.
 
-📸 Screenshots
+## 💼 Career Readiness
 
-The following screenshots showcase the main modules of the SkillProof application.
+The Career Readiness module provides an overview of how prepared the user is to demonstrate their selected skill.
 
-Splash Screen
+It considers:
 
-<img width="333" height="697" alt="image" src="https://github.com/user-attachments/assets/5cbc8e4c-f47d-480d-afb1-3d86cf805adf" />
-
-Login
-
-
-
-Registration
-
-
-
-Dashboard
-
-<img width="335" height="692" alt="image" src="https://github.com/user-attachments/assets/a2037756-a4c2-4676-b02d-82fbe4f2876e" />
-
-Skills
-
-<img width="335" height="690" alt="image" src="https://github.com/user-attachments/assets/2f44538f-bd32-4d90-b862-7650a41bc8fc" />
-
-Evidence
-
-<img width="336" height="702" alt="image" src="https://github.com/user-attachments/assets/c052f075-2705-4519-8d59-b6fd5a1757e8" />
-
-Assessment
-
-<img width="337" height="696" alt="image" src="https://github.com/user-attachments/assets/f44b2d65-8b39-4428-a16f-91268649d9b7" />
-
-Assessment History
-
-<img width="337" height="696" alt="image" src="https://github.com/user-attachments/assets/390ce1e9-40eb-4fb6-8821-ab70bdf818b7" />
-
-GitHub Verification
-
-<img width="337" height="697" alt="image" src="https://github.com/user-attachments/assets/b83ccc3a-ea67-4271-b0af-f3eecab59afc" />
-
+```
+Current Skill
+   ↓
 Proof Score
+   ↓
+Assessment
+   ↓
+Career Readiness
+```
 
-<img width="332" height="687" alt="image" src="https://github.com/user-attachments/assets/1fc95069-6a78-4a84-b408-6178d1f05bc1" />
+Users can also navigate to **Skill Badges** and **Skill Gap Analysis** from the Career Readiness module.
 
-Skill Gap
+## 📸 Screenshots
 
-<img width="341" height="701" alt="image" src="https://github.com/user-attachments/assets/93537fbe-f7f0-4355-bc95-4d778ef79c96" />
+| Registration | Login |
+|-----------|-----------|
+| <img width="340" height="697" alt="Screenshot 2026-09-16 073008" src="https://github.com/user-attachments/assets/594cee44-9f16-4755-a374-8e1b25361567" />
+ |<img width="338" height="695" alt="Screenshot 2026-09-16 072944" src="https://github.com/user-attachments/assets/607b54da-3a83-4285-ba01-78d73f6c8f4e" />
 
-Career
+ |
 
-<img width="335" height="697" alt="image" src="https://github.com/user-attachments/assets/125b5040-f341-49af-9f13-fa96bac0dba1" />
+| Dashboard | My Skills |
+|-----------|-----------|
+| <img width="335" height="692" alt="Screenshot 2026-09-16 071119" src="https://github.com/user-attachments/assets/43bbe928-2efb-4b70-9b84-e066771b43b2" />
+ | <img width="332" height="693" alt="Screenshot 2026-09-16 072620" src="https://github.com/user-attachments/assets/7a2d71a5-670c-4342-abe5-c7018a2f8993" />
+ |
 
-Profile
+| Skill Assessment | Assessment History |
+|-------------------|---------------------|
+|  | <img width="337" height="696" alt="Screenshot 2026-09-16 071733" src="https://github.com/user-attachments/assets/70aafde7-982a-482d-b771-ab1da4366383" />
+|
 
-<img width="332" height="702" alt="image" src="https://github.com/user-attachments/assets/d8394fef-4f41-4114-be2e-833ca198469a" />
+| My Evidence | GitHub Verification |
+|-------------|----------------------|
+|<img width="336" height="702" alt="Screenshot 2026-09-16 071322" src="https://github.com/user-attachments/assets/41cb1a19-3cc6-4c09-a60b-fc089a18719c" />
+ | <img width="337" height="697" alt="Screenshot 2026-09-16 071819" src="https://github.com/user-attachments/assets/f5e803ef-a562-4c78-8e75-ffedda6f0596" />
+ |
 
+| Proof Score | Skill Gap Analyzer |
+|-------------|----------------------|
+| <img width="332" height="687" alt="Screenshot 2026-09-16 071646" src="https://github.com/user-attachments/assets/00b5fe11-34f9-4d77-9235-18741b20b622" />
+ | <img width="341" height="701" alt="Screenshot 2026-09-16 071610" src="https://github.com/user-attachments/assets/c4c096c0-b54d-4000-a16d-56db5c024066" />
+ |
 
-🏗️ Application Architecture
+| Career Readiness | Skill Badges |
+|-------------------|----------------|
+| <img width="335" height="697" alt="Screenshot 2026-09-16 071539" src="https://github.com/user-attachments/assets/3ef44287-d70a-4362-bdd9-53846041b5ae" />
+ | ![Skill Badges](screenshots/badges.png) |
 
+| Profile | Splash Screen |
+|---------|---|
+| <img width="332" height="702" alt="Screenshot 2026-09-16 071506" src="https://github.com/user-attachments/assets/7aa65422-8d51-4c23-8856-e648d932ac7a" />
+ | <img width="333" height="697" alt="Screenshot 2026-09-16 073129" src="https://github.com/user-attachments/assets/e7ffd58b-0cb5-4cce-9921-ee4aae9b9fdb" />
+ |
+
+## 🏗️ Application Architecture
+
+```
                  SkillProof Android App
                           |
         +-----------------+-----------------+
@@ -223,16 +222,18 @@ Profile
         |                 |                 |
         ↓                 ↓                 ↓
       XML            Calculations        SQLite
-   Material UI       Proof Score      SharedPrefs
+   Material UI       Proof Score      SharedPreferences
    RecyclerView      Skill Gap
         |                 |
         +-----------------+
                 |
                 ↓
         Career Readiness
+```
 
-📂 Project Structure
+## 📂 Project Structure
 
+```
 SkillProof/
 │
 ├── app/
@@ -243,7 +244,8 @@ SkillProof/
 │           │       ├── Activities
 │           │       ├── Adapters
 │           │       ├── Models
-│           │       └── DatabaseHelper.kt
+│           │       ├── DatabaseHelper.kt
+│           │       └── ...
 │           │
 │           └── res/
 │               ├── layout/
@@ -252,210 +254,169 @@ SkillProof/
 │               └── values/
 │
 ├── screenshots/
-│   ├── splash.png
-│   ├── login.png
-│   ├── registration.png
 │   ├── dashboard.png
 │   ├── skills.png
-│   ├── add_skill.png
-│   ├── evidence.png
 │   ├── assessment.png
-│   ├── assessment_result.png
 │   ├── assessment_history.png
+│   ├── evidence.png
 │   ├── github_verification.png
 │   ├── proof_score.png
 │   ├── skill_gap.png
 │   ├── career.png
+│   ├── badges.png
 │   └── profile.png
 │
 ├── build.gradle.kts
 ├── settings.gradle.kts
 └── README.md
+```
 
-🛠️ Tech Stack
+## 🛠️ Tech Stack
 
-Android
+### Android
 
-Kotlin
+- Kotlin
+- Android Studio
+- XML
+- Material Components
+- ConstraintLayout
+- RecyclerView
 
-Android Studio
+### Data
 
-XML
+- SQLite
+- SQLiteOpenHelper
+- SharedPreferences
 
-Material Components
+### Android Components
 
-ConstraintLayout
+- Activities
+- Intents
+- Activity Result API
+- File Picker
+- RecyclerView
+- SQLite Database
+- SharedPreferences
 
-RecyclerView
+### Development
 
-Data
+- Git
+- GitHub
 
-SQLite
+## 💾 Data Storage
 
-SQLiteOpenHelper
-
-SharedPreferences
-
-Development
-
-Git
-
-GitHub
-
-💾 Data Storage
-
-SQLite
+### SQLite
 
 Used for storing:
 
-Skills
+- Skills
+- Evidence
+- Assessments
+- Verification information
 
-Evidence
-
-Assessments
-
-Verification information
-
-SharedPreferences
+### SharedPreferences
 
 Used for:
 
-Login status
+- Login status
+- User information
+- Current Skill
 
-User information
+## 🔄 Application Flow
 
-Current Skill
-
-🔄 Application Flow
-
+```
 Splash
-  ↓
+   ↓
 Login / Register
-  ↓
+   ↓
 Dashboard
-  ↓
+   ↓
 Skills
-  ↓
+   ↓
 Select Current Skill
-  ↓
+   ↓
 Assessment
-  ↓
+   ↓
 Assessment Result
-  ↓
+   ↓
 Assessment History
-  ↓
+   ↓
 Evidence
-  ↓
-Verification
-  ↓
-Proof Score
-  ↓
-Skill Gap
-  ↓
-Career
-
-🚀 Getting Started
-
-Requirements
-
-Android Studio
-
-Android SDK
-
-Android Emulator or Android Device
-
-Git
-
-Installation
-
-Clone the repository:
-
-git clone <YOUR_REPOSITORY_URL>
-
-Open the project in Android Studio, allow Gradle to sync, connect an Android device or start an emulator, and run the application.
-
-📱 Main Modules
-
-Module
-
-Description
-
-Splash
-
-Application startup
-
-Login/Register
-
-Authentication
-
-Dashboard
-
-Main navigation
-
-Skills
-
-Skill management
-
-Assessment
-
-Skill evaluation
-
-Assessment History
-
-Previous assessment attempts
-
-Evidence
-
-Proof submission
-
+   ↓
 GitHub Verification
-
-Project verification
-
+   ↓
 Proof Score
-
-Skill proof calculation
-
+   ↓
 Skill Gap
+   ↓
+Career Readiness
+   ↓
+Skill Badges / Profile
+```
 
-Improvement analysis
+## 🚀 Getting Started
 
-Career
+### Requirements
 
-Career readiness
+- Android Studio
+- Android SDK
+- Android Emulator or Android Device
+- Git
 
-Profile
+### Installation
 
-User information
+```bash
+git clone https://github.com/Adithi-097/Skill_Proof_MAD_ASSIGNMENT_1.git
+```
 
-🔮 Future Enhancements
+Then:
+
+1. Open the project in Android Studio.
+2. Allow Gradle to sync.
+3. Connect an Android device or start an Android Emulator.
+4. Build the project.
+5. Run the application.
+
+## 📱 Main Modules
+
+| Module | Description |
+|--------|-------------|
+| Splash | Application startup |
+| Login/Register | User authentication |
+| Dashboard | Main application overview |
+| Skills | Skill management |
+| Current Skill | Select the skill being focused on |
+| Assessment | Skill evaluation through MCQs |
+| Assessment Result | Score and performance |
+| Assessment History | Previous assessment attempts |
+| Evidence | Add projects, certificates and proof |
+| GitHub Verification | Verify public GitHub repositories |
+| Skill Badges | Achievement tracking |
+| Proof Score | Skill proof calculation |
+| Skill Gap | Improvement analysis |
+| Career | Career readiness analysis |
+| Profile | User information and account management |
+
+## 🔮 Future Enhancements
 
 Future versions of SkillProof can include:
 
-🤖 AI-based skill analysis
+- 🤖 AI-based skill analysis
+- 🧠 AI-generated assessments
+- 📄 NLP-based resume analysis
+- 🔍 Advanced GitHub repository analysis
+- ☁️ Cloud database and synchronization
+- 💼 Job-role matching
+- 📑 Automated resume generation
+- 🗺️ Personalized learning roadmaps
+- 💬 LLM-based career assistant
 
-🧠 AI-generated assessments
+## 🎓 Academic Information
 
-📄 NLP-based resume analysis
-
-🔍 Advanced GitHub repository analysis
-
-☁️ Cloud database and synchronization
-
-💼 Job-role matching
-
-📑 Automated resume generation
-
-🗺️ Personalized learning roadmaps
-
-💬 LLM-based career assistant
-
-🎓 Academic Information
-
-Project: SkillProof – Skill Verification & Career Readiness App
-Course: Mobile Application Development
-Course Code: 2CEIT5PE18
-Semester: V
-Academic Year: 2026–27
-University: Ganpat University
-Faculty: Faculty of Engineering & Technology
+**Project:** SkillProof – Skill Verification & Career Readiness App
+**Course:** Mobile Application Development
+**Course Code:** 2CEIT5PE18
+**Semester:** V
+**Academic Year:** 2026–27
+**University:** Ganpat University
+**Faculty:** Faculty of Engineering & Technology
