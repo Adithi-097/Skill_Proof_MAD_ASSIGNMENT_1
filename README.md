@@ -166,62 +166,27 @@ Career Readiness
 
 Users can also navigate to **Skill Badges** and **Skill Gap Analysis** from the Career Readiness module.
 
+| Splash Screen | Registration | Login |
+|---------------------|-------------|----------------------|
+| <img width="333" height="697" alt="Screenshot 2026-09-16 073129" src="https://github.com/user-attachments/assets/e7ffd58b-0cb5-4cce-9921-ee4aae9b9fdb" /> |<img width="336" height="702" alt="Screenshot 2026-09-16 071322" src="https://github.com/user-attachments/assets/41cb1a19-3cc6-4c09-a60b-fc089a18719c" /> | <img width="338" height="695" alt="Screenshot 2026-09-16 072944" src="https://github.com/user-attachments/assets/607b54da-3a83-4285-ba01-78d73f6c8f4e" /> |
+
 | Dashboard | My Skills | Skill Assessment |
 |-----------|-----------|-------------------|
-| <img width="335" height="692" alt="Screenshot 2026-09-16 071119" src="https://github.com/user-attachments/assets/43bbe928-2efb-4b70-9b84-e066771b43b2" /> | <img width="332" height="693" alt="Screenshot 2026-09-16 072620" src="https://github.com/user-attachments/assets/7a2d71a5-670c-4342-abe5-c7018a2f8993" /> | <img width="337" height="696" alt="Screenshot 2026-09-16 071733" src="https://github.com/user-attachments/assets/70aafde7-982a-482d-b771-ab1da4366383" /<img width="337" height="696" alt="Screenshot 2026-09-16 071733" src="https://github.com/user-attachments/assets/70aafde7-982a-482d-b771-ab1da4366383"/> |
+| <img width="335" height="692" alt="Screenshot 2026-09-16 071119" src="https://github.com/user-attachments/assets/43bbe928-2efb-4b70-9b84-e066771b43b2" /> | <img width="340" height="692" alt="Screenshot 2026-09-16 073008" src="https://github.com/user-attachments/assets/594cee44-9f16-4755-a374-8e1b25361567" /> | <img width="330" height="696" alt="image" src="https://github.com/user-attachments/assets/f5e821d6-ec88-412c-90d0-ff6ea6e124f7" />|
 
 | Assessment History | My Evidence | GitHub Verification |
 |---------------------|-------------|----------------------|
-| ![Assessment History](screenshots/assessment_history.png) | ![My Evidence](screenshots/evidence.png) | ![GitHub Verification](screenshots/github_verification.png) |
+| <img width="337" height="698" alt="image" src="https://github.com/user-attachments/assets/539fd52f-a09b-4135-9d58-01187d12d223" /> |<img width="328" height="696" alt="image" src="https://github.com/user-attachments/assets/f7654744-6262-450d-aa85-30ecf5818b6d" /> | <img width="337" height="692" alt="Screenshot 2026-09-16 071819" src="https://github.com/user-attachments/assets/f5e803ef-a562-4c78-8e75-ffedda6f0596" /> |
 
 | Proof Score | Skill Gap Analyzer | Career Readiness |
 |-------------|----------------------|-------------------|
-| ![Proof Score](screenshots/proof_score.png) | ![Skill Gap Analyzer](screenshots/skill_gap.png) | ![Career Readiness](screenshots/career.png) |
+|<img width="332" height="692" alt="Screenshot 2026-09-16 071646" src="https://github.com/user-attachments/assets/00b5fe11-34f9-4d77-9235-18741b20b622" /> | <img width="336" height="692" alt="Screenshot 2026-09-16 072750" src="https://github.com/user-attachments/assets/14b9634c-6931-4085-9ab1-db50912b1796" /> | <img width="335" height="692" alt="Screenshot 2026-09-16 071539" src="https://github.com/user-attachments/assets/3ef44287-d70a-4362-bdd9-53846041b5ae" /> |
 
 | Skill Badges | Profile | |
 |----------------|---------|---|
-| ![Skill Badges](screenshots/badges.png) | ![Profile](screenshots/profile.png) | |
+| <img width="335" height="697" alt="Screenshot 2026-09-16 071539" src="https://github.com/user-attachments/assets/3ef44287-d70a-4362-bdd9-53846041b5ae" /> | <img width="332" height="702" alt="Screenshot 2026-09-16 071506" src="https://github.com/user-attachments/assets/7aa65422-8d51-4c23-8856-e648d932ac7a" />| |
 
-| Registration | Login |
-|-----------|-----------|
-| <img width="340" height="697" alt="Screenshot 2026-09-16 073008" src="https://github.com/user-attachments/assets/594cee44-9f16-4755-a374-8e1b25361567" />
- |<img width="338" height="695" alt="Screenshot 2026-09-16 072944" src="https://github.com/user-attachments/assets/607b54da-3a83-4285-ba01-78d73f6c8f4e" />
 
- |
-
-| Dashboard | My Skills |
-|-----------|-----------|
-| <img width="335" height="692" alt="Screenshot 2026-09-16 071119" src="https://github.com/user-attachments/assets/43bbe928-2efb-4b70-9b84-e066771b43b2" />
- | <img width="332" height="693" alt="Screenshot 2026-09-16 072620" src="https://github.com/user-attachments/assets/7a2d71a5-670c-4342-abe5-c7018a2f8993" />
- |
-
-| Skill Assessment | Assessment History |
-|-------------------|---------------------|
-|  | <img width="337" height="696" alt="Screenshot 2026-09-16 071733" src="https://github.com/user-attachments/assets/70aafde7-982a-482d-b771-ab1da4366383" />
-|
-
-| My Evidence | GitHub Verification |
-|-------------|----------------------|
-|<img width="336" height="702" alt="Screenshot 2026-09-16 071322" src="https://github.com/user-attachments/assets/41cb1a19-3cc6-4c09-a60b-fc089a18719c" />
- | <img width="337" height="697" alt="Screenshot 2026-09-16 071819" src="https://github.com/user-attachments/assets/f5e803ef-a562-4c78-8e75-ffedda6f0596" />
- |
-
-| Proof Score | Skill Gap Analyzer |
-|-------------|----------------------|
-| <img width="332" height="687" alt="Screenshot 2026-09-16 071646" src="https://github.com/user-attachments/assets/00b5fe11-34f9-4d77-9235-18741b20b622" />
- | <img width="341" height="701" alt="Screenshot 2026-09-16 071610" src="https://github.com/user-attachments/assets/c4c096c0-b54d-4000-a16d-56db5c024066" />
- |
-
-| Career Readiness | Skill Badges |
-|-------------------|----------------|
-| <img width="335" height="697" alt="Screenshot 2026-09-16 071539" src="https://github.com/user-attachments/assets/3ef44287-d70a-4362-bdd9-53846041b5ae" />
- | ![Skill Badges](screenshots/badges.png) |
-
-| Profile | Splash Screen |
-|---------|---|
-| <img width="332" height="702" alt="Screenshot 2026-09-16 071506" src="https://github.com/user-attachments/assets/7aa65422-8d51-4c23-8856-e648d932ac7a" />
- | <img width="333" height="697" alt="Screenshot 2026-09-16 073129" src="https://github.com/user-attachments/assets/e7ffd58b-0cb5-4cce-9921-ee4aae9b9fdb" />
- |
 
 ## 🏗️ Application Architecture
 
