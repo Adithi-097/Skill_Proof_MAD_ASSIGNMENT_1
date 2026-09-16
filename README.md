@@ -166,7 +166,21 @@ Career Readiness
 
 Users can also navigate to **Skill Badges** and **Skill Gap Analysis** from the Career Readiness module.
 
-## 📸 Screenshots
+| Dashboard | My Skills | Skill Assessment |
+|-----------|-----------|-------------------|
+| <img width="335" height="692" alt="Screenshot 2026-09-16 071119" src="https://github.com/user-attachments/assets/43bbe928-2efb-4b70-9b84-e066771b43b2" /> | <img width="332" height="693" alt="Screenshot 2026-09-16 072620" src="https://github.com/user-attachments/assets/7a2d71a5-670c-4342-abe5-c7018a2f8993" /> | <img width="337" height="696" alt="Screenshot 2026-09-16 071733" src="https://github.com/user-attachments/assets/70aafde7-982a-482d-b771-ab1da4366383" /<img width="337" height="696" alt="Screenshot 2026-09-16 071733" src="https://github.com/user-attachments/assets/70aafde7-982a-482d-b771-ab1da4366383"/> |
+
+| Assessment History | My Evidence | GitHub Verification |
+|---------------------|-------------|----------------------|
+| ![Assessment History](screenshots/assessment_history.png) | ![My Evidence](screenshots/evidence.png) | ![GitHub Verification](screenshots/github_verification.png) |
+
+| Proof Score | Skill Gap Analyzer | Career Readiness |
+|-------------|----------------------|-------------------|
+| ![Proof Score](screenshots/proof_score.png) | ![Skill Gap Analyzer](screenshots/skill_gap.png) | ![Career Readiness](screenshots/career.png) |
+
+| Skill Badges | Profile | |
+|----------------|---------|---|
+| ![Skill Badges](screenshots/badges.png) | ![Profile](screenshots/profile.png) | |
 
 | Registration | Login |
 |-----------|-----------|
